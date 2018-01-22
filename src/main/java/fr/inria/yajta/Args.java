@@ -29,7 +29,7 @@ public class Args {
                 ar = new String[1];
                 ar[0] = args;
             }
-            EXCLUDES = new String[1];
+            EXCLUDES = new String[0];
             INCLUDES = new String[0];
             ISOTOPES = new String[0];
             strictIncludes = false;
@@ -75,7 +75,6 @@ public class Args {
     }
     public void parseExcludes(String p) {
         EXCLUDES = parseArray(p.split("excludes=")[1]);
-        System.out.println("exclude[0]=" + EXCLUDES[0]);
     }
     public void parseStrictIncludes(String p) {
         strictIncludes = true;

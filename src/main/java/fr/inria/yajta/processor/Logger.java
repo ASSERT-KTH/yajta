@@ -47,7 +47,10 @@ public class Logger implements Tracking {
             log.createNewFile();
             bufferedWriter = new BufferedWriter(new FileWriter(log, true));
             if(tree) bufferedWriter.append("{\"name\":\"Threads\", \"children\":[");
+            boolean isFirst = true;
             for(Map.Entry<String, Map.Entry<TreeNode, TreeNode>> e: threadLogs.entrySet()) {
+                if (isFirst) isFirst = false;
+                else if(tree) bufferedWriter.append(",");
                 e.getValue().getKey().print(bufferedWriter, tree);
             }
             if(tree) bufferedWriter.append("]}");

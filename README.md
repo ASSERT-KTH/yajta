@@ -4,7 +4,7 @@ Java agent tracing methods calls.
 
 Argument must belong to the following list (and be separated by |)
 	- includes=org.package(,org.package2)* Default: Empty
-	- excludes=org.package(,org.package2)* Default: fr.inria.yajta
+	- excludes=org.package(,org.package2)* Default: fr.inria.yajta (always added to excludes)
 	- isotopes=org.package(,org.package2)* Default:Empty
 	- print=(list,tree,tie) Default: tree
 	- strict-includes Default: false
@@ -20,6 +20,8 @@ Ex:
 ```
 java javaagent:path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|output=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
 ```
+
+Note that not excluding java,javax,sun,sunw might still result into carshes
 
 ## Check that an App follows the same execution path than a previous one
 
@@ -37,9 +39,14 @@ Does not log native methods yet.
 
 ## Run test with traces
 
-For each test:
+For each test (Trace only org.MyApp):
 ```
-mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar=\"strict-includes|print=tie|includes=org.myApp|excludes=fr.inria.yalta\"" test > testLog/MyTest
+mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar=\"strict-includes|print=tie|includes=org.myApp\"" test > testLog/MyTest
+```
+
+For each test (Trace (almost) everything):
+```
+mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar=\"print=tie|excludes=java,javax,sun,sunw\"" test > testLog/MyTest
 ```
 
 ## Organize the output as a map of methods / set of test
