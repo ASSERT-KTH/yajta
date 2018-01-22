@@ -14,13 +14,13 @@ public class Args {
     public File output = null;
     public boolean strictIncludes = false;
     public String print = "tree";
+    public ClassList cl = null;
     //includes=|excludes=
     public void parseArgs(String args) {
         if(args == null || args.equals("")) {
             INCLUDES = new String[0];
             ISOTOPES = new String[0];
-            EXCLUDES = new String[1];
-            EXCLUDES[0] = "fr.inria.yajta";
+            EXCLUDES = new String[0];
         } else {
             String ar[];
             if(args.contains("|")) {
@@ -38,6 +38,7 @@ public class Args {
                 parseArg(p);
             }
         }
+        cl = new ClassList(Utils.format(INCLUDES),Utils.format(EXCLUDES),Utils.format(ISOTOPES),strictIncludes);
     }
 
     public void parseArg(String p) {
@@ -74,6 +75,7 @@ public class Args {
     }
     public void parseExcludes(String p) {
         EXCLUDES = parseArray(p.split("excludes=")[1]);
+        System.out.println("exclude[0]=" + EXCLUDES[0]);
     }
     public void parseStrictIncludes(String p) {
         strictIncludes = true;

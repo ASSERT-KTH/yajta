@@ -6,6 +6,7 @@ import javassist.expr.ExprEditor;
 
 import java.io.*;
 import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.*;
 
 import static javassist.CtClass.voidType;
@@ -14,48 +15,33 @@ public class Tracer implements ClassFileTransformer {
 
     boolean verbose = false;
     boolean strictIncludes = false;
+    ClassList cl;
 
-    public Tracer (String[] includes, String excludes[]) {
-        new Tracer(includes,excludes,new String[0]);
+    public Tracer (ClassList cl) {
+        new Tracer(cl,new String[0]);
     }
 
-    public Tracer (String[] includes, String excludes[], String isotopes[]) {
-        INCLUDES = includes;
-        DEFAULT_EXCLUDES = excludes;
+    public Tracer (ClassList cl, String isotopes[]) {
+        this.cl = cl;
         ISOTOPES = isotopes;
     }
 
-    String[] DEFAULT_EXCLUDES;
     String[] ISOTOPES;
-
-    String[] INCLUDES;
 
     public byte[] transform( final ClassLoader loader, final String className, final Class clazz,
                              final java.security.ProtectionDomain domain, final byte[] bytes ) {
 
-        for( String isotope : ISOTOPES ) {
-
-            if( className.startsWith( isotope ) ) {
-                return doClass( className, clazz, bytes, true);
-            }
+        /*if(clazz.isPrimitive()) {
+            System.out.println("primitive: " + className );
+            return bytes;
+        }*/
+        //System.out.println("className: " + className + " -> " + cl.isToBeProcessed(className));
+        if( Utils.startWith(className, ISOTOPES) ) return doClass( className, clazz, bytes, true);
+        if( cl.isToBeProcessed(className) ) {
+            return doClass( className, clazz, bytes );
+        } else {
+            return bytes;
         }
-
-        for( String include : INCLUDES ) {
-
-            if( className.startsWith( include ) ) {
-                return doClass( className, clazz, bytes );
-            }
-        }
-
-        for( int i = 0; i < DEFAULT_EXCLUDES.length; i++ ) {
-
-            if( className.startsWith( DEFAULT_EXCLUDES[i] ) ) {
-                return bytes;
-            }
-        }
-
-        if(!strictIncludes) return doClass( className, clazz, bytes );
-        else return bytes;
     }
 
     public byte[] doClass( final String name, final Class clazz, byte[] b ) {
@@ -131,7 +117,7 @@ public class Tracer implements ClassFileTransformer {
     }
 
     private void doMethod( final CtBehavior method , String className, boolean isIsotope, String isotope) throws NotFoundException, CannotCompileException {
-
+        //System.out.println("\t\tMethod: " + method.getLongName() + " -> " + !Modifier.isNative(method.getModifiers()));
         if(!Modifier.isNative(method.getModifiers())) {
             String pprefix = "", ppostfix = "";
             if(isIsotope && !Modifier.isStatic(method.getModifiers())) {

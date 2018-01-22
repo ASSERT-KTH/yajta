@@ -9,12 +9,6 @@
   <url>http://maven.apache.org</url>
 
   <dependencies>
-    <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>3.8.1</version>
-        <scope>test</scope>
-    </dependency>
       <!--<dependency>
           <groupId>javassist</groupId>
           <artifactId>javassist</artifactId>
@@ -47,6 +41,11 @@
           <groupId>org.json</groupId>
           <artifactId>json</artifactId>
           <version>20090211</version>
+      </dependency>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.12</version>
       </dependency>
   </dependencies>
 

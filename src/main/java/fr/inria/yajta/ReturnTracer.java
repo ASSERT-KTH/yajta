@@ -13,7 +13,7 @@ public class ReturnTracer implements ClassFileTransformer {
     boolean strictIncludes = false;
 
     public ReturnTracer (String[] includes, String excludes[]) {
-        new Tracer(includes,excludes,new String[0]);
+        new ReturnTracer(includes,excludes,new String[0]);
     }
 
     public ReturnTracer (String[] includes, String excludes[], String isotopes[]) {

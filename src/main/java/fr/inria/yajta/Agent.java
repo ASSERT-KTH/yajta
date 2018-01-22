@@ -8,10 +8,9 @@ import java.lang.instrument.UnmodifiableClassException;
 
 
 public class Agent {
-    static String[] INCLUDES = new String[] {
-    };
-    static String[] ISOTOPES = new String[] {
-    };
+    static String[] INCLUDES = new String[] {};
+    static String[] ISOTOPES = new String[] {};
+    static String[] EXCLUDES = new String[] {};
 
     static Tracking trackingInstance;
 
@@ -46,11 +45,12 @@ public class Agent {
             trackingInstance = l;
         }
         if(a.print.equalsIgnoreCase("values")) {
-            final ReturnTracer transformer = new ReturnTracer(format(a.INCLUDES), format(a.EXCLUDES), format(a.ISOTOPES));
+            final ReturnTracer transformer = new ReturnTracer(Utils.format(a.INCLUDES), Utils.format(a.EXCLUDES), Utils.format(a.ISOTOPES));
 
             if (a.strictIncludes) transformer.strictIncludes = true;
 
             INCLUDES = a.INCLUDES;
+            EXCLUDES = a.EXCLUDES;
             ISOTOPES = a.ISOTOPES;
             inst.addTransformer(transformer, true);
             if (inst.isNativeMethodPrefixSupported()) {
@@ -58,11 +58,12 @@ public class Agent {
             }
 
         } else if(a.includeFile == null) {
-            final Tracer transformer = new Tracer(format(a.INCLUDES), format(a.EXCLUDES), format(a.ISOTOPES));
+            final Tracer transformer = new Tracer(a.cl, Utils.format(a.ISOTOPES));
 
             if (a.strictIncludes) transformer.strictIncludes = true;
 
             INCLUDES = a.INCLUDES;
+            EXCLUDES = a.EXCLUDES;
             ISOTOPES = a.ISOTOPES;
             inst.addTransformer(transformer, true);
             if (inst.isNativeMethodPrefixSupported()) {
@@ -76,31 +77,28 @@ public class Agent {
                 inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
             }
         }
-        Class cl[] = inst.getAllLoadedClasses();
+        Class loadedClasses[] = inst.getAllLoadedClasses();
 
         //System.err.println("isRedefineClassesSupported: " + inst.isRedefineClassesSupported());
 
-        for(int i = cl.length-1; i >= 0; i--) {
-            for( String include : INCLUDES ) {
+        for(int i = loadedClasses.length-1; i >= 0; i--) {
+            if(loadedClasses[i].getName().startsWith("[L")) {
+                String className = loadedClasses[i].getName().substring(2).replace(".","/");
 
-                if (cl[i].getName().startsWith(include)) {
+                if(a.cl.isToBeProcessed(className)) {
                     try {
                         //System.err.println(cl[i].getName());
-                        inst.retransformClasses(cl[i]);
+                        inst.retransformClasses(loadedClasses[i]);
 
                     } catch (UnmodifiableClassException e) {
-                        System.err.println("err: " + cl[i].getName());
+                        System.err.println("[ERROR] " + className);
                     }
-                } else {
-
                 }
-            }
-            for( String isotope : ISOTOPES ) {
-                if (cl[i].getName().startsWith(isotope)) {
+                if(Utils.startWith(className, Utils.format(a.ISOTOPES)) && !Utils.startWith(className, Utils.format(a.EXCLUDES))) {
                     try {
-                        inst.retransformClasses(cl[i]);
+                        inst.retransformClasses(loadedClasses[i]);
                     } catch (UnmodifiableClassException e) {
-                        System.err.println("err: " + cl[i].getName());
+                        System.err.println("[ERROR] (isotope) " + className);
                     }
                 }
             }
@@ -115,13 +113,6 @@ public class Agent {
 
 
     }
-
-    public static String[] format(String[] ar) {
-        String[] res = new String[ar.length];
-        for(int i = 0; i < ar.length; i++) res[i] = ar[i].replace(".","/");
-        return res;
-    }
-
 
 
 }
