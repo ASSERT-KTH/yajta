@@ -13,7 +13,7 @@ import static javassist.CtClass.voidType;
 
 public class Tracer implements ClassFileTransformer {
 
-    boolean verbose = false;
+    boolean verbose = true;
     boolean strictIncludes = false;
     ClassList cl;
 
@@ -35,7 +35,7 @@ public class Tracer implements ClassFileTransformer {
             System.out.println("primitive: " + className );
             return bytes;
         }*/
-        //System.out.println("className: " + className + " -> " + cl.isToBeProcessed(className));
+        if(verbose) System.out.println("className: " + className + " -> " + cl.isToBeProcessed(className));
         if( Utils.startWith(className, ISOTOPES) ) return doClass( className, clazz, bytes, true);
         if( cl.isToBeProcessed(className) ) {
             return doClass( className, clazz, bytes );
@@ -141,7 +141,7 @@ public class Tracer implements ClassFileTransformer {
 
             //method.insertAfter( "System.err.println( $_ );");
 
-            method.insertBefore(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepIn(Thread.currentThread().getName(),\"" + className.replace("/", ".") + "." + method.getName() + params + "\");" + ppostfix);
+            method.insertBefore(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepIn(Thread.currentThread().getName(),\"" + className.replace("/", ".") + "\", \"" + method.getName() + params + "\");" + ppostfix);
             method.insertAfter(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepOut(Thread.currentThread().getName());" + ppostfix);
 
         } else {

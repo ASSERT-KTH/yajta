@@ -96,6 +96,8 @@ public class Args {
             print = "tie";
         } else if(p.compareTo("print=values") == 0) {
             print = "values";
+        } else if(p.compareTo("print=matrix") == 0) {
+            print = "matrix";
         }
     }
 

@@ -16,15 +16,15 @@ public class Logger implements Tracking {
 
     Map<String, Map.Entry<TreeNode, TreeNode>> threadLogs = new HashMap<>();
 
-    public synchronized void stepIn(String thread, String method) {
+    public synchronized void stepIn(String thread, String clazz, String method) {
         Map.Entry<TreeNode, TreeNode> entry = threadLogs.get(thread);
         if(entry == null) {
             TreeNode cur = new TreeNode();
             cur.method = thread;
-            entry = new HashMap.SimpleEntry<>(cur,cur.addChild(method));
+            entry = new HashMap.SimpleEntry<>(cur,cur.addChild(clazz, method));
             threadLogs.put(thread, entry);
         } else {
-            entry.setValue(entry.getValue().addChild(method));
+            entry.setValue(entry.getValue().addChild(clazz, method));
             threadLogs.put(thread,entry);
         }
     }
@@ -61,42 +61,42 @@ public class Logger implements Tracking {
     }
 
     @Override
-    public void trace(String thread, String method, Object returnValue) {
+    public void trace(String thread, String clazz, String method, Object returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, boolean returnValue) {
+    public void trace(String thread, String clazz, String method, boolean returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, byte returnValue) {
+    public void trace(String thread, String clazz, String method, byte returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, int returnValue) {
+    public void trace(String thread, String clazz, String method, int returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, long returnValue) {
+    public void trace(String thread, String clazz, String method, long returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, float returnValue) {
+    public void trace(String thread, String clazz, String method, float returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, double returnValue) {
+    public void trace(String thread, String clazz, String method, double returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, short returnValue) {
+    public void trace(String thread, String clazz, String method, short returnValue) {
 
     }
 

@@ -109,9 +109,9 @@ public class SpecializedTracer implements ClassFileTransformer {
                 params += c.getName();
             }
             params += ")";
-            String methodName = className.replace("/", ".") + "." + method.getName() + params;
+            //String methodName = className.replace("/", ".") + "." + method.getName() + params;
             if(methodToTrace.get(className.replace("/", ".")).contains(method.getName() + params)) {
-                method.insertBefore(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepIn(Thread.currentThread().getName(),\"" + methodName + "\");" + ppostfix);
+                method.insertBefore(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepIn(Thread.currentThread().getName(),\"" + className.replace("/", ".") + "\", \""+ method.getName() + params + "\");" + ppostfix);
                 method.insertAfter(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepOut(Thread.currentThread().getName());" + ppostfix);
             }
         } else {

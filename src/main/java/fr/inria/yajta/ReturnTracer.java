@@ -111,7 +111,7 @@ public class ReturnTracer implements ClassFileTransformer {
 
             //method.insertAfter( "System.err.println( $_ );");
 
-            method.insertAfter("fr.inria.yajta.Agent.getTrackingInstance().trace(Thread.currentThread().getName(),\"" + className.replace("/", ".") + "." + method.getName() + params + "\", $_);");
+            method.insertAfter("fr.inria.yajta.Agent.getTrackingInstance().trace(Thread.currentThread().getName(), \"" + className.replace("/", ".") + "\", \"" + method.getName() + params + "\", $_);");
 
         } else {
             if(verbose) System.err.println("Method: " + className.replace("/", ".") + "." + method.getName() + " is native");

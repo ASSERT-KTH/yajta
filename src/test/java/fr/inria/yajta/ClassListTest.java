@@ -77,6 +77,13 @@ public class ClassListTest {
                         false,
                         new String[]{"org/Class","org/p1/sp1/Class","org/p2/Class","org/p1/Class","org/p1/sp2/Class","org/p2/Class2", "com/Class"},
                         new String[]{"fr/inria/yajta/Agent"}
+                },
+                { new String[]{"fr/inria/helloworld","java/util/ArrayList","java/util/AbstractList"},
+                        new String[]{"fr/inria/yajta"},
+                        new String[]{},
+                        true,
+                        new String[]{"fr/inria/helloworld/App","java/util/ArrayList","java/util/AbstractList"},
+                        new String[]{"fr/inria/yajta/Agent", "java/util/Map"}
                 }
         });
     }

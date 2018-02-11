@@ -23,6 +23,11 @@ java javaagent:path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 Note that not excluding java,javax,sun,sunw might still result into carshes
 
+Note that in order to instrument classes loaded by the bootstrap class loader you need to add the agent jar to its classpath.
+```
+java -Xbootclasspath/p:path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar -javaagent...
+```
+
 ## Check that an App follows the same execution path than a previous one
 
 Ex:

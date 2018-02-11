@@ -14,59 +14,59 @@ public class ReturnLogger implements Tracking {
 
     Map<String, Map<String, List<Serializable>>> logs = new ConcurrentHashMap<>();
 
-    public void trace(String thread, String method, Object returnValue) {
+    public void trace(String thread, String clazz, String method, Object returnValue) {
         if( returnValue instanceof java.io.Serializable ) {
             Map<String, List<Serializable>> threadLogs;
             if(!logs.containsKey(thread)) threadLogs = new ConcurrentHashMap<>();
             else threadLogs = logs.get(thread);
 
             List<Serializable> values;
-            if(!threadLogs.containsKey(method)) values = new ArrayList<>();
-            else values = threadLogs.get(method);
+            if(!threadLogs.containsKey(clazz + "." + method)) values = new ArrayList<>();
+            else values = threadLogs.get(clazz + "." + method);
 
             values.add((Serializable) returnValue);
-            threadLogs.put(method,values);
+            threadLogs.put(clazz + "." + method,values);
             logs.put(thread,threadLogs);
         }
     }
 
     @Override
-    public void trace(String thread, String method, boolean returnValue) {
-        trace(thread,method, new Boolean(returnValue));
+    public void trace(String thread, String clazz, String method, boolean returnValue) {
+        trace(thread,clazz,method, new Boolean(returnValue));
     }
 
     @Override
-    public void trace(String thread, String method, byte returnValue) {
-        trace(thread,method, new Byte(returnValue));
+    public void trace(String thread, String clazz, String method, byte returnValue) {
+        trace(thread,clazz,method, new Byte(returnValue));
     }
 
     @Override
-    public void trace(String thread, String method, int returnValue) {
-        trace(thread,method, new Integer(returnValue));
+    public void trace(String thread, String clazz, String method, int returnValue) {
+        trace(thread,clazz,method, new Integer(returnValue));
     }
 
     @Override
-    public void trace(String thread, String method, long returnValue) {
-        trace(thread,method, new Long(returnValue));
+    public void trace(String thread, String clazz, String method, long returnValue) {
+        trace(thread,clazz,method, new Long(returnValue));
     }
 
     @Override
-    public void trace(String thread, String method, float returnValue) {
-        trace(thread,method, new Float(returnValue));
+    public void trace(String thread, String clazz, String method, float returnValue) {
+        trace(thread,clazz,method, new Float(returnValue));
     }
 
     @Override
-    public void trace(String thread, String method, double returnValue) {
-        trace(thread,method, new Double(returnValue));
+    public void trace(String thread, String clazz, String method, double returnValue) {
+        trace(thread,clazz,method, new Double(returnValue));
     }
 
     @Override
-    public void trace(String thread, String method, short returnValue) {
-        trace(thread,method, new Short(returnValue));
+    public void trace(String thread, String clazz, String method, short returnValue) {
+        trace(thread,clazz,method, new Short(returnValue));
     }
 
     @Override
-    public void stepIn(String thread, String method) {
+    public void stepIn(String thread, String clazz, String method) {
 
     }
 

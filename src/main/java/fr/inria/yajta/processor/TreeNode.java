@@ -13,15 +13,17 @@ import org.json.JSONObject;
  * Created by nharrand on 11/07/17.
  */
 public class TreeNode {
+    protected String clazz;
     protected String method;
     protected List<TreeNode> children;
     protected TreeNode parent;
 
     public TreeNode() {}
 
-    public TreeNode addChild(String m) {
+    public TreeNode addChild(String c, String m) {
         TreeNode t = new TreeNode();
         t.method = m;
+        t.clazz = c;
         t.parent = this;
         if(children == null) children = new ArrayList<>();
         children.add(t);
@@ -33,7 +35,7 @@ public class TreeNode {
     }
 
     public void print(BufferedWriter b, boolean tree) throws IOException {
-        if(tree) b.append("{\"name\":\"" + method + "\", \"children\":[");
+        if(tree) b.append("{\"class\":\"" + clazz + "\", \"method\":\"" + method + "\", \"children\":[");
         else b.append(method + "\n");
         if(children != null) {
             boolean isFirst = true;
@@ -70,7 +72,8 @@ public class TreeNode {
     }
 
     public TreeNode(JSONObject o) throws JSONException {
-        method = o.getString("name");
+        method = o.getString("method");
+        clazz = o.getString("class");
         JSONArray jsonChildren = o.getJSONArray("children");
         if(jsonChildren.length() > 0) children = new ArrayList<>();
         for(int i = 0; i < jsonChildren.length(); i++) {

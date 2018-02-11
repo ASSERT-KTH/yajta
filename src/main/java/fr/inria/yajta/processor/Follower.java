@@ -20,20 +20,20 @@ public class Follower implements Tracking {
     Map<String, TreeNode> threadLogs = new HashMap<>();
     Map<String, Boolean> threadOfftrack = new HashMap<>();
 
-    public synchronized void stepIn(String thread, String method) {
+    public synchronized void stepIn(String thread, String clazz, String method) {
         if(!threadOfftrack.containsKey(thread) || threadOfftrack.get(thread)) return;
         //System.err.println("[" + thread + "] " + method + "{");
         TreeNode cur = threadLogs.get(thread);
-        if(cur == null) offTrack(thread,method);
+        if(cur == null) offTrack(thread,clazz + "." + method, "NO CHILD");
         else {
             if(cur.hasNext()) {
                 cur = cur.next();
-                if(cur.method.compareTo(method) != 0) {
-                    offTrack(thread, method);
+                if((cur.method.compareTo(method) != 0) && (cur.clazz.compareTo(clazz) ==0)) {
+                    offTrack(thread, clazz + "." + method, cur.clazz + "." + cur.method);
                 } else {
                     threadLogs.put(thread,cur);
                 }
-            } else offTrack(thread, method);
+            } else offTrack(thread, clazz + "." + method, "DONE");
         }
     }
 
@@ -57,8 +57,8 @@ public class Follower implements Tracking {
         }
     }
 
-    public void offTrack(String thread, String method) {
-        System.err.println("[" + thread + "] " + method + " >>>> OffTrack <<<< ");
+    public void offTrack(String thread, String method, String cur) {
+        System.err.println("[OFF TRACK] <" + method + "> instad of <" + cur + ">");
         threadOfftrack.put(thread,true);
 
     }
@@ -68,42 +68,42 @@ public class Follower implements Tracking {
     }
 
     @Override
-    public void trace(String thread, String method, Object returnValue) {
+    public void trace(String thread, String clazz, String method, Object returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, boolean returnValue) {
+    public void trace(String thread, String clazz, String method, boolean returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, byte returnValue) {
+    public void trace(String thread, String clazz, String method, byte returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, int returnValue) {
+    public void trace(String thread, String clazz, String method, int returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, long returnValue) {
+    public void trace(String thread, String clazz, String method, long returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, float returnValue) {
+    public void trace(String thread, String clazz, String method, float returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, double returnValue) {
+    public void trace(String thread, String clazz, String method, double returnValue) {
 
     }
 
     @Override
-    public void trace(String thread, String method, short returnValue) {
+    public void trace(String thread, String clazz, String method, short returnValue) {
 
     }
 }
