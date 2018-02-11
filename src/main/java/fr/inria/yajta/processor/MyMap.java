@@ -1,5 +1,7 @@
-package fr.inria.yajta.structures;
+package fr.inria.yajta.processor;
 
+
+import fr.inria.yajta.processor.MyList;
 
 import java.util.Arrays;
 

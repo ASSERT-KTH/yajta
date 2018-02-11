@@ -1,4 +1,4 @@
-package fr.inria.yajta.structures;
+package fr.inria.yajta.processor;
 
 import java.util.Arrays;
 
@@ -23,6 +23,16 @@ public class MyStack<E> {
         E e = (E) elements[--size];
         elements[size] = null;
         return e;
+    }
+
+    public E peek() {
+        if(size != 0)
+            return (E) elements[size-1];
+        else return null;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
     }
 
     private void ensureCapa() {

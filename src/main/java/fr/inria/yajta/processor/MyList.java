@@ -1,4 +1,4 @@
-package fr.inria.yajta.structures;
+package fr.inria.yajta.processor;
 
 import java.util.Arrays;
 
@@ -31,4 +31,6 @@ public class MyList<E> {
         }
         return (E) elements[i];
     }
+
+    public int size() {return size;}
 }

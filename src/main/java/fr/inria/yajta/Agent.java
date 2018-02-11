@@ -142,7 +142,7 @@ public class Agent {
             if(className.startsWith("[L")) {
                 className = className.substring(2);
             }
-            System.err.println("Loaded class " + className + " -> " + a.cl.isToBeProcessed(className));
+            //System.err.println("Loaded class " + className + " -> " + a.cl.isToBeProcessed(className));
             if(a.cl.isToBeProcessed(className)) {
                 try {
                     //System.err.println(loadedClasses[i].getName());

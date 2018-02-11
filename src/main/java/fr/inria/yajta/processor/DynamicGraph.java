@@ -11,24 +11,23 @@ import java.util.Stack;
 
 public class DynamicGraph implements Tracking {
 
-    Map<String, Map<String, Map<String, Integer>>> matrix = new HashMap<>(); //Thread -> Caller -> Callee -> #called
-    Map<String, Stack<String>> previous = new HashMap<>();
-
+    MyMap<String, MyMap<String, MyMap<String, Integer>>> matrix = new MyMap<>(); //Thread -> Caller -> Callee -> #called
+    MyMap<String, MyStack<String>> previous = new MyMap<>();
 
     public File log;
 
     @Override
     public void stepIn(String thread, String clazz, String method) {
-        Stack<String> threadPrevious = previous.get(thread);
+        MyStack<String> threadPrevious = previous.get(thread);
         String callee = clazz + "." + method;
-        if(threadPrevious == null) threadPrevious = new Stack<>();
+        if(threadPrevious == null) threadPrevious = new MyStack<>();
         else {
             String caller = threadPrevious.peek();
             if(caller != null) {
-                Map<String, Map<String, Integer>> threadMatrix = matrix.get(thread);
-                if(threadMatrix == null) threadMatrix = new HashMap<>();
-                Map<String, Integer> callerMatrix = threadMatrix.get(caller);
-                if(callerMatrix == null) callerMatrix = new HashMap<>();
+                MyMap<String, MyMap<String, Integer>> threadMatrix = matrix.get(thread);
+                if(threadMatrix == null) threadMatrix = new MyMap<>();
+                MyMap<String, Integer> callerMatrix = threadMatrix.get(caller);
+                if(callerMatrix == null) callerMatrix = new MyMap<>();
                 Integer numberCalled = callerMatrix.get(callee);
                 if(numberCalled == null) numberCalled = 0;
                 numberCalled++;
@@ -69,22 +68,31 @@ public class DynamicGraph implements Tracking {
             bufferedWriter.append("[");
 
             boolean isFirst = true;
-            for(String thread: matrix.keySet()) {
+            MyList threads = matrix.keyList();
+            for(int i = 0; i < threads.size(); i++) {
+                String thread = (String) threads.get(i);
+            //for(String thread: matrix.keyList()) {
                 if (isFirst) isFirst = false;
                 else bufferedWriter.append(",");
 
                 bufferedWriter.append("{ \"thread\": \"" + thread + "\", \"callgraph\":[");
 
-                Map<String, Map<String, Integer>> threadMatrix = matrix.get(thread);
+                MyMap<String, MyMap<String, Integer>> threadMatrix = matrix.get(thread);
                 boolean isFirst2 = true;
-                for(String caller: threadMatrix.keySet()) {
+                MyList callers = threadMatrix.keyList();
+                for(int j = 0; j < callers.size(); j++) {
+                    String caller = (String) callers.get(j);
+                //for(String caller: threadMatrix.keySet()) {
                     if (isFirst2) isFirst2 = false;
                     else bufferedWriter.append(",");
                     bufferedWriter.append("{ \"caller\": \"" + caller + "\", \"called\":[");
 
-                    Map<String, Integer> callerMatrix = threadMatrix.get(caller);
+                    MyMap<String, Integer> callerMatrix = threadMatrix.get(caller);
                     boolean isFirst3 = true;
-                    for(String callee: callerMatrix.keySet()) {
+                    MyList callees = callerMatrix.keyList();
+                    for(int k = 0; k < callees.size(); k++) {
+                        String callee = (String) callees.get(k);
+                    //for(String callee: callerMatrix.keySet()) {
                         if (isFirst3) isFirst3 = false;
                         else bufferedWriter.append(",");
                         bufferedWriter.append("{ \"callee\": \"" + callee + "\", \"nb\": " + callerMatrix.get(callee));
