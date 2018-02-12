@@ -23,6 +23,10 @@ public class MyMap<K, V> {
         return null;
     }
 
+    public boolean containsKey(K key) {
+        return get(key) != null;
+    }
+
     public void put(K key, V value) {
         boolean insert = true;
         for (int i = 0; i < size; i++) {

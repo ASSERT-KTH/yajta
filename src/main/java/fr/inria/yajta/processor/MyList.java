@@ -1,8 +1,9 @@
 package fr.inria.yajta.processor;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
-public class MyList<E> {
+public class MyList<E> implements Iterable<E> {
     private int size = 0;
     private static final int DEFAULT_CAPACITY = 10;
     private Object elements[];
@@ -33,4 +34,20 @@ public class MyList<E> {
     }
 
     public int size() {return size;}
+
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            int i = 0;
+            @Override
+            public boolean hasNext() {
+                return i < size;
+            }
+
+            @Override
+            public E next() {
+                return (E) elements[i++];
+            }
+        };
+    }
 }

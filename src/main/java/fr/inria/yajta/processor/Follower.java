@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class Follower implements Tracking {
 
-    Map<String, TreeNode> threadLogs = new HashMap<>();
-    Map<String, Boolean> threadOfftrack = new HashMap<>();
+    MyMap<String, TreeNode> threadLogs = new MyMap<>();
+    MyMap<String, Boolean> threadOfftrack = new MyMap<>();
 
     public synchronized void stepIn(String thread, String clazz, String method) {
         if(!threadOfftrack.containsKey(thread) || threadOfftrack.get(thread)) return;

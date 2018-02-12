@@ -68,10 +68,10 @@ public class DynamicGraph implements Tracking {
             bufferedWriter.append("[");
 
             boolean isFirst = true;
-            MyList threads = matrix.keyList();
+            /*MyList threads = matrix.keyList();
             for(int i = 0; i < threads.size(); i++) {
-                String thread = (String) threads.get(i);
-            //for(String thread: matrix.keyList()) {
+                String thread = (String) threads.get(i);*/
+            for(String thread: matrix.keyList()) {
                 if (isFirst) isFirst = false;
                 else bufferedWriter.append(",");
 
@@ -79,9 +79,10 @@ public class DynamicGraph implements Tracking {
 
                 MyMap<String, MyMap<String, Integer>> threadMatrix = matrix.get(thread);
                 boolean isFirst2 = true;
-                MyList callers = threadMatrix.keyList();
+                /*MyList callers = threadMatrix.keyList();
                 for(int j = 0; j < callers.size(); j++) {
-                    String caller = (String) callers.get(j);
+                    String caller = (String) callers.get(j);*/
+                for(String caller: threadMatrix.keyList()) {
                 //for(String caller: threadMatrix.keySet()) {
                     if (isFirst2) isFirst2 = false;
                     else bufferedWriter.append(",");
@@ -89,9 +90,10 @@ public class DynamicGraph implements Tracking {
 
                     MyMap<String, Integer> callerMatrix = threadMatrix.get(caller);
                     boolean isFirst3 = true;
-                    MyList callees = callerMatrix.keyList();
+                    /*MyList callees = callerMatrix.keyList();
                     for(int k = 0; k < callees.size(); k++) {
-                        String callee = (String) callees.get(k);
+                        String callee = (String) callees.get(k);*/
+                    for(String callee: callerMatrix.keyList()) {
                     //for(String callee: callerMatrix.keySet()) {
                         if (isFirst3) isFirst3 = false;
                         else bufferedWriter.append(",");
