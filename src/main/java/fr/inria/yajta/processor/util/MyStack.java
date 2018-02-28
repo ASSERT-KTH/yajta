@@ -1,4 +1,4 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.util;
 
 import java.util.Arrays;
 
@@ -23,6 +23,10 @@ public class MyStack<E> {
         E e = (E) elements[--size];
         elements[size] = null;
         return e;
+    }
+
+    public int size() {
+        return size;
     }
 
     public E peek() {

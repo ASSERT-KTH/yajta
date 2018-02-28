@@ -1,4 +1,4 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.util;
 
 import java.util.Arrays;
 import java.util.Iterator;

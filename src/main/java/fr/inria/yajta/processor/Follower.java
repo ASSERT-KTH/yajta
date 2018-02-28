@@ -1,16 +1,12 @@
 package fr.inria.yajta.processor;
 
 import fr.inria.yajta.FileHelper;
+import fr.inria.yajta.processor.util.MyMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by nharrand on 11/07/17.

@@ -2,9 +2,8 @@ package fr.inria.yajta.processor;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import fr.inria.yajta.processor.util.MyList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +14,7 @@ import org.json.JSONObject;
 public class TreeNode {
     protected String clazz;
     protected String method;
-    protected List<TreeNode> children;
+    protected MyList<TreeNode> children;
     protected TreeNode parent;
 
     public TreeNode() {}
@@ -25,7 +24,7 @@ public class TreeNode {
         t.method = m;
         t.clazz = c;
         t.parent = this;
-        if(children == null) children = new ArrayList<>();
+        if(children == null) children = new MyList<>();
         children.add(t);
         return t;
     }
@@ -75,7 +74,7 @@ public class TreeNode {
         method = o.getString("method");
         clazz = o.getString("class");
         JSONArray jsonChildren = o.getJSONArray("children");
-        if(jsonChildren.length() > 0) children = new ArrayList<>();
+        if(jsonChildren.length() > 0) children = new MyList<>();
         for(int i = 0; i < jsonChildren.length(); i++) {
             TreeNode c = new TreeNode(jsonChildren.getJSONObject(i));
             c.parent = this;

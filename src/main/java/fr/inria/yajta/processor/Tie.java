@@ -1,13 +1,13 @@
 package fr.inria.yajta.processor;
 
+import fr.inria.yajta.processor.util.MyEntry;
+import fr.inria.yajta.processor.util.MyMap;
+import fr.inria.yajta.processor.util.MySet;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by nharrand on 12/07/17.
@@ -16,12 +16,12 @@ public class Tie implements Tracking {
     public File log;
     BufferedWriter bufferedWriter;
 
-    Map<String, Set<String>> threadLogs = new HashMap<>();
+    MyMap<String, MySet<String>> threadLogs = new MyMap<>();
 
     public synchronized void stepIn(String thread, String clazz, String method) {
-        Set<String> entry = threadLogs.get(thread);
+        MySet<String> entry = threadLogs.get(thread);
         if(entry == null) {
-            entry = new HashSet<>();
+            entry = new MySet<>();
         }
         entry.add(clazz + "." + method);
         threadLogs.put(thread,entry);
@@ -41,7 +41,7 @@ public class Tie implements Tracking {
             bufferedWriter = new BufferedWriter(new FileWriter(log, true));
             boolean isFirst = true;
             bufferedWriter.append("{\"report\":[");
-            for(Map.Entry<String, Set<String>> e: threadLogs.entrySet()) {
+            for(MyEntry<String, MySet<String>> e: threadLogs.entryList()) {
                 if(isFirst) isFirst = false;
                 else bufferedWriter.append(",");
                 bufferedWriter.append("{\"thread\":\"" + e.getKey() + "\", \"methods\":[");

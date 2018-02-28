@@ -1,4 +1,4 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.util;
 
 public class MyEntry<K, V> {
     private final K key;

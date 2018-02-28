@@ -1,7 +1,5 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.util;
 
-
-import fr.inria.yajta.processor.MyList;
 
 import java.util.Arrays;
 
@@ -13,6 +11,7 @@ public class MyMap<K, V> {
 
 
     public V get(K key) {
+        if(key == null) return null;
         for (int i = 0; i < size; i++) {
             if (values[i] != null) {
                 if (values[i].getKey().equals(key)) {
@@ -72,6 +71,22 @@ public class MyMap<K, V> {
         MyList<K> set = new MyList<K>();
         for (int i = 0; i < size; i++) {
             set.add(values[i].getKey());
+        }
+        return set;
+    }
+
+    public MyList<V> valueList() {
+        MyList<V> set = new MyList<V>();
+        for (int i = 0; i < size; i++) {
+            set.add(values[i].getValue());
+        }
+        return set;
+    }
+
+    public MyList<MyEntry<K, V>> entryList() {
+        MyList<MyEntry<K, V>> set = new MyList<MyEntry<K, V>>();
+        for (int i = 0; i < size; i++) {
+            set.add(values[i]);
         }
         return set;
     }
