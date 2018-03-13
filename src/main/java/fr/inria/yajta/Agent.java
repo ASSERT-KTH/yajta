@@ -6,7 +6,6 @@ import fr.inria.yajta.processor.*;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
-import java.net.JarURLConnection;
 import java.util.Arrays;
 import java.util.Properties;
 
