@@ -3,14 +3,17 @@ package fr.inria.yajta;
 
 import fr.inria.yajta.processor.*;
 
+import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
-import java.util.ArrayList;
+import java.net.JarURLConnection;
+import java.util.Arrays;
+import java.util.Properties;
 
 
 public class Agent {
-
-    public static final String yajtaVersionUID = "1.0";
+    //Initialized from pom (pom > project.properties > Yajta
+    public static String yajtaVersionUID;
 
     static String[] INCLUDES = new String[] {};
     static String[] ISOTOPES = new String[] {};
@@ -23,15 +26,7 @@ public class Agent {
     }
 
     public static void premain(String agentArgs, Instrumentation inst) {
-        /*JarURLConnection connection = (JarURLConnection) Agent.class.getResource("Agent.class").openConnection();
-        inst.appendToBootstrapClassLoaderSearch(connection.getJarFile());*/
-
-        //ClassLoader bootstrapLoader = ClassLoader.getSystemClassLoader().getParent();
-        //Class[] initiatedClasses = inst.getInitiatedClasses(bootstrapLoader);
-        //Class[] cl = inst.getAllLoadedClasses();
-
-
-        System.err.println("[Premain] Begin '" + agentArgs + "'");
+        System.err.println("[Yajta] Begin with '" + agentArgs + "'");
         Args a = new Args();
         a.parseArgs(agentArgs);
 
@@ -105,19 +100,22 @@ public class Agent {
                 inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
             }
         }
+        Class loadedClasses[] = inst.getAllLoadedClasses();
+        Object oFilteredLoadedClasses[] = Arrays.stream(loadedClasses)
+                .filter(el -> !el.getName().startsWith("fr.inria.yajta")
+                && !el.getName().startsWith("[Lfr.inria.yajta"))
+                .toArray();
+        Class filteredLoadedClasses[] = new Class[oFilteredLoadedClasses.length];
+        for(int i = 0; i < oFilteredLoadedClasses.length; i++) {
+            filteredLoadedClasses[i] = (Class) oFilteredLoadedClasses[i];
+        }
+        Class BSloadedClasses[] = inst.getInitiatedClasses(ClassLoader.getSystemClassLoader().getParent());
+        //System.err.println("BSloadedClasses size: " + BSloadedClasses.length);
+        //System.err.println("filteredLoadedClasses size: " + filteredLoadedClasses.length);
+        retransform(BSloadedClasses, inst, a);
+        retransform(filteredLoadedClasses, inst, a);
 
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("coucou");
-        /*for(Class cl : inst.getInitiatedClasses(ArrayList.class.getClassLoader())) {
-            System.err.println("[missing class] " + cl.getName());
-        }*/
-        /*Class loadedClasses[] = inst.getAllLoadedClasses();*/
-        Class loadedClasses[] = inst.getInitiatedClasses(ClassLoader.getSystemClassLoader().getParent());
-        //System.err.println("isRedefineClassesSupported: " + inst.isRedefineClassesSupported());
-        retransform(loadedClasses, inst, a);
-        retransform(inst.getInitiatedClasses(ArrayList.class.getClassLoader()), inst, a);
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
             public void run() {
                 getTrackingInstance().flush();
             }
@@ -153,5 +151,15 @@ public class Agent {
         }
     }
 
-
+    public static void main(String[] args) {
+        System.out.println("This class is supposed to be used as an agent and has no real main.");
+        final Properties properties = new Properties();
+        try {
+            properties.load(Agent.class.getClassLoader().getResourceAsStream("/project.properties"));
+            //properties.load(Agent.class.getResourceAsStream("project.properties"));
+            yajtaVersionUID = properties.getProperty("project.version");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

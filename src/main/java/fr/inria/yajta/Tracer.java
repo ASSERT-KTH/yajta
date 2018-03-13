@@ -14,7 +14,7 @@ import static javassist.CtClass.voidType;
 public class Tracer implements ClassFileTransformer {
 
     boolean verbose = false;
-    boolean strictIncludes = false;
+    public boolean strictIncludes = false;
     ClassList cl;
 
     public Tracer (ClassList cl) {
