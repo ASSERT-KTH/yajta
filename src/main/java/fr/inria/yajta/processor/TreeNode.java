@@ -12,6 +12,9 @@ import org.json.JSONObject;
  * Created by nharrand on 11/07/17.
  */
 public class TreeNode {
+
+    public static final long serialVersionUID = 0L;
+
     protected String clazz;
     protected String method;
     protected MyList<TreeNode> children;

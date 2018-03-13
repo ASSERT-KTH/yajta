@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 
 public class Agent {
+
+    public static final String yajtaVersionUID = "1.0";
+
     static String[] INCLUDES = new String[] {};
     static String[] ISOTOPES = new String[] {};
     static String[] EXCLUDES = new String[] {};
@@ -20,6 +23,8 @@ public class Agent {
     }
 
     public static void premain(String agentArgs, Instrumentation inst) {
+        /*JarURLConnection connection = (JarURLConnection) Agent.class.getResource("Agent.class").openConnection();
+        inst.appendToBootstrapClassLoaderSearch(connection.getJarFile());*/
 
         //ClassLoader bootstrapLoader = ClassLoader.getSystemClassLoader().getParent();
         //Class[] initiatedClasses = inst.getInitiatedClasses(bootstrapLoader);
@@ -68,7 +73,18 @@ public class Agent {
             if (inst.isNativeMethodPrefixSupported()) {
                 inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
             }
+        } else if(a.print.equalsIgnoreCase("branch")) {
+            final BranchTracer transformer = new BranchTracer(a.cl, Utils.format(a.ISOTOPES));
 
+            if (a.strictIncludes) transformer.strictIncludes = true;
+
+            INCLUDES = a.INCLUDES;
+            EXCLUDES = a.EXCLUDES;
+            ISOTOPES = a.ISOTOPES;
+            inst.addTransformer(transformer, true);
+            if (inst.isNativeMethodPrefixSupported()) {
+                inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
+            }
         } else if(a.includeFile == null) {
             final Tracer transformer = new Tracer(a.cl, Utils.format(a.ISOTOPES));
 

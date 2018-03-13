@@ -54,7 +54,7 @@ public class Follower implements Tracking {
     }
 
     public void offTrack(String thread, String method, String cur) {
-        System.err.println("[OFF TRACK] <" + method + "> instad of <" + cur + ">");
+        System.err.println("[OFF TRACK] <" + method + "> instead of <" + cur + ">");
         threadOfftrack.put(thread,true);
 
     }

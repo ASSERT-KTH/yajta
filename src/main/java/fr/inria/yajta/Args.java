@@ -98,6 +98,8 @@ public class Args {
             print = "values";
         } else if(p.compareTo("print=matrix") == 0) {
             print = "matrix";
+        } else if(p.compareTo("print=branch") == 0) {
+            print = "branch";
         }
     }
 

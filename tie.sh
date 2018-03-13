@@ -1,8 +1,10 @@
 #!/bin/bash
 
+rootDir=`pwd`
 pathToJarAgent=$1
-tmpDir="log"
+tmpDir="$rootDir/log"
 packages=$2
+testSrcDir="src/test"
 #pathToJarAgent="../../projet_art_et_numerique/whistle-bits/code-analyser/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar"
 #packages="org.apache.commons.lang3"
 
@@ -17,7 +19,7 @@ traceTest() {
 }
 
 mkdir $tmpDir
-for t in `listTests src/test`
+for t in `listTests $testSrcDir`
 do
 	traceTest $t
 done

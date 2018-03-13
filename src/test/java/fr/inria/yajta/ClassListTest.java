@@ -1,5 +1,6 @@
 package fr.inria.yajta;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -110,5 +111,4 @@ public class ClassListTest {
             assertFalse("Class " + notOk[i] + " should NOT be ok", cl.isToBeProcessed(notOk[i]));
         }
     }
-
 }

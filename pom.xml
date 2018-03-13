@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fr.inria</groupId>
   <artifactId>yajta</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
   <name>yajta</name>
   <url>http://maven.apache.org</url>
@@ -75,6 +75,7 @@
                             <Can-Redefine-Classes>True</Can-Redefine-Classes>
                             <Can-Retransform-Classes>True</Can-Retransform-Classes>
                             <Can-Set-Native-Method-Prefix>True</Can-Set-Native-Method-Prefix>
+                            <Boot-Class-Path>/home/nharrand/Documents/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar</Boot-Class-Path>
                         </manifestEntries>
                     </archive>
                     <descriptorRefs>

@@ -1,6 +1,9 @@
 package fr.inria.yajta;
 
-import java.util.*;
+
+import fr.inria.yajta.processor.util.MyMap;
+
+import java.util.Arrays;
 
 public class ClassList {
     PackTree rootTree;
@@ -9,12 +12,12 @@ public class ClassList {
         rootTree = new PackTree(!strictIncludes);
         if(includes != null) {
             for(String in : includes) {
-                rootTree.add(in.split("/"),true, !strictIncludes);
+                rootTree.add(split(in,'/'),true, !strictIncludes);
             }
         }
         if(excludes != null) {
             for(String ex : excludes) {
-                rootTree.add(ex.split("/"),false, !strictIncludes);
+                rootTree.add(split(ex,'/'),false, !strictIncludes);
             }
         }
         rootTree.add(new String[]{"fr","inria","yajta"},false, !strictIncludes);
@@ -22,7 +25,7 @@ public class ClassList {
 
     public boolean isToBeProcessed(String className) {
         if (className == null) return false;
-        return rootTree.get(className.split("/"));
+        return rootTree.get(split(className,'/'));
     }
 
 
@@ -32,7 +35,7 @@ public class ClassList {
             this.toInclude = toInclude;
         }
 
-        Map<String,PackTree> children = new HashMap<>();
+        MyMap<String,PackTree> children = new MyMap<>();
 
         public void add(String[] path, boolean toInclude, boolean def) {
             if(path == null) return;
@@ -66,5 +69,24 @@ public class ClassList {
             }
         }
 
+    }
+
+    public static String[] split(String str, char delim) {
+        int size = 1;
+        for(char c: str.toCharArray()) {
+            if(c == delim) size++;
+        }
+        String[] res = new String[size];
+        int j = 0;
+        int last = 0;
+        for(int i = 0; i < str.length(); i++) {
+            if(str.charAt(i) == delim) {
+                res[j] = str.substring(last,i);
+                j++;
+                last = i+1;
+            }
+        }
+        res[j] = str.substring(last);
+        return res;
     }
 }

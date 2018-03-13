@@ -41,8 +41,16 @@ Does not log native methods yet.
 
 # |-o-| tie |-o-| (Test Impact Explorer)
 
+Simply run 
 
-## Run test with traces
+```bash
+./tie.sh /path/to/yajta-jar org.MyPackage
+
+```
+
+## Manual run
+
+### Run test with traces
 
 For each test (Trace only org.MyApp):
 ```
@@ -54,7 +62,7 @@ For each test (Trace (almost) everything):
 mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar=\"print=tie|excludes=java,javax,sun,sunw\"" test > testLog/MyTest
 ```
 
-## Organize the output as a map of methods / set of test
+### Organize the output as a map of methods / set of test
 
 ```
 java -cp path/to/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar fr.inria.tie.Report -i testLog -o methodsImpact.json

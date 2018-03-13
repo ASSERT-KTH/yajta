@@ -1,5 +1,6 @@
 package fr.inria.yajta.processor;
 
+import fr.inria.yajta.Agent;
 import fr.inria.yajta.processor.util.MyEntry;
 import fr.inria.yajta.processor.util.MyMap;
 
@@ -48,7 +49,9 @@ public class Logger implements Tracking {
             if(log.exists()) log.delete();
             log.createNewFile();
             bufferedWriter = new BufferedWriter(new FileWriter(log, true));
-            if(tree) bufferedWriter.append("{\"name\":\"Threads\", \"children\":[");
+            if(tree) bufferedWriter.append("{\"name\":\"Threads\", " +
+                    "\"yajta-version\": " + Agent.yajtaVersionUID + ", " +
+                    "\"serialization-version\": " + TreeNode.serialVersionUID + ", \"children\":[");
             boolean isFirst = true;
             for(MyEntry<String, MyEntry<TreeNode, TreeNode>> e: threadLogs.entryList()) {
                 if (isFirst) isFirst = false;
