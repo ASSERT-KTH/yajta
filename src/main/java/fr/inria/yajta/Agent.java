@@ -117,32 +117,6 @@ public class Agent {
         retransform(loadedClasses, inst, a);
         retransform(inst.getInitiatedClasses(ArrayList.class.getClassLoader()), inst, a);
 
-        /*for(int i = loadedClasses.length-1; i >= 0; i--) {
-            System.err.println("Loaded class " + loadedClasses[i].getName());
-            String className = loadedClasses[i].getName();
-            if(loadedClasses[i].getName().startsWith("[L")) {
-                className = loadedClasses[i].getName().substring(2).replace(".", "/");
-            }
-                System.err.println("Loaded class " + className + " -> " + a.cl.isToBeProcessed(className));
-                if(a.cl.isToBeProcessed(className)) {
-                    try {
-                        //System.err.println(loadedClasses[i].getName());
-                        inst.retransformClasses(loadedClasses[i]);
-
-                    } catch (UnmodifiableClassException e) {
-                        System.err.println("[ERROR] " + className);
-                    }
-                }
-                if(Utils.startWith(className, Utils.format(a.ISOTOPES)) && !Utils.startWith(className, Utils.format(a.EXCLUDES))) {
-                    try {
-                        inst.retransformClasses(loadedClasses[i]);
-                    } catch (UnmodifiableClassException e) {
-                        System.err.println("[ERROR] (isotope) " + className);
-                    }
-                }
-            //}
-        }*/
-
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 getTrackingInstance().flush();

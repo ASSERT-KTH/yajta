@@ -50,8 +50,9 @@ public class Logger implements Tracking {
             log.createNewFile();
             bufferedWriter = new BufferedWriter(new FileWriter(log, true));
             if(tree) bufferedWriter.append("{\"name\":\"Threads\", " +
-                    "\"yajta-version\": " + Agent.yajtaVersionUID + ", " +
-                    "\"serialization-version\": " + TreeNode.serialVersionUID + ", \"children\":[");
+                    "\"yajta-version\": \"" + Agent.yajtaVersionUID + "\", " +
+                    "\"serialization-version\": " + TreeNode.serialVersionUID + ", " +
+                    "\"children\":[");
             boolean isFirst = true;
             for(MyEntry<String, MyEntry<TreeNode, TreeNode>> e: threadLogs.entryList()) {
                 if (isFirst) isFirst = false;
