@@ -1,6 +1,8 @@
 package fr.inria.yajta.processor;
 
 
+import fr.inria.yajta.api.ValueTracking;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by nharrand on 27/07/17.
  */
-public class ReturnLogger implements Tracking {
+public class ReturnLogger implements ValueTracking {
     public File log;
     BufferedWriter bufferedWriter;
 
@@ -31,55 +33,25 @@ public class ReturnLogger implements Tracking {
     }
 
     @Override
-    public void trace(String thread, String clazz, String method, boolean returnValue) {
-        trace(thread,clazz,method, new Boolean(returnValue));
+    public void setLogFile(File log) {
+        this.log = log;
     }
 
     @Override
-    public void trace(String thread, String clazz, String method, byte returnValue) {
-        trace(thread,clazz,method, new Byte(returnValue));
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, int returnValue) {
-        trace(thread,clazz,method, new Integer(returnValue));
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, long returnValue) {
-        trace(thread,clazz,method, new Long(returnValue));
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, float returnValue) {
-        trace(thread,clazz,method, new Float(returnValue));
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, double returnValue) {
-        trace(thread,clazz,method, new Double(returnValue));
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, short returnValue) {
-        trace(thread,clazz,method, new Short(returnValue));
-    }
-
-    @Override
-    public void stepIn(String thread, String clazz, String method) {
+    public void stepIn(String thread, String clazz, String method, Object[] parameter) {
 
     }
 
     @Override
-    public void stepOut(String thread) {
+    public void stepOut(String thread, Object returnValue) {
 
     }
 
     public void flush() {
         if(log == null) {
             int i = (int) Math.floor(Math.random() * (double) Integer.MAX_VALUE);
-            //log = new File("log" + i + ".json");
-            log = new File("log" + i + ".ser");
+            log = new File("log" + i + ".json");
+            //log = new File("log" + i + ".ser");
         }
         try {
             if(log.exists()) log.delete();

@@ -1,5 +1,6 @@
 package fr.inria.yajta.processor;
 
+import fr.inria.yajta.api.Tracking;
 import fr.inria.yajta.processor.util.MyMap;
 import fr.inria.yajta.processor.util.MyStack;
 
@@ -15,6 +16,11 @@ public class DynamicGraph implements Tracking {
     MyMap<String, MyStack<String>> previous = new MyMap<>();
 
     public File log;
+
+    @Override
+    public void setLogFile(File log) {
+        this.log = log;
+    }
 
     @Override
     public void stepIn(String thread, String clazz, String method) {
@@ -114,46 +120,6 @@ public class DynamicGraph implements Tracking {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, Object returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, boolean returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, byte returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, int returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, long returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, float returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, double returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, short returnValue) {
 
     }
 }

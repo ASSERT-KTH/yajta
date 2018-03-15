@@ -1,15 +1,10 @@
 package fr.inria.yajta;
 
+import fr.inria.yajta.api.ClassList;
 import javassist.*;
 import javassist.Modifier;
-import javassist.expr.ExprEditor;
 
-import java.io.*;
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.UnmodifiableClassException;
-import java.lang.reflect.*;
-
-import static javassist.CtClass.voidType;
 
 public class Tracer implements ClassFileTransformer {
 

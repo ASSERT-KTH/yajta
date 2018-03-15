@@ -1,6 +1,7 @@
 package fr.inria.yajta.processor;
 
 import fr.inria.yajta.FileHelper;
+import fr.inria.yajta.api.Tracking;
 import fr.inria.yajta.processor.util.MyMap;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,11 @@ public class Follower implements Tracking {
 
     MyMap<String, TreeNode> threadLogs = new MyMap<>();
     MyMap<String, Boolean> threadOfftrack = new MyMap<>();
+
+    @Override
+    public void setLogFile(File log) {
+
+    }
 
     public synchronized void stepIn(String thread, String clazz, String method) {
         if(!threadOfftrack.containsKey(thread) || threadOfftrack.get(thread)) return;
@@ -60,46 +66,6 @@ public class Follower implements Tracking {
     }
 
     public void flush() {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, Object returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, boolean returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, byte returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, int returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, long returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, float returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, double returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, short returnValue) {
 
     }
 }

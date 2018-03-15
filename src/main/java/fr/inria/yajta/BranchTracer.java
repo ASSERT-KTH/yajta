@@ -1,5 +1,6 @@
 package fr.inria.yajta;
 
+import fr.inria.yajta.api.ClassList;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -9,17 +10,13 @@ import javassist.Modifier;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.Bytecode;
-import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
-import javassist.bytecode.Mnemonic;
 import javassist.bytecode.analysis.ControlFlow;
 import javassist.compiler.CompileError;
 import javassist.compiler.Javac;
 
 import java.lang.instrument.ClassFileTransformer;
-import java.util.Arrays;
-import java.util.List;
 
 public class BranchTracer implements ClassFileTransformer {
 

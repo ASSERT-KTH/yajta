@@ -1,5 +1,7 @@
 package fr.inria.yajta;
 
+import fr.inria.yajta.api.ClassList;
+
 import java.io.File;
 
 /**

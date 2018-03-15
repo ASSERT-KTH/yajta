@@ -1,5 +1,6 @@
 package fr.inria.yajta.processor;
 
+import fr.inria.yajta.api.Tracking;
 import fr.inria.yajta.processor.util.MyEntry;
 import fr.inria.yajta.processor.util.MyMap;
 
@@ -14,6 +15,11 @@ public class BranchLogger implements Tracking {
     BufferedWriter bufferedWriter;
 
     MyMap<String, MyEntry<TreeNode, TreeNode>> threadLogs = new MyMap<>();
+
+    @Override
+    public void setLogFile(File log) {
+        this.log = log;
+    }
 
     public synchronized void stepIn(String thread, String clazz, String method) {
         MyEntry<TreeNode, TreeNode> entry = threadLogs.get(thread);
@@ -57,46 +63,6 @@ public class BranchLogger implements Tracking {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, Object returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, boolean returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, byte returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, int returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, long returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, float returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, double returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, short returnValue) {
-
     }
 
 }

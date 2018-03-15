@@ -1,14 +1,14 @@
 package fr.inria.yajta;
 
 
+import fr.inria.yajta.api.Tracking;
+import fr.inria.yajta.api.ValueTracking;
 import fr.inria.yajta.processor.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.util.Arrays;
-import java.util.Properties;
 
 
 public class Agent {
@@ -20,22 +20,7 @@ public class Agent {
     static String[] EXCLUDES = new String[] {};
 
     static Tracking trackingInstance;
-
-    public static void offlineInit() {
-        //If used offline, the Agent premain will never be called
-        //Then trackingInstance must be initialized
-        //And the shutdown hook too
-        Logger l =  new Logger();
-        l.log = new File("yajta-trace.json");
-        //System.err.println("[yajta] output: " + l.log.getAbsolutePath());
-        trackingInstance = l;
-
-        Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
-            public void run() {
-                getTrackingInstance().flush();
-            }
-        });
-    }
+    static ValueTracking valueTrackingInstance;
 
     public static Tracking getTrackingInstance() {
         if(trackingInstance == null) {
@@ -67,7 +52,7 @@ public class Agent {
             ReturnLogger t = new ReturnLogger();
             if(a.output != null)
                 t.log = a.output;
-            trackingInstance = t;
+            valueTrackingInstance = t;
         } else {
             Logger l =  new Logger();
             if(a.output != null)
@@ -143,6 +128,21 @@ public class Agent {
 
     }
 
+    public static void offlineInit() {
+        //If used offline, the Agent premain will never be called
+        //Then trackingInstance must be initialized
+        //And the shutdown hook too
+        Logger l =  new Logger();
+        trackingInstance = l;
+        trackingInstance.setLogFile(new File("yajta-trace.json"));
+
+        Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
+            public void run() {
+                getTrackingInstance().flush();
+            }
+        });
+    }
+
     public static void retransform(Class[] classes, Instrumentation inst, Args a) {
         for(int i = classes.length-1; i >= 0; i--) {
             String className = classes[i].getName().replace(".", "/");
@@ -166,7 +166,6 @@ public class Agent {
                     System.err.println("[ERROR] (isotope) " + className);
                 }
             }
-            //}
         }
     }
 }

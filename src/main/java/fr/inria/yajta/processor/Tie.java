@@ -1,5 +1,6 @@
 package fr.inria.yajta.processor;
 
+import fr.inria.yajta.api.Tracking;
 import fr.inria.yajta.processor.util.MyEntry;
 import fr.inria.yajta.processor.util.MyMap;
 import fr.inria.yajta.processor.util.MySet;
@@ -17,6 +18,11 @@ public class Tie implements Tracking {
     BufferedWriter bufferedWriter;
 
     MyMap<String, MySet<String>> threadLogs = new MyMap<>();
+
+    @Override
+    public void setLogFile(File log) {
+        this.log = log;
+    }
 
     public synchronized void stepIn(String thread, String clazz, String method) {
         MySet<String> entry = threadLogs.get(thread);
@@ -58,46 +64,6 @@ public class Tie implements Tracking {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, Object returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, boolean returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, byte returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, int returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, long returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, float returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, double returnValue) {
-
-    }
-
-    @Override
-    public void trace(String thread, String clazz, String method, short returnValue) {
-
     }
 
 }

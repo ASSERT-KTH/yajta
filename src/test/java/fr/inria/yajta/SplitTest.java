@@ -1,5 +1,6 @@
 package fr.inria.yajta;
 
+import fr.inria.yajta.api.ClassList;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;

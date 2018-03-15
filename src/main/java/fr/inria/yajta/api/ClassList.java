@@ -1,4 +1,4 @@
-package fr.inria.yajta;
+package fr.inria.yajta.api;
 
 
 import fr.inria.yajta.processor.util.MyMap;
@@ -6,6 +6,10 @@ import fr.inria.yajta.processor.util.MyMap;
 import java.util.Arrays;
 
 public class ClassList {
+    public static ClassList getDefault(String packageToTrace) {
+        return new ClassList(new String[]{packageToTrace}, null, null, true);
+    }
+
     PackTree rootTree;
 
     public ClassList(String[] includes, String[] excludes, String[] isotopes, boolean strictIncludes) {

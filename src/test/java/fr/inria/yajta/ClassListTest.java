@@ -1,6 +1,6 @@
 package fr.inria.yajta;
 
-import org.junit.Test;
+import fr.inria.yajta.api.ClassList;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
