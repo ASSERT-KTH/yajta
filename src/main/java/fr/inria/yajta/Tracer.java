@@ -13,7 +13,7 @@ import static javassist.CtClass.voidType;
 
 public class Tracer implements ClassFileTransformer {
 
-    boolean verbose = false;
+    public boolean verbose = false;
     public boolean strictIncludes = false;
     ClassList cl;
 
@@ -54,7 +54,26 @@ public class Tracer implements ClassFileTransformer {
             cl = pool.makeClass( new java.io.ByteArrayInputStream( b ) );
             if( cl.isInterface() == false ) {
 
-                CtBehavior[] methods = cl.getDeclaredBehaviors();
+                doClass(cl,name,isIsotope);
+
+                b = cl.toBytecode();
+
+                if(verbose) System.err.println( "-> Instrument  " + name);
+            }
+        } catch( Exception e ) {
+            if(verbose) System.err.println( "Could not instrument  " + name + ",  exception : " + e.getMessage() );
+        } finally {
+
+            if( cl != null ) {
+                cl.detach();
+            }
+        }
+
+        return b;
+    }
+
+    public void doClass(CtClass cl, String name, boolean isIsotope) throws NotFoundException, CannotCompileException {
+        CtBehavior[] methods = cl.getDeclaredBehaviors();
 
                 /*for( int i = 0; i < methods.length; i++ ) {
                     if(Modifier.isNative(methods[i].getModifiers()) && !methods[i].getName().startsWith("wrapped__native__method__")) {
@@ -86,30 +105,15 @@ public class Tracer implements ClassFileTransformer {
                 }
                 methods = cl.getDeclaredBehaviors();*/
 
-                for( int i = 0; i < methods.length; i++ ) {
+        for( int i = 0; i < methods.length; i++ ) {
 
-                    if( methods[i].isEmpty() == false ) {
-                        if(isIsotope)
-                            doMethod( methods[i] , name, isIsotope, "fr.inria.singleusagedemo.collections.MyMap");
-                        else
-                            doMethod( methods[i] , name);
-                    }
-                }
-
-                b = cl.toBytecode();
-
-                if(verbose) System.err.println( "-> Instrument  " + name);
-            }
-        } catch( Exception e ) {
-            if(verbose) System.err.println( "Could not instrument  " + name + ",  exception : " + e.getMessage() );
-        } finally {
-
-            if( cl != null ) {
-                cl.detach();
+            if( methods[i].isEmpty() == false ) {
+                if(isIsotope)
+                    doMethod( methods[i] , name, isIsotope, "fr.inria.singleusagedemo.collections.MyMap");
+                else
+                    doMethod( methods[i] , name);
             }
         }
-
-        return b;
     }
 
     private void doMethod( final CtBehavior method , String className) throws NotFoundException, CannotCompileException {

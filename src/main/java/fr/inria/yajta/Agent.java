@@ -3,6 +3,7 @@ package fr.inria.yajta;
 
 import fr.inria.yajta.processor.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
@@ -20,7 +21,26 @@ public class Agent {
 
     static Tracking trackingInstance;
 
+    public static void offlineInit() {
+        //If used offline, the Agent premain will never be called
+        //Then trackingInstance must be initialized
+        //And the shutdown hook too
+        Logger l =  new Logger();
+        l.log = new File("yajta-trace.json");
+        //System.err.println("[yajta] output: " + l.log.getAbsolutePath());
+        trackingInstance = l;
+
+        Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
+            public void run() {
+                getTrackingInstance().flush();
+            }
+        });
+    }
+
     public static Tracking getTrackingInstance() {
+        if(trackingInstance == null) {
+            offlineInit();
+        }
         return trackingInstance;
     }
 
@@ -147,18 +167,6 @@ public class Agent {
                 }
             }
             //}
-        }
-    }
-
-    public static void main(String[] args) {
-        System.out.println("This class is supposed to be used as an agent and has no real main.");
-        final Properties properties = new Properties();
-        try {
-            properties.load(Agent.class.getClassLoader().getResourceAsStream("/project.properties"));
-            //properties.load(Agent.class.getResourceAsStream("project.properties"));
-            yajtaVersionUID = properties.getProperty("project.version");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

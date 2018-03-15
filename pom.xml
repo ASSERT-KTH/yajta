@@ -9,6 +9,21 @@
   <url>http://maven.apache.org</url>
 
   <dependencies>
+      <dependency>
+          <groupId>com.github.gumtreediff</groupId>
+          <artifactId>client</artifactId>
+          <version>2.0.0</version>
+      </dependency>
+      <!--<dependency>
+          <groupId>com.github.gumtreediff</groupId>
+          <artifactId>gen.antlr3-json</artifactId>
+          <version>2.1.0</version>
+      </dependency>-->
+      <dependency>
+          <groupId>com.github.gumtreediff</groupId>
+          <artifactId>core</artifactId>
+          <version>2.0.0</version>
+      </dependency>
       <!--<dependency>
           <groupId>javassist</groupId>
           <artifactId>javassist</artifactId>

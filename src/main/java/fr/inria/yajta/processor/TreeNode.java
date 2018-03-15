@@ -15,10 +15,10 @@ public class TreeNode {
 
     public static final long serialVersionUID = 0L;
 
-    protected String clazz;
-    protected String method;
-    protected MyList<TreeNode> children;
-    protected TreeNode parent;
+    public String clazz;
+    public String method;
+    public MyList<TreeNode> children;
+    public TreeNode parent;
 
     public TreeNode() {}
 
