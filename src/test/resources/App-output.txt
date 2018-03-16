@@ -1,0 +1,7 @@
+Hello world!
+B:
+T extends B : 1
+C:
+T extends C : 2
+D:
+T extends C : 2
