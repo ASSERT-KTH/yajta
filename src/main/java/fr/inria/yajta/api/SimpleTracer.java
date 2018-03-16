@@ -4,10 +4,13 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
 import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtPrimitiveType;
 import javassist.Modifier;
 import javassist.NotFoundException;
 
 import java.lang.instrument.ClassFileTransformer;
+import java.lang.reflect.Method;
 
 public class SimpleTracer implements ClassFileTransformer {
 
@@ -32,6 +35,38 @@ public class SimpleTracer implements ClassFileTransformer {
 
     public SimpleTracer (ClassList cl, boolean logValue) {
         new SimpleTracer(cl, "fr.inria.yajta.Agent.getInstance()", logValue);
+    }
+
+    public void setTrackingClass(Class<? extends Tracking> trackingClass) throws MalformedTrackingClassException {
+        if(trackingClass.isAnonymousClass()) {
+            throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " should not be anonymous.)");
+        }
+        try {
+            Method m = trackingClass.getDeclaredMethod("getInstance");
+            if(!java.lang.reflect.Modifier.isStatic(m.getModifiers())) {
+                throw new MalformedTrackingClassException("Method " + trackingClass.getName() + ".getInstance() is not static");
+            }
+            loggerInstance = trackingClass.getName() + ".getInstance()";
+            logValue = false;
+        } catch (NoSuchMethodException e) {
+            throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " does not have a static method getInstance()");
+        }
+    }
+
+    public void setValueTrackingClass(Class<? extends ValueTracking> trackingClass) throws MalformedTrackingClassException {
+        if(trackingClass.isAnonymousClass()) {
+            throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " should not be anonymous.)");
+        }
+        try {
+            Method m = trackingClass.getDeclaredMethod("getInstance");
+            if(!java.lang.reflect.Modifier.isStatic(m.getModifiers())) {
+                throw new MalformedTrackingClassException("Method " + trackingClass.getName() + ".getInstance() is not static");
+            }
+            loggerInstance = trackingClass.getName() + ".getInstance()";
+            logValue = true;
+        } catch (NoSuchMethodException e) {
+            throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " does not have a static method getInstance()");
+        }
     }
 
     public SimpleTracer (ClassList cl, String loggerInstance, boolean logValue) {
@@ -107,14 +142,29 @@ public class SimpleTracer implements ClassFileTransformer {
             String returnValue = "";
             if(logValue) {
                 parameterValues = ", $args";
-                returnValue = ", $_";
+                if(method instanceof CtMethod) {
+                    CtMethod m = (CtMethod) method;
+                    if(m.getReturnType() instanceof CtPrimitiveType
+                            && !(m.getReturnType().getName().equals("void"))) {
+                        returnValue = ", new " + ((CtPrimitiveType) m.getReturnType()).getWrapperName() +"($_)";
+                    } else {
+                        returnValue = ", $_";
+                    }
+                } else {
+                    returnValue = ", $_";
+                }
             }
 
+            /*System.err.println(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
+                    + className.replace("/", ".") + "\", \""
+                    + method.getName() + params + "\""
+                    + parameterValues
+                    + ");");*/
             method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
                     + className.replace("/", ".") + "\", \""
-                    + method.getName() + params
+                    + method.getName() + params + "\""
                     + parameterValues
-                    + "\");");
+                    + ");");
             method.insertAfter(loggerInstance + ".stepOut(Thread.currentThread().getName()"
                     + returnValue
                     +");");

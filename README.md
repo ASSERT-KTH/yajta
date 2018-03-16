@@ -1,5 +1,7 @@
 # yajta (Yet Another Java Tracing Agent)
 
+yajta is both a small library on top of javassist helping to insert probes in bytecode, and a agent built with this library that allow tracing method call at runtime of java programs.
+
 Java agent tracing methods calls.
 
 Argument must belong to the following list (and be separated by |)
@@ -81,4 +83,23 @@ java -cp path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar fr.inria.off
 
 #Run
 java -cp outputDir:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar org.myApp
+```
+
+# API
+
+```Java
+    //File classDir is the directory that contains byte code to be instrumented
+    //You should implement in a class the interface Tracking (here TestLogger does)
+    //Other constructors exist if you want to add filters to the class to be instrumented 
+    //and/or specify the output for the transformed bytecode (by default a temporary directory is created)
+    InstrumentationBuilder builder = new InstrumentationBuilder(classDir, TestLogger.class);
+    //Note that the tracking class must also contain a static method getInstance() that returns an instance of the logger.
+    //If bytecode is to be instrumented offline and run after the stop of the jvm, this getInstance() method should also register a shutdown hook that will call flush()
+    //flush is supposed to contain whatever processing is supposed to be done after all logs are collected.
+
+    //Apply the instrumentation
+    builder.instrument();
+    //Optionally run the instrumented classes
+    builder.setEntryPoint("fr.inria.helloworld.App", "main", String[].class);
+    builder.runInstrumented((Object) new String[]{""});
 ```

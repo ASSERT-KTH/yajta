@@ -20,6 +20,12 @@ public class Logger implements Tracking {
 
     MyMap<String, MyEntry<TreeNode, TreeNode>> threadLogs = new MyMap<>();
 
+    //If used outside of agent
+    static Logger instance = new Logger();
+    public static Logger getInstance() {
+        return instance;
+    }
+
     @Override
     public void setLogFile(File log) {
         this.log = log;

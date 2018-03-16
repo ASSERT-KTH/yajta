@@ -2,6 +2,7 @@ package fr.inria.offline;
 
 import fr.inria.yajta.Agent;
 import fr.inria.yajta.Tracer;
+import fr.inria.yajta.Utils;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -30,9 +31,7 @@ public class Instrumenter {
             pool.appendClassPath(Agent.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             pool.appendClassPath(classDir.getAbsolutePath());
             //pool.appendClassPath("/home/nharrand/Documents/yajta/target/classes");
-            Object[] classNamesO = listClassFiles(classDir,classDir).toArray();
-            String[] classNames = new String[classNamesO.length];
-            for(int i = 0; i < classNamesO.length; i++) classNames[i] = (String) classNamesO[i];
+            String[] classNames = Utils.listClassesAsArray(classDir);
             CtClass[] classToTransform = pool.get(classNames);
 
             Tracer tracer = new Tracer(null);
@@ -52,18 +51,6 @@ public class Instrumenter {
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public static List<String> listClassFiles(File f, File root) {
-        List<String> res = new ArrayList<>();
-        if(f.isDirectory()) {
-            for(File c: f.listFiles()) {
-                res.addAll(listClassFiles(c, root));
-            }
-        } else if (f.getName().endsWith(".class")) {
-            res.add(f.getPath().split("\\.class")[0].substring(root.getPath().length()+1).replace("/","."));
-        }
-        return res;
     }
 
 
