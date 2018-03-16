@@ -12,12 +12,20 @@ public class TestLogger implements Tracking {
     public List<Log> log = new ArrayList<>();
 
     public static TestLogger getInstance() {
+        //No needs to register a shutdown hook but it would look like this:
+        /*
+         * Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
+         *   public void run() {
+         *      TestLogger.getInstance().flush();
+         *   }
+         * });
+        */
         return instance;
     }
 
     @Override
     public void setLogFile(File log) {
-
+        //This logger is not meant to be used outside of tests, therefor, logs will never be wrote done in a file
     }
 
     @Override
@@ -32,7 +40,7 @@ public class TestLogger implements Tracking {
 
     @Override
     public void flush() {
-
+        //This logger is not meant to be used outside of tests, therefor, logs will never be wrote done in a file
     }
 
     public enum LOGTYPE {IN,OUT;}

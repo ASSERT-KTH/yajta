@@ -97,6 +97,8 @@ java -cp outputDir:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar or
     //If bytecode is to be instrumented offline and run after the stop of the jvm, this getInstance() method should also register a shutdown hook that will call flush()
     //flush is supposed to contain whatever processing is supposed to be done after all logs are collected.
 
+    //See fr.inria.yajta.api.loggerimplem.TestLogger as example.
+
     //Apply the instrumentation
     builder.instrument();
     //Optionally run the instrumented classes
