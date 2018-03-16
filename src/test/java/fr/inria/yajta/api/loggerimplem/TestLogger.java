@@ -7,25 +7,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestLogger implements Tracking {
-    static TestLogger instance = new TestLogger();
+    static TestLogger instance;
 
     public List<Log> log = new ArrayList<>();
 
     public static TestLogger getInstance() {
-        //No needs to register a shutdown hook but it would look like this:
-        /*
-         * Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
-         *   public void run() {
-         *      TestLogger.getInstance().flush();
-         *   }
-         * });
-        */
+        if(instance == null) {
+            instance = new TestLogger();
+            // This logger is not meant to be used outside of tests, therefor,
+            // logs will never be written down in a file, so
+            // there is no needs to register a shutdown hook but it would look like this:
+
+            /*
+             * instance.setLogFile(new File("my-traces.json"));
+             * Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
+             *   public void run() {
+             *      TestLogger.getInstance().flush();
+             *   }
+             * });
+            */
+        }
         return instance;
     }
 
     @Override
     public void setLogFile(File log) {
-        //This logger is not meant to be used outside of tests, therefor, logs will never be wrote done in a file
+        //This logger is not meant to be used outside of tests, therefor, logs will never be written down in a file
     }
 
     @Override
@@ -40,7 +47,7 @@ public class TestLogger implements Tracking {
 
     @Override
     public void flush() {
-        //This logger is not meant to be used outside of tests, therefor, logs will never be wrote done in a file
+        //This logger is not meant to be used outside of tests, therefor, logs will never be written down in a file
     }
 
     public enum LOGTYPE {IN,OUT;}
