@@ -5,36 +5,36 @@ yajta is both a small library on top of javassist helping to insert probes in by
 Java agent tracing methods calls.
 
 Argument must belong to the following list (and be separated by |)
-	- includes=org.package(,org.package2)* Default: Empty
-	- excludes=org.package(,org.package2)* Default: fr.inria.yajta (always added to excludes)
-	- isotopes=org.package(,org.package2)* Default:Empty
-	- print=(list,tree,tie) Default: tree
-	- strict-includes Default: false
-	- follow=File Default: null
-	- output=File Default: null
+ * includes=org.package(,org.package2)* Default: Empty
+ * excludes=org.package(,org.package2)* Default: fr.inria.yajta (always added to excludes)
+ * isotopes=org.package(,org.package2)* Default:Empty
+ * print=(list,tree,tie,matrix) Default: tree
+ * strict-includes Default: false
+ * follow=File Default: null
+ * output=File Default: log[random_number].json
 
 Usage:
 ```
-java -javaagent:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar="Args" myApp 
+java -javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="Args" myApp 
 ```
 
 Ex:
 ```
-java javaagent:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|output=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
+java javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|output=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
 ```
 
 Note that not excluding java,javax,sun,sunw might still result into carshes
 
 Note that in order to instrument classes loaded by the bootstrap class loader you need to add the agent jar to its classpath.
 ```
-java -Xbootclasspath/p:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar -javaagent...
+java -Xbootclasspath/p:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar -javaagent...
 ```
 
 ## Check that an App follows the same execution path than a previous one
 
 Ex:
 ```
-java javaagent:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|follow=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
+java javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|follow=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
 ```
 
 ## Known Limitations
@@ -56,18 +56,18 @@ Simply run
 
 For each test (Trace only org.MyApp):
 ```
-mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar=\"strict-includes|print=tie|includes=org.myApp\"" test > testLog/MyTest
+mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar=\"strict-includes|print=tie|includes=org.myApp\"" test > testLog/MyTest
 ```
 
 For each test (Trace (almost) everything):
 ```
-mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar=\"print=tie|excludes=java,javax,sun,sunw\"" test > testLog/MyTest
+mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar=\"print=tie|excludes=java,javax,sun,sunw\"" test > testLog/MyTest
 ```
 
 ### Organize the output as a map of methods / set of test
 
 ```
-java -cp path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar fr.inria.tie.Report -i testLog -o methodsImpact.json
+java -cp path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar fr.inria.tie.Report -i testLog -o methodsImpact.json
 ```
 
 # Offline instrumentation
@@ -79,10 +79,10 @@ Note that in order to run them you must add the yajta jar to your classpath (as 
 
 ```
 #Instrument
-java -cp path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar fr.inria.offline.Instrumenter classDir outputDir
+java -cp path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar fr.inria.offline.Instrumenter classDir outputDir
 
 #Run
-java -cp outputDir:path/to/yajta/target/yajta-1.1.0-jar-with-dependencies.jar org.myApp
+java -cp outputDir:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar org.myApp
 ```
 
 # API
