@@ -65,6 +65,7 @@ public class InstrumentationBuilder {
     }
 
 
+    /** instrument all classes (unless a class filter us given) from the given input directory and writes the instrumented classed to disk */
     public void instrument() throws MalformedTrackingClassException {
         try {
             if(implementsInterface(loggerClass,Tracking.class)) {
