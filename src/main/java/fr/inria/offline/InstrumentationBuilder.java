@@ -28,6 +28,7 @@ public class InstrumentationBuilder {
     ClassList list;
     SimpleTracer tracer;
 
+    /** trackingClass must implement Tracking or ValueTracking */
     public InstrumentationBuilder (File classDir, File outputDir, ClassList filter, Class trackingClass) throws MalformedTrackingClassException {
         this.classDir = classDir;
         this.outputDir = outputDir;
@@ -47,14 +48,17 @@ public class InstrumentationBuilder {
         }
     }
 
+    /** trackingClass must implement Tracking or ValueTracking */
     public InstrumentationBuilder (File classDir, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,null,null,trackingClass);
     }
 
+    /** trackingClass must implement Tracking or ValueTracking */
     public InstrumentationBuilder (File classDir, ClassList filter, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,null,filter,trackingClass);
     }
 
+    /** trackingClass must implement Tracking or ValueTracking */
     public InstrumentationBuilder (File classDir, File outputDir, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,outputDir,null,trackingClass);
     }
