@@ -38,6 +38,10 @@ public class Agent {
             Follower f = new Follower();
             f.load(a.follow);
             trackingInstance = f;
+        } else if(a.mfollow != null) {
+                DynamicGraphFollower f = new DynamicGraphFollower();
+                f.load(a.mfollow);
+                trackingInstance = f;
         } else if(a.print.equalsIgnoreCase("tie")) {
             Tie t = new Tie();
             if(a.output != null)

@@ -1,5 +1,6 @@
 package fr.inria.yajta;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -33,6 +34,32 @@ public class FileHelper {
         }
 
         return jsonObject;
+    }
+
+    public static JSONArray readArrayFromFile(File f) {
+        JSONArray jsonArray = null;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(f));
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                line = br.readLine();
+            }
+
+            jsonArray = new JSONArray(sb.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return jsonArray;
     }
 
     public static void printResults(String str, File out) {

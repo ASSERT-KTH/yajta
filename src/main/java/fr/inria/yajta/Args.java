@@ -12,6 +12,7 @@ import java.io.File;
 public class Args {
     public String[] INCLUDES, EXCLUDES, ISOTOPES;
     public File follow = null;
+    public File mfollow = null;
     public File includeFile = null;
     public File output = null;
     public boolean strictIncludes = false;
@@ -59,6 +60,8 @@ public class Args {
             parseIsotopes(p);
         } else if (p.startsWith("follow=")) {
             parseFollow(p);
+        } else if (p.startsWith("mfollow=")) {
+            parsemFollow(p);
         } else if (p.startsWith("output=")) {
             parseOutput(p);
         }
@@ -85,6 +88,11 @@ public class Args {
     public void parseFollow(String p) {
         follow = new File(p.split("follow=")[1]);
         if(!follow.exists()) System.err.println("Unvalid file for follow argument");
+    }
+
+    public void parsemFollow(String p) {
+        mfollow = new File(p.split("mfollow=")[1]);
+        if(!mfollow.exists()) System.err.println("Unvalid file for follow argument");
     }
 
     public void parseOutput(String p) {
