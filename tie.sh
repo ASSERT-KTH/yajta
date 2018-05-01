@@ -15,7 +15,7 @@ listTests() {
 
 traceTest() {
 	#1 test name
-	mvn -o -Dtest=$1 -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=fr.inria.yalta|print=tie|output=$tmpDir/$1\"" test
+	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=fr.inria.yalta|print=tie|output=$tmpDir/$1\"" test
 }
 
 mkdir $tmpDir

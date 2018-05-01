@@ -68,6 +68,10 @@ public class Tracer implements ClassFileTransformer {
     }
 
     public void doClass(CtClass cl, String name, boolean isIsotope) throws NotFoundException, CannotCompileException {
+        /*cl.setModifiers(Modifier.setPublic(cl.getModifiers()));
+        for(CtConstructor constructor :cl.getConstructors()) {
+            constructor.setModifiers(Modifier.setPublic(constructor.getModifiers()));
+        }*/
         CtBehavior[] methods = cl.getDeclaredBehaviors();
 
                 /*for( int i = 0; i < methods.length; i++ ) {
@@ -139,6 +143,11 @@ public class Tracer implements ClassFileTransformer {
             params += ")";
 
             //method.insertAfter( "System.err.println( $_ );");
+            //String test = className.replace("/", ".") + "." + method.getName();//
+            //if(test.startsWith("org.apache.commons.codec.net.BCodec.doDecoding")) {
+            //    System.err.println("[yajta] " + test + " is " + Modifier.isPublic(method.getModifiers()) + "|" + Modifier.isProtected(method.getModifiers()) + "|" + Modifier.isPrivate(method.getModifiers()) + "|");
+            //    method.setModifiers(Modifier.setPublic(method.getModifiers()));
+            //}
 
             method.insertBefore(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepIn(Thread.currentThread().getName(),\"" + className.replace("/", ".") + "\", \"" + method.getName() + params + "\");" + ppostfix);
             method.insertAfter(pprefix + "fr.inria.yajta.Agent.getTrackingInstance().stepOut(Thread.currentThread().getName());" + ppostfix);

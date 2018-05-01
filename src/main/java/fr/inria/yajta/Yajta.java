@@ -18,11 +18,14 @@ public class Yajta {
         final Properties properties = new Properties();
         JarURLConnection connection = null;
         String yajtaVersionUID = null;
+        boolean runFromBootstrapClassLoader = agentArgs.contains("from-bootstrap-classloader");
         try {
             properties.load(Yajta.class.getClassLoader().getResourceAsStream("project.properties"));
             yajtaVersionUID = properties.getProperty("project.version");
             connection = (JarURLConnection) Yajta.class.getResource("Yajta.class").openConnection();
-            inst.appendToBootstrapClassLoaderSearch(connection.getJarFile());
+            if(runFromBootstrapClassLoader) {
+                inst.appendToBootstrapClassLoaderSearch(connection.getJarFile());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -14,6 +14,7 @@ Argument must belong to the following list (and be separated by |)
  * strict-includes Default: false
  * follow=File Default: null
  * output=File Default: log[random_number].json
+ * from-bootstrap-classloader Default: false
 
 Usage:
 ```
