@@ -90,7 +90,7 @@ public class DynamicGraphFollower implements Tracking {
                     String callerName = caller.getString("caller");
                     JSONArray calleds = caller.getJSONArray("called");
                     for(int k = 0; k < calleds.length(); k++) {
-                        JSONObject callee = calleds.getJSONObject(j);
+                        JSONObject callee = calleds.getJSONObject(k);
                         String calleeName = callee.getString("callee");
                         Integer nb = callee.getInt("nb");
                         callerMap.put(calleeName,nb);
