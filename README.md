@@ -4,7 +4,7 @@ yajta is a extensible library for byte code probe insertion. Its built on top of
 
 Further more several tools that make us of that library are provided:
 
- * An agent that allow probe insertion at run time (See [Agent_README](Agent_README.md))
+ * An agent that allow probe insertion at run time (See [Agent_README](Agent_README.md)) (Example of traces collected on common open source libraries can be found [here](https://github.com/KTH/execution-traces).)
  * An agent that check that an execution follow a previous trace (See [Follower_README](Follower_README.md))
  * A tool that generate a test impact report (A json file containing for each method of the explored project the list of test the call it.) (See [TIE_README](TIE_README.md))
  * A way to insert probe offline (See [API_README](API_README.md))
