@@ -238,6 +238,7 @@ public class SimpleTracer implements TracerI {
                     + returnValue
                     +");");
 
+            // !!!! This only work because the inserted call for branch logging does not have more arguments than the method logging one.
             if(logBranch && method instanceof CtMethod) {
                 try {
                     ControlFlow controlFlow = new ControlFlow((CtMethod)method);
@@ -248,21 +249,12 @@ public class SimpleTracer implements TracerI {
                     String branchIn = loggerInstance + ".branchIn(Thread.currentThread().getName(),\"";
                     String branchInEnd = "\");";
                     String branchOut = loggerInstance + ".branchOut(Thread.currentThread().getName());";
-
-                    String loggerBegin = "System.err.println(\"[" + className + "] " + method.getName() + params + " block ";
-                    String loggerEnd = "\");";
-                    /*for(int i = 0; i < blocks.length; i++) {
-                        //if(i == 3) {
-                        System.err.println("Block: " + i + ", pos: " + blocks[i].position());
-                    }*/
                     int offset = 0;
                     /*if(method.getName().contains("mySwitch")) {
                         System.out.println(" --- RAW --- ");
 
                         for(int i = 0; i < ca.getCode().length; i++) {
-                            //if(ca.getCode()[i] != 0) {
-                                System.out.println(Mnemonic.OPCODE[(int) ca.getCode()[i] & 0xff]);
-                            //}
+                            System.out.println(Mnemonic.OPCODE[(int) ca.getCode()[i] & 0xff]);
                         }
 
                         System.out.println(" --- Avant --- ");
@@ -273,20 +265,14 @@ public class SimpleTracer implements TracerI {
                         System.out.println("------- total size: "+ca.getCode().length+ ", added 0");
                     }*/
                     for(int i = 0; i < blocks.length; i++) {
-                        //if(method.getName().contains("mySwitch")) continue;
                         int sizeBefore = ca.getCode().length;
-                        //if(isBlockEmpty(iterator, blocks[i].position() + offset, blocks[i].position() + offset + blocks[i].length()))
-                        //    continue;
-                        //System.out.println(Mnemonic.OPCODE[iterator.byteAt(blocks[i].position() + offset)]);
-                        //System.err.println("Transform Block: " + i + ", pos: " + (blocks[i].position() + offset));
                         byte[] bytes = getBytecode(branchIn + i + branchInEnd, method.getDeclaringClass()).get();
-                        //byte[] bytes = getBytecode(loggerBegin + i + loggerEnd, method.getDeclaringClass()).get();
                         iterator.insertAt(blocks[i].position() + offset, bytes);
                         //int old_off = offset;
+                        //offset += bytes.length;
                         int sizeAfter = ca.getCode().length;
-                        //offset += bytes.length;// + biz;
-                        //System.out.println("------- total size: "+ ca.getCode().length + ", added " + bytes.length + " or " + (sizeAfter - sizeBefore));
-                        offset += (sizeAfter - sizeBefore);
+
+                        offset += (sizeAfter - sizeBefore); //insertAt may insert more than bytes.length bytes... For some reasons...
 
                         /*if(method.getName().contains("mySwitch")) {
                             System.out.println("------- total size: "+ ca.getCode().length + ", added " + bytes.length + " or " + (sizeAfter - sizeBefore));
@@ -301,14 +287,7 @@ public class SimpleTracer implements TracerI {
                         sizeAfter = ca.getCode().length;
                         offset += (sizeAfter - sizeBefore);
                     }
-                    //System.out.print("["+method.getName()+"] before ms: " + ms);
                     //if(ms < 4) ca.setMaxStack(4);
-                    //System.out.println(", after: " + ca.getMaxStack());
-                    //System.out.println(", after compute: " + ca.computeMaxStack());
-                    //ca.setMaxStack(3);
-                    //ca.computeMaxStack();
-                    //ca.getAttributes().add()
-                    //info.rebuildStackMap(pool);
                 } catch (BadBytecode badBytecode) {
                     badBytecode.printStackTrace();
                 } catch (CompileError compileError) {
