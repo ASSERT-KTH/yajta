@@ -1,6 +1,9 @@
 package fr.inria.offline;
 
+import fr.inria.yajta.api.BranchTracer;
+import fr.inria.yajta.TracerI;
 import fr.inria.yajta.Utils;
+import fr.inria.yajta.api.BranchTracking;
 import fr.inria.yajta.api.ClassList;
 import fr.inria.yajta.api.MalformedTrackingClassException;
 import fr.inria.yajta.api.SimpleTracer;
@@ -26,7 +29,8 @@ public class InstrumentationBuilder {
     boolean tmpOutput = false;
     Class loggerClass;
     ClassList list;
-    SimpleTracer tracer;
+    //SimpleTracer tracer;
+    TracerI tracer;
 
     /** trackingClass must implement Tracking or ValueTracking */
     public InstrumentationBuilder (File classDir, File outputDir, ClassList filter, Class trackingClass) throws MalformedTrackingClassException {
@@ -34,13 +38,13 @@ public class InstrumentationBuilder {
         this.outputDir = outputDir;
         this.list = filter;
         this.loggerClass = trackingClass;
-        tracer = new SimpleTracer(list,null);
-        if(implementsInterface(trackingClass, Tracking.class)) {
+        tracer = new SimpleTracer(list, null);
+        if (implementsInterface(trackingClass, Tracking.class)) {
             tracer.setTrackingClass(trackingClass);
         } else if (implementsInterface(trackingClass, ValueTracking.class)) {
             tracer.setValueTrackingClass(trackingClass);
         } else {
-            throw new MalformedTrackingClassException("Tracking class must implements either Tracking or ValueTracking");
+            throw new MalformedTrackingClassException("Tracking class must implements either Tracking, BranchTracking or ValueTracking");
         }
         if(outputDir == null) {
             tmpOutput = true;
@@ -48,17 +52,17 @@ public class InstrumentationBuilder {
         }
     }
 
-    /** trackingClass must implement Tracking or ValueTracking */
+    /** trackingClass must implement Tracking, BranchTracking or ValueTracking */
     public InstrumentationBuilder (File classDir, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,null,null,trackingClass);
     }
 
-    /** trackingClass must implement Tracking or ValueTracking */
+    /** trackingClass must implement Tracking, BranchTracking or ValueTracking */
     public InstrumentationBuilder (File classDir, ClassList filter, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,null,filter,trackingClass);
     }
 
-    /** trackingClass must implement Tracking or ValueTracking */
+    /** trackingClass must implement Tracking, BranchTracking or ValueTracking */
     public InstrumentationBuilder (File classDir, File outputDir, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,outputDir,null,trackingClass);
     }
@@ -136,7 +140,7 @@ public class InstrumentationBuilder {
                 NoSuchMethodException |
                 InvocationTargetException |
                 IllegalAccessException e ) {
-            throw new MalformedTrackingClassException("");
+            throw new MalformedTrackingClassException("Run instrumented code failed");
         }
     }
 

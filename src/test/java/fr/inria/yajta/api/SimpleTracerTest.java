@@ -11,6 +11,7 @@ import fr.inria.yajta.api.loggerimplem.IncompleteLogger3;
 import fr.inria.yajta.api.loggerimplem.IncompleteValueLogger1;
 import fr.inria.yajta.api.loggerimplem.IncompleteValueLogger2;
 import fr.inria.yajta.api.loggerimplem.IncompleteValueLogger3;
+import fr.inria.yajta.api.loggerimplem.TestBranchLogger;
 import fr.inria.yajta.api.loggerimplem.TestLogger;
 import fr.inria.yajta.api.loggerimplem.TestValueLogger;
 import fr.inria.yajta.processor.Logger;
@@ -156,6 +157,37 @@ public class SimpleTracerTest {
         assertEquals(((String[]) logs.get(20).returnValue)[0],"Hello");
         //contract: Last method to end (first to be called) return void"
         assertEquals(logs.get(21).returnValue,null);
+
+        builder.close();
+    }
+
+    @Test
+    public void testBranchProbesInsertion() throws MalformedTrackingClassException {
+        //Initialization
+        File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("classes-with-branch").getPath());
+        InstrumentationBuilder builder = new InstrumentationBuilder(classDir, TestBranchLogger.class);
+
+        //Instrument bytecode of class in classDir
+        builder.instrument();
+
+        //Run the instrumented code from fr.inria.hellovalue.App.main()
+        builder.setEntryPoint("fr.inria.hellobranch.AppBranch", "main", String[].class);
+        builder.runInstrumented((Object) new String[]{"Input"});
+
+        //Check that the logs collected are consistent with what was expected
+        List<TestBranchLogger.Log> logs = TestBranchLogger.getInstance().log;
+        //contract: Every method and each branch is indeed logged (in and out)
+        assertTrue(logs.size() == 196);
+        //contract: Every method logged in is also logged out
+        assertEquals(
+                logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.IN).count(),
+                logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.OUT).count()
+        );
+        //contract: Every branch logged in is also logged out
+        assertEquals(
+                logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.BIN).count(),
+                logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.BOUT).count()
+        );
 
         builder.close();
     }

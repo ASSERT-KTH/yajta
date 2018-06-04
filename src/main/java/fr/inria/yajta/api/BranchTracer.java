@@ -1,5 +1,8 @@
-package fr.inria.yajta;
+package fr.inria.yajta.api;
 
+import fr.inria.yajta.Tracer;
+import fr.inria.yajta.TracerI;
+import fr.inria.yajta.Utils;
 import fr.inria.yajta.api.ClassList;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -17,12 +20,16 @@ import javassist.compiler.CompileError;
 import javassist.compiler.Javac;
 
 import java.lang.instrument.ClassFileTransformer;
+import java.lang.reflect.Method;
 
-public class BranchTracer implements ClassFileTransformer {
+public class BranchTracer implements TracerI {
 
-    boolean verbose = false;
-    boolean strictIncludes = false;
+    public boolean verbose = false;
+    public boolean strictIncludes = false;
     ClassList cl;
+
+    String loggerInstance;
+    boolean logValue = false;
 
     public BranchTracer (ClassList cl) {
         new Tracer(cl,new String[0]);
@@ -43,6 +50,18 @@ public class BranchTracer implements ClassFileTransformer {
             return doClass( className, clazz, bytes );
         } else {
             return bytes;
+        }
+    }
+
+    @Override
+    public void doClass(CtClass cl, String name) throws NotFoundException, CannotCompileException {
+        CtBehavior[] methods = cl.getDeclaredBehaviors();
+
+        for( int i = 0; i < methods.length; i++ ) {
+
+            if( methods[i].isEmpty() == false ) {
+                doMethod( methods[i] , name);
+            }
         }
     }
 
@@ -85,9 +104,6 @@ public class BranchTracer implements ClassFileTransformer {
 
 
     private Bytecode getBytecode(String print, CtClass cc) throws CompileError {
-        // `Javac` is an internal part of Javassist that should probably not be used here.
-        // I couldn't find a way to construct bytecode from string directly from Javassist.
-        // The next three lines do exactly what we want though.
         Javac jv = new Javac(cc);
         jv.compileStmnt(print);
         if(verbose) System.err.println("compile: " + print);
@@ -146,4 +162,31 @@ public class BranchTracer implements ClassFileTransformer {
             if(verbose) System.err.println("Method: " + className.replace("/", ".") + "." + method.getName() + " is native");
         }
     }
+
+    @Override
+    public void setTrackingClass(Class<? extends Tracking> trackingClass) throws MalformedTrackingClassException {
+        throw new MalformedTrackingClassException("BranchTracer only accept Classes implementing BranchTracking.");
+    }
+
+    @Override
+    public void setValueTrackingClass(Class<? extends ValueTracking> trackingClass) throws MalformedTrackingClassException {
+        throw new MalformedTrackingClassException("BranchTracer only accept Classes implementing BranchTracking.");
+    }
+
+    /*@Override
+    public void setBranchTrackingClass(Class<? extends BranchTracking> trackingClass) throws MalformedTrackingClassException {
+        if(trackingClass.isAnonymousClass()) {
+            throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " should not be anonymous.)");
+        }
+        try {
+            Method m = trackingClass.getDeclaredMethod("getInstance");
+            if(!java.lang.reflect.Modifier.isStatic(m.getModifiers())) {
+                throw new MalformedTrackingClassException("Method " + trackingClass.getName() + ".getInstance() is not static");
+            }
+            loggerInstance = trackingClass.getName() + ".getInstance()";
+            logValue = false;
+        } catch (NoSuchMethodException e) {
+            throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " does not have a static method getInstance()");
+        }
+    }*/
 }

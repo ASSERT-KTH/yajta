@@ -1,5 +1,6 @@
 package fr.inria.yajta.api;
 
+import fr.inria.yajta.TracerI;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -8,11 +9,23 @@ import javassist.CtMethod;
 import javassist.CtPrimitiveType;
 import javassist.Modifier;
 import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.Bytecode;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.CodeIterator;
+import javassist.bytecode.MethodInfo;
+import javassist.bytecode.Mnemonic;
+import javassist.bytecode.Opcode;
+import javassist.bytecode.analysis.ControlFlow;
+import javassist.compiler.CompileError;
+import javassist.compiler.Javac;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
-public class SimpleTracer implements ClassFileTransformer {
+//public class SimpleTracer implements ClassFileTransformer {
+public class SimpleTracer implements TracerI {
 
     public boolean verbose = false;
     public boolean strictIncludes = false;
@@ -20,6 +33,8 @@ public class SimpleTracer implements ClassFileTransformer {
 
     String loggerInstance;
     boolean logValue = false;
+    boolean logBranch = false;
+    ClassPool pool = ClassPool.getDefault();
 
     public static SimpleTracer getDefault(String packageToTrace) {
         return new SimpleTracer(ClassList.getDefault(packageToTrace));
@@ -37,6 +52,16 @@ public class SimpleTracer implements ClassFileTransformer {
         new SimpleTracer(cl, "fr.inria.yajta.Agent.getInstance()", logValue);
     }
 
+
+    public boolean implementsInterface(Class cl, Class interf) {
+        for(Class c : cl.getInterfaces()) {
+            if(c.equals(interf)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setTrackingClass(Class<? extends Tracking> trackingClass) throws MalformedTrackingClassException {
         if(trackingClass.isAnonymousClass()) {
             throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " should not be anonymous.)");
@@ -48,6 +73,9 @@ public class SimpleTracer implements ClassFileTransformer {
             }
             loggerInstance = trackingClass.getName() + ".getInstance()";
             logValue = false;
+            if(implementsInterface(trackingClass, BranchTracking.class)) {
+                logBranch = true;
+            }
         } catch (NoSuchMethodException e) {
             throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " does not have a static method getInstance()");
         }
@@ -64,6 +92,9 @@ public class SimpleTracer implements ClassFileTransformer {
             }
             loggerInstance = trackingClass.getName() + ".getInstance()";
             logValue = true;
+            if(implementsInterface(trackingClass, BranchTracking.class)) {
+                logBranch = true;
+            }
         } catch (NoSuchMethodException e) {
             throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " does not have a static method getInstance()");
         }
@@ -86,7 +117,6 @@ public class SimpleTracer implements ClassFileTransformer {
     }
 
     public byte[] doClass( final String name, final Class clazz, byte[] b ) {
-        ClassPool pool = ClassPool.getDefault();
         CtClass cl = null;
         try {
             cl = pool.makeClass( new java.io.ByteArrayInputStream( b ) );
@@ -123,6 +153,45 @@ public class SimpleTracer implements ClassFileTransformer {
 
     private void doMethod( final CtBehavior method , String className) throws NotFoundException, CannotCompileException {
         doMethod(method,className,false,null);
+    }
+
+    private Bytecode getBytecode(String print, CtClass cc) throws CompileError {
+        Javac jv = new Javac(cc);
+        jv.compileStmnt(print);
+        if(verbose) System.err.println("compile: " + print);
+        return jv.getBytecode();
+    }
+
+    private void printBlock(CodeIterator iterator, int begin, int end, int no) {
+        System.out.println(" -- Block "+ no +":");
+        for(int i = begin; i < end; i++) {
+            //if(iterator.byteAt(i) != 0)
+                System.out.println(Mnemonic.OPCODE[iterator.byteAt(i)]);
+        }
+        System.out.println(" -- ");
+    }
+
+    private void printDiff(CodeAttribute ca, int debut, int insertSize, int segmentSize) {
+        System.out.println(" --- RAW --- ");
+
+        for(int i = 0; i < ca.getCode().length; i++) {
+            if(i >= debut && i < debut + insertSize) {
+                System.out.print("++");
+            }
+            if(i >= debut + insertSize && i < debut + segmentSize) {
+                System.out.print("|");
+            }
+            //if(ca.getCode()[i] != 0) {
+            System.out.println(Mnemonic.OPCODE[(int) ca.getCode()[i] & 0xff]);
+            //}
+        }
+    }
+
+    private boolean isBlockEmpty(CodeIterator iterator, int begin, int end) {
+        for(int i = begin; i < end; i++) {
+            if(iterator.byteAt(i) != 0) return false;
+        }
+        return true;
     }
 
     private void doMethod( final CtBehavior method , String className, boolean isIsotope, String isotope) throws NotFoundException, CannotCompileException {
@@ -168,6 +237,84 @@ public class SimpleTracer implements ClassFileTransformer {
             method.insertAfter(loggerInstance + ".stepOut(Thread.currentThread().getName()"
                     + returnValue
                     +");");
+
+            if(logBranch && method instanceof CtMethod) {
+                try {
+                    ControlFlow controlFlow = new ControlFlow((CtMethod)method);
+                    MethodInfo info = method.getMethodInfo();
+                    CodeAttribute ca = info.getCodeAttribute();
+                    CodeIterator iterator = ca.iterator();
+                    ControlFlow.Block[] blocks = controlFlow.basicBlocks();
+                    String branchIn = loggerInstance + ".branchIn(Thread.currentThread().getName(),\"";
+                    String branchInEnd = "\");";
+                    String branchOut = loggerInstance + ".branchOut(Thread.currentThread().getName());";
+
+                    String loggerBegin = "System.err.println(\"[" + className + "] " + method.getName() + params + " block ";
+                    String loggerEnd = "\");";
+                    /*for(int i = 0; i < blocks.length; i++) {
+                        //if(i == 3) {
+                        System.err.println("Block: " + i + ", pos: " + blocks[i].position());
+                    }*/
+                    int offset = 0;
+                    /*if(method.getName().contains("mySwitch")) {
+                        System.out.println(" --- RAW --- ");
+
+                        for(int i = 0; i < ca.getCode().length; i++) {
+                            //if(ca.getCode()[i] != 0) {
+                                System.out.println(Mnemonic.OPCODE[(int) ca.getCode()[i] & 0xff]);
+                            //}
+                        }
+
+                        System.out.println(" --- Avant --- ");
+                        for(int i = 0; i < blocks.length; i++) {
+                            printBlock(iterator, blocks[i].position(), blocks[i].position() + blocks[i].length(), i);
+                        }
+                        System.out.println(" --- Après --- ");
+                        System.out.println("------- total size: "+ca.getCode().length+ ", added 0");
+                    }*/
+                    for(int i = 0; i < blocks.length; i++) {
+                        //if(method.getName().contains("mySwitch")) continue;
+                        int sizeBefore = ca.getCode().length;
+                        //if(isBlockEmpty(iterator, blocks[i].position() + offset, blocks[i].position() + offset + blocks[i].length()))
+                        //    continue;
+                        //System.out.println(Mnemonic.OPCODE[iterator.byteAt(blocks[i].position() + offset)]);
+                        //System.err.println("Transform Block: " + i + ", pos: " + (blocks[i].position() + offset));
+                        byte[] bytes = getBytecode(branchIn + i + branchInEnd, method.getDeclaringClass()).get();
+                        //byte[] bytes = getBytecode(loggerBegin + i + loggerEnd, method.getDeclaringClass()).get();
+                        iterator.insertAt(blocks[i].position() + offset, bytes);
+                        //int old_off = offset;
+                        int sizeAfter = ca.getCode().length;
+                        //offset += bytes.length;// + biz;
+                        //System.out.println("------- total size: "+ ca.getCode().length + ", added " + bytes.length + " or " + (sizeAfter - sizeBefore));
+                        offset += (sizeAfter - sizeBefore);
+
+                        /*if(method.getName().contains("mySwitch")) {
+                            System.out.println("------- total size: "+ ca.getCode().length + ", added " + bytes.length + " or " + (sizeAfter - sizeBefore));
+                            //printBlock(iterator, blocks[i].position() + old_off, blocks[i].position() + offset + blocks[i].length(), i);
+                            printDiff(ca, blocks[i].position() + old_off, (sizeAfter - sizeBefore), (sizeAfter - sizeBefore) + blocks[i].length());
+                        }*/
+
+                        //Branch out
+                        sizeBefore = ca.getCode().length;
+                        bytes = getBytecode(branchOut, method.getDeclaringClass()).get();
+                        iterator.insertAt(blocks[i].position() + offset, bytes);
+                        sizeAfter = ca.getCode().length;
+                        offset += (sizeAfter - sizeBefore);
+                    }
+                    //System.out.print("["+method.getName()+"] before ms: " + ms);
+                    //if(ms < 4) ca.setMaxStack(4);
+                    //System.out.println(", after: " + ca.getMaxStack());
+                    //System.out.println(", after compute: " + ca.computeMaxStack());
+                    //ca.setMaxStack(3);
+                    //ca.computeMaxStack();
+                    //ca.getAttributes().add()
+                    //info.rebuildStackMap(pool);
+                } catch (BadBytecode badBytecode) {
+                    badBytecode.printStackTrace();
+                } catch (CompileError compileError) {
+                    compileError.printStackTrace();
+                }
+            }
 
         } else {
             if(verbose) System.err.println("Method: " + className.replace("/", ".") + "." + method.getName() + " is native");
