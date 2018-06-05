@@ -6,7 +6,7 @@ Argument must belong to the following list (and be separated by |)
  * includes=org.package(,org.package2)* Default: Empty
  * excludes=org.package(,org.package2)* Default: fr.inria.yajta (always added to excludes)
  * isotopes=org.package(,org.package2)* Default:Empty
- * print=(list,tree,tie,matrix) Default: tree
+ * print=(list,tree,tie,matrix,branch) Default: tree
  * strict-includes Default: false
  * follow=File Default: null
  * output=File Default: log[random_number].json

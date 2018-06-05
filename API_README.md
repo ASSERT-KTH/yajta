@@ -33,3 +33,5 @@ java -cp outputDir:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar or
     builder.setEntryPoint("fr.inria.helloworld.App", "main", String[].class);
     builder.runInstrumented((Object) new String[]{""});
 ```
+
+Note that your logging facade should implement either `fr.inria.yajta.api.Tracking` or `fr.inria.yajta.api.ValueTracking`. Addition al it may implements `fr.inria.yajta.api.BranchTracking`

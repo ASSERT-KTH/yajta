@@ -2,7 +2,7 @@
 
 rootDir=`pwd`
 pathToJarAgent=$1
-tmpDir="$rootDir/traces"
+tmpDir="$rootDir/branchTraces"
 packages=$2
 testSrcDir="src/test"
 
@@ -14,7 +14,7 @@ listTests() {
 
 traceTest() {
 	#1 test name
-	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=fr.inria.yalta|print=tree|output=$tmpDir/$1\"" test
+	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=fr.inria.yalta|print=branch|output=$tmpDir/$1.json\"" test
 }
 
 mkdir $tmpDir
