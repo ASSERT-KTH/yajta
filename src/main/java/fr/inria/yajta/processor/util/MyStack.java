@@ -3,11 +3,12 @@ package fr.inria.yajta.processor.util;
 import java.util.Arrays;
 
 public class MyStack<E> {
-    private int size = 0;
+    private int size;
     private static final int DEFAULT_CAPACITY = 10;
     private Object elements[];
 
     public MyStack() {
+        size = 0;
         elements = new Object[DEFAULT_CAPACITY];
     }
 

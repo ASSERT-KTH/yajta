@@ -165,8 +165,8 @@ public class SimpleTracerTest {
     public void testBranchProbesInsertion() throws MalformedTrackingClassException {
         //Initialization
         File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("classes-with-branch").getPath());
-        //InstrumentationBuilder builder = new InstrumentationBuilder(classDir, TestBranchLogger.class);
-        InstrumentationBuilder builder = new InstrumentationBuilder(classDir, Logger.class);
+        InstrumentationBuilder builder = new InstrumentationBuilder(classDir, TestBranchLogger.class);
+        //InstrumentationBuilder builder = new InstrumentationBuilder(classDir, Logger.class);
 
         //Instrument bytecode of class in classDir
         builder.instrument();

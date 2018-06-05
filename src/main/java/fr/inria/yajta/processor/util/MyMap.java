@@ -5,9 +5,15 @@ import java.util.Arrays;
 
 public class MyMap<K, V> {
     private int size;
-    private int DEFAULT_CAPACITY = 16;
+    private int DEFAULT_CAPACITY;
     @SuppressWarnings("unchecked")
-    private MyEntry<K, V>[] values = new MyEntry[DEFAULT_CAPACITY];
+    private MyEntry<K, V>[] values;
+
+    public MyMap() {
+        size = 0;
+        DEFAULT_CAPACITY = 16;
+        values = new MyEntry[DEFAULT_CAPACITY];
+    }
 
 
     public V get(K key) {

@@ -60,8 +60,16 @@ public class Agent {
             if(a.output != null)
                 t.log = a.output;
             valueTrackingInstance = t;
+        } else if(a.print.equalsIgnoreCase("branch")) {
+            //LinearLogger t = LinearLogger.getInstance();
+            Logger t = Logger.getInstance();
+            t.tree = true;
+            if(a.output != null)
+                t.log = a.output;
+            trackingInstance = t;
         } else {
-            Logger l =  new Logger();
+            //Logger l =  new Logger();
+            Logger l = Logger.getInstance();
             if(a.output != null)
                 l.log = a.output;
             if(!a.print.equalsIgnoreCase("tree")) l.tree = false;
@@ -79,8 +87,7 @@ public class Agent {
             if (a.strictIncludes) ((ReturnTracer)transformer).strictIncludes = true;
         } else if(a.print.equalsIgnoreCase("branch")) {
             System.err.println("[yajta] Branch logging");
-            //final SimpleTracer transformer = new SimpleTracer(a.cl);
-            //transformer = new BranchTracer(a.cl, "fr.inria.yajta.Agent.getInstance()", false, a.ISOTOPES);
+            //transformer = new SimpleTracer(a.cl, "fr.inria.yajta.Agent.getInstance()", false);
             transformer = new SimpleTracer(a.cl);
             if (a.strictIncludes) ((SimpleTracer)transformer).strictIncludes = true;
             try {

@@ -8,10 +8,10 @@ import java.util.HashSet;
 
 public class Dico {
 
-    private MyMap<Integer, String> dico = new MyMap();
+    private MyMap<Integer, String> dico;
 
     public Dico() {
-
+        dico = new MyMap();
     }
 
     public Dico(JSONArray array) throws JSONException {

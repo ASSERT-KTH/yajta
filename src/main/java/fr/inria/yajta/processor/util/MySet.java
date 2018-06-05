@@ -4,9 +4,11 @@ import java.util.Iterator;
 
 public class MySet<T> implements Iterable<T> {
 
-    private MyMap<Integer, T> dico = new MyMap<>();
+    private MyMap<Integer, T> dico;
 
-    public MySet() {}
+    public MySet() {
+        dico = new MyMap<>();
+    }
 
     public boolean contains(T el) {
         if(el == null) return false;

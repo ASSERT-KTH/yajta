@@ -37,6 +37,7 @@ public class SimpleTracer implements TracerI {
     boolean logBranch = false;
     ClassPool pool = ClassPool.getDefault();
 
+
     public SimpleTracer (ClassList cl) {
         this.cl = cl;
         this.loggerInstance = "fr.inria.yajta.Agent.getInstance()";

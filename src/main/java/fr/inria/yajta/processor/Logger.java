@@ -15,16 +15,20 @@ import java.io.IOException;
  * Created by nharrand on 19/04/17.
  */
 public class Logger implements Tracking, BranchTracking {
-    boolean verbose = true;
     public File log;
     public boolean tree = true;
     BufferedWriter bufferedWriter;
 
-    MyMap<String, MyEntry<TreeNode, TreeNode>> threadLogs = new MyMap<>();
+    private MyMap<String, MyEntry<TreeNode, TreeNode>> threadLogs;
+
+    public Logger() {
+        threadLogs = new MyMap<>();
+    }
 
     //If used outside of agent
-    static Logger instance = new Logger();
+    static Logger instance ;
     public static Logger getInstance() {
+        if(instance == null) instance = new Logger();
         return instance;
     }
 
@@ -34,7 +38,6 @@ public class Logger implements Tracking, BranchTracking {
     }
 
     public synchronized void stepIn(String thread, String clazz, String method) {
-        if(verbose) System.err.println("[yajta][" + thread + "] stepIn " + method);
         MyEntry<TreeNode, TreeNode> entry = threadLogs.get(thread);
         if(entry == null) {
             TreeNode cur = new TreeNode();
@@ -48,7 +51,6 @@ public class Logger implements Tracking, BranchTracking {
     }
 
     public synchronized void stepOut(String thread) {
-        if(verbose) System.err.println("[yajta][" + thread + "] stepOut");
         MyEntry<TreeNode, TreeNode> entry = threadLogs.get(thread);
         if(entry != null) {
             if(entry.getValue() != null) entry.setValue(entry.getValue().parent);
@@ -57,7 +59,6 @@ public class Logger implements Tracking, BranchTracking {
 
     @Override
     public void branchIn(String thread, String branch) {
-        if(verbose) System.err.println("[yajta][" + thread + "] branchIn " + branch);
         MyEntry<TreeNode, TreeNode> entry = threadLogs.get(thread);
         if(entry != null) {
             if(entry.getValue() != null) {
@@ -76,7 +77,6 @@ public class Logger implements Tracking, BranchTracking {
     }
 
     public void flush() {
-        if(verbose) System.err.println("[yajta] flush");
         if(log == null) {
             int i = (int) Math.floor(Math.random() * (double) Integer.MAX_VALUE);
             if(tree) log = new File("log" + i + ".json");
@@ -86,25 +86,18 @@ public class Logger implements Tracking, BranchTracking {
             if(log.exists()) log.delete();
             log.createNewFile();
             bufferedWriter = new BufferedWriter(new FileWriter(log, true));
-            if(verbose) System.err.println("{\"name\":\"Threads\", " +
-                    "\"yajta-version\": \"" + Agent.yajtaVersionUID + "\", " +
-                    "\"serialization-version\": " + TreeNode.serialVersionUID + ", " +
-                    "\"children\":[");
             if(tree) bufferedWriter.append("{\"name\":\"Threads\", " +
                     "\"yajta-version\": \"" + Agent.yajtaVersionUID + "\", " +
                     "\"serialization-version\": " + TreeNode.serialVersionUID + ", " +
                     "\"children\":[");
             boolean isFirst = true;
             for(MyEntry<String, MyEntry<TreeNode, TreeNode>> e: threadLogs.entryList()) {
-                if(verbose) System.err.println("entry: " + e.getKey());
                 if (isFirst) isFirst = false;
                 else if(tree) bufferedWriter.append(",");
                 e.getValue().getKey().print(bufferedWriter, tree);
             }
-            if(verbose) System.err.println("]}");
             if(tree) bufferedWriter.append("]}");
             bufferedWriter.flush();
-            if(verbose) System.err.println("[yajta] flush done");
         } catch (IOException e) {
             e.printStackTrace();
         }
