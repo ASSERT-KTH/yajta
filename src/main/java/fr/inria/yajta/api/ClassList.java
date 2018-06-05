@@ -1,6 +1,7 @@
 package fr.inria.yajta.api;
 
 
+import fr.inria.yajta.processor.util.MyEntry;
 import fr.inria.yajta.processor.util.MyMap;
 
 import java.util.Arrays;
@@ -30,6 +31,10 @@ public class ClassList {
     public boolean isToBeProcessed(String className) {
         if (className == null) return false;
         return rootTree.get(split(className,'/'));
+    }
+
+    public void print() {
+        System.err.println("ClassList:\n" + rootTree.print());
     }
 
 
@@ -71,6 +76,26 @@ public class ClassList {
             } else {
                 return toInclude;
             }
+        }
+
+        public String ntab(int n) {
+            String res = "";
+            for(int i = 0; i < n; i++) {
+                res += "\t";
+            }
+            return res;
+        }
+        public String print() {
+            return print(0);
+        }
+
+        public String print(int tab) {
+            String res = "";
+            for(MyEntry<String, PackTree> entry : children.entryList()) {
+                res += ntab(tab) + entry.getKey() + " " + entry.getValue().toInclude + "\n";
+                res += entry.getValue().print(tab+1);
+            }
+            return res;
         }
 
     }

@@ -22,9 +22,13 @@ public class Yajta {
         try {
             properties.load(Yajta.class.getClassLoader().getResourceAsStream("project.properties"));
             yajtaVersionUID = properties.getProperty("project.version");
-            connection = (JarURLConnection) Yajta.class.getResource("Yajta.class").openConnection();
-            if(runFromBootstrapClassLoader) {
-                inst.appendToBootstrapClassLoaderSearch(connection.getJarFile());
+            try {
+                connection = (JarURLConnection) Yajta.class.getResource("Yajta.class").openConnection();
+                if (runFromBootstrapClassLoader) {
+                    inst.appendToBootstrapClassLoaderSearch(connection.getJarFile());
+                }
+            } catch (ClassCastException ignorable) {
+                ignorable.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();

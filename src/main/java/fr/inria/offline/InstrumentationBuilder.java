@@ -1,9 +1,7 @@
 package fr.inria.offline;
 
-import fr.inria.yajta.api.BranchTracer;
 import fr.inria.yajta.TracerI;
 import fr.inria.yajta.Utils;
-import fr.inria.yajta.api.BranchTracking;
 import fr.inria.yajta.api.ClassList;
 import fr.inria.yajta.api.MalformedTrackingClassException;
 import fr.inria.yajta.api.SimpleTracer;

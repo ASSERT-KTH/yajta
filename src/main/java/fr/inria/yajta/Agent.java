@@ -1,12 +1,14 @@
 package fr.inria.yajta;
 
 
-import fr.inria.yajta.api.BranchTracer;
+import fr.inria.yajta.api.MalformedTrackingClassException;
+import fr.inria.yajta.api.SimpleTracer;
 import fr.inria.yajta.api.Tracking;
 import fr.inria.yajta.api.ValueTracking;
 import fr.inria.yajta.processor.*;
 
 import java.io.File;
+import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.util.Arrays;
@@ -65,50 +67,40 @@ public class Agent {
             if(!a.print.equalsIgnoreCase("tree")) l.tree = false;
             trackingInstance = l;
         }
+
+        final ClassFileTransformer transformer;
+
+        INCLUDES = a.INCLUDES;
+        EXCLUDES = a.EXCLUDES;
+        ISOTOPES = a.ISOTOPES;
+
         if(a.print.equalsIgnoreCase("values")) {
-            final ReturnTracer transformer = new ReturnTracer(Utils.format(a.INCLUDES), Utils.format(a.EXCLUDES), Utils.format(a.ISOTOPES));
-
-            if (a.strictIncludes) transformer.strictIncludes = true;
-
-            INCLUDES = a.INCLUDES;
-            EXCLUDES = a.EXCLUDES;
-            ISOTOPES = a.ISOTOPES;
-            inst.addTransformer(transformer, true);
-            if (inst.isNativeMethodPrefixSupported()) {
-                inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
-            }
+            transformer = new ReturnTracer(Utils.format(a.INCLUDES), Utils.format(a.EXCLUDES), Utils.format(a.ISOTOPES));
+            if (a.strictIncludes) ((ReturnTracer)transformer).strictIncludes = true;
         } else if(a.print.equalsIgnoreCase("branch")) {
-            final BranchTracer transformer = new BranchTracer(a.cl, Utils.format(a.ISOTOPES));
-
-            if (a.strictIncludes) transformer.strictIncludes = true;
-
-            INCLUDES = a.INCLUDES;
-            EXCLUDES = a.EXCLUDES;
-            ISOTOPES = a.ISOTOPES;
-            inst.addTransformer(transformer, true);
-            if (inst.isNativeMethodPrefixSupported()) {
-                inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
+            System.err.println("[yajta] Branch logging");
+            //final SimpleTracer transformer = new SimpleTracer(a.cl);
+            //transformer = new BranchTracer(a.cl, "fr.inria.yajta.Agent.getInstance()", false, a.ISOTOPES);
+            transformer = new SimpleTracer(a.cl);
+            if (a.strictIncludes) ((SimpleTracer)transformer).strictIncludes = true;
+            try {
+                ((SimpleTracer)transformer).setTrackingClass(trackingInstance.getClass());
+            } catch (MalformedTrackingClassException e) {
+                e.printStackTrace();
             }
         } else if(a.includeFile == null) {
-            final Tracer transformer = new Tracer(a.cl, Utils.format(a.ISOTOPES));
-
-            if (a.strictIncludes) transformer.strictIncludes = true;
-
-            INCLUDES = a.INCLUDES;
-            EXCLUDES = a.EXCLUDES;
-            ISOTOPES = a.ISOTOPES;
-            inst.addTransformer(transformer, true);
-            if (inst.isNativeMethodPrefixSupported()) {
-                inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
-            }
+            transformer = new Tracer(a.cl, Utils.format(a.ISOTOPES));
+            if (a.strictIncludes) ((Tracer)transformer).strictIncludes = true;
         } else {
-            final SpecializedTracer transformer = new SpecializedTracer(a.includeFile);
-
-            inst.addTransformer(transformer, true);
-            if (inst.isNativeMethodPrefixSupported()) {
-                inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
-            }
+            transformer = new SpecializedTracer(a.includeFile);
         }
+
+        inst.addTransformer(transformer, true);
+
+        if (inst.isNativeMethodPrefixSupported()) {
+            inst.setNativeMethodPrefix(transformer, "wrapped_native_method_");
+        }
+
         Class loadedClasses[] = inst.getAllLoadedClasses();
         Object oFilteredLoadedClasses[] = Arrays.stream(loadedClasses)
                 .filter(el -> !el.getName().startsWith("fr.inria.yajta")
@@ -157,7 +149,7 @@ public class Agent {
             //System.err.println("Loaded class " + className + " -> " + a.cl.isToBeProcessed(className));
             if(a.cl.isToBeProcessed(className)) {
                 try {
-                    //System.err.println(loadedClasses[i].getName());
+                    //System.err.println(classes[i].getName());
                     inst.retransformClasses(classes[i]);
 
                 } catch (UnmodifiableClassException e) {
