@@ -56,7 +56,8 @@ public class Agent {
                 t.log = a.output;
             trackingInstance = t;
         } else if(a.print.equalsIgnoreCase("values")) {
-            ReturnLogger t = new ReturnLogger();
+            //ReturnLogger t = new ReturnLogger();
+            ValueLogger t = ValueLogger.getInstance();
             if(a.output != null)
                 t.log = a.output;
             valueTrackingInstance = t;
@@ -83,8 +84,15 @@ public class Agent {
         ISOTOPES = a.ISOTOPES;
 
         if(a.print.equalsIgnoreCase("values")) {
-            transformer = new ReturnTracer(Utils.format(a.INCLUDES), Utils.format(a.EXCLUDES), Utils.format(a.ISOTOPES));
-            if (a.strictIncludes) ((ReturnTracer)transformer).strictIncludes = true;
+            //transformer = new ReturnTracer(Utils.format(a.INCLUDES), Utils.format(a.EXCLUDES), Utils.format(a.ISOTOPES));
+            //if (a.strictIncludes) ((ReturnTracer)transformer).strictIncludes = true;
+            transformer = new SimpleTracer(a.cl);
+            if (a.strictIncludes) ((SimpleTracer)transformer).strictIncludes = true;
+            try {
+                ((SimpleTracer)transformer).setValueTrackingClass(valueTrackingInstance.getClass());
+            } catch (MalformedTrackingClassException e) {
+                e.printStackTrace();
+            }
         } else if(a.print.equalsIgnoreCase("branch")) {
             System.err.println("[yajta] Branch logging");
             //transformer = new SimpleTracer(a.cl, "fr.inria.yajta.Agent.getInstance()", false);
@@ -125,7 +133,13 @@ public class Agent {
 
         Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
             public void run() {
-                getTrackingInstance().flush();
+                if(trackingInstance != null) {
+                    getTrackingInstance().flush();
+                } else if (valueTrackingInstance != null) {
+                    valueTrackingInstance.flush();
+                } else {
+                    System.err.println("[Premain] No tracking instance found.");
+                }
             }
         });
         System.err.println("[Premain] Done");

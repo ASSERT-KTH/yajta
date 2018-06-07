@@ -180,19 +180,13 @@ public class SimpleTracerTest {
 
 
         //contract: Every method and each branch is indeed logged (in and out)
-        //assertTrue(logs.size() == 97);
-        //assertTrue(logs.size() == 160);
-        //assertTrue(logs.size() == 196);
+        assertTrue(logs.size() == 97);
+
         //contract: Every method logged in is also logged out
         assertEquals(
                 logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.IN).count(),
                 logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.OUT).count()
         );
-        //contract: Every branch logged in is also logged out
-        /*assertEquals(
-                logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.BIN).count(),
-                logs.stream().filter(l -> l.type == TestBranchLogger.LOGTYPE.BOUT).count()
-        );*/
 
         builder.close();
     }
