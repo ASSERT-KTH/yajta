@@ -1,6 +1,6 @@
-# yajta (Yet Another Java Tracing Agent)
+# Yajta (Yet Another Java Tracing Agent)
 
-yajta is a extensible library for byte code probe insertion. Its built on top of javassist. It allow to build tracing agent but is not limited to this task. Probe insertion can be done both offline and at load time. So far, probe can be inserted only at the begining and the end of methods and/or at any branching point.
+Yajta is a extensible library for byte code probe insertion. It is built on top of javassist. It allows to build tracing agents but it is not limited to this task. Probe insertion can be done both offline and at load time. So far, probe can be inserted only at the begining and the end of methods and/or at any branching point.
 
 Further more several tools that make us of that library are provided:
 
