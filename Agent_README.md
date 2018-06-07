@@ -46,44 +46,45 @@ public class AppValue {
 ```
 
 Running this command:
-```java -javaagent:/path/to/yajta.jar=strict-includes|includes="fr.inria.testentry|print=values|output=values.json" -cp myJar.jar fr.inria.testentry.AppValue
+```
+java -javaagent:/path/to/yajta.jar=strict-includes|includes="fr.inria.testentry|print=values|output=values.json" -cp myJar.jar fr.inria.testentry.AppValue
 ```
 
 should create a json file named `values.json` containing:
 ```JSON
 {
-	"name": "Threads",
-	"yajta-version": "2.0.0",
-	"serialization-version": 0,
-	"children": [
-		{
-			"class": "Thread",
-			"method": "main",
-			"parameters": [],
-			"returnValue": "null",
-			"children": [
-				{
-					"class": "fr.inria.testentry.AppValue",
-					"method": "main(java.lang.String[])",
-					"parameters": [
-						"rO0ABXVyABNbTGphdmEubGFuZy5TdHJpbmc7rdJW5+kde0cCAAB4cAAAAAA="
-					],
-					"returnValue": "null",
-					"children": [
-						{
-							"class": "fr.inria.testentry.AppValue",
-							"method": "getI(int)",
-							"parameters": [
-								"rO0ABXNyABFqYXZhLmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAAAAAD"
-							],
-							"returnValue": "rO0ABXNyABFqYXZhLmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAAAAAE",
-							"children": []
-						}
-					]
-				}
-			]
-		}
-	]
+  "name": "Threads",
+  "yajta-version": "2.0.0",
+  "serialization-version": 0,
+  "children": [
+    {
+      "class": "Thread",
+      "method": "main",
+      "parameters": [],
+      "returnValue": "null",
+      "children": [
+        {
+          "class": "fr.inria.testentry.AppValue",
+          "method": "main(java.lang.String[])",
+          "parameters": [
+            "rO0ABXVyABNbTGphdmEubGFuZy5TdHJpbmc7rdJW5+kde0cCAAB4cAAAAAA="
+          ],
+          "returnValue": "null",
+          "children": [
+            {
+              "class": "fr.inria.testentry.AppValue",
+              "method": "getI(int)",
+              "parameters": [
+                "rO0ABXNyABFqYXZhLmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAAAAAD"
+              ],
+              "returnValue": "rO0ABXNyABFqYXZhLmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAAAAAE",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 Values are encoded in Base64.
