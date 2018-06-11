@@ -91,4 +91,5 @@ Values are encoded in Base64.
 
 ## Known Limitations
 
-Does not log native methods yet.
+ * Does not log native methods yet.
+ * Traces are written in the output file by a shutdown hook. Thus, anything that stops the jvm without executing these hooks (Internal error, SIGKILL, Uncaugth exceptions) will result in not writting traces.
