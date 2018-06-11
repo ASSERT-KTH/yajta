@@ -18,11 +18,13 @@ public class Logger implements Tracking, BranchTracking {
     public File log;
     public boolean tree = true;
     BufferedWriter bufferedWriter;
+    int nodes;
 
     private MyMap<String, MyEntry<TreeNode, TreeNode>> threadLogs;
 
     public Logger() {
         threadLogs = new MyMap<>();
+        nodes = 0;
     }
 
     //If used outside of agent
@@ -38,6 +40,7 @@ public class Logger implements Tracking, BranchTracking {
     }
 
     public synchronized void stepIn(String thread, String clazz, String method) {
+        nodes++;
         MyEntry<TreeNode, TreeNode> entry = threadLogs.get(thread);
         if(entry == null) {
             TreeNode cur = new TreeNode();
@@ -59,6 +62,7 @@ public class Logger implements Tracking, BranchTracking {
 
     @Override
     public void branchIn(String thread, String branch) {
+        nodes++;
         MyEntry<TreeNode, TreeNode> entry = threadLogs.get(thread);
         if(entry != null) {
             if(entry.getValue() != null) {
@@ -89,6 +93,7 @@ public class Logger implements Tracking, BranchTracking {
             if(tree) bufferedWriter.append("{\"name\":\"Threads\", " +
                     "\"yajta-version\": \"" + Agent.yajtaVersionUID + "\", " +
                     "\"serialization-version\": " + TreeNode.serialVersionUID + ", " +
+                    "\"nodes\": " + nodes + ", " +
                     "\"children\":[");
             boolean isFirst = true;
             for(MyEntry<String, MyEntry<TreeNode, TreeNode>> e: threadLogs.entryList()) {
