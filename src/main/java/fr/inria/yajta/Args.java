@@ -110,6 +110,8 @@ public class Args {
             print = "matrix";
         } else if(p.compareTo("print=branch") == 0) {
             print = "branch";
+        } else if(p.compareTo("print=count") == 0) {
+            print = "count";
         }
     }
 
@@ -128,9 +130,10 @@ public class Args {
         System.err.println("\t\t- includes=org.package(,org.package2)* Default: Empty");
         System.err.println("\t\t- excludes=org.package(,org.package2)* Default: fr.inria.yajta");
         System.err.println("\t\t- isotopes=org.package(,org.package2)* Default:Empty");
-        System.err.println("\t\t- print=(list,tree,tie) Default: tree");
+        System.err.println("\t\t- print=(list,tree,tie,values,branch,count) Default: tree");
         System.err.println("\t\t- strict-includes Default: false");
         System.err.println("\t\t- follow=File Default: null");
+        System.err.println("\t\t- mfollow=File Default: null");
         System.err.println("\t\t- output=File Default: null");
         System.err.println("Found: \"" + args + "\"");
     }
