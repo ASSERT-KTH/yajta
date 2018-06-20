@@ -112,6 +112,8 @@ public class Args {
             print = "branch";
         } else if(p.compareTo("print=count") == 0) {
             print = "count";
+        } else if(p.compareTo("print=remote") == 0) {
+            print = "remote";
         }
     }
 

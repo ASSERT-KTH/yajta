@@ -66,6 +66,15 @@ public class Agent {
             if(a.output != null)
                 t.log = a.output;
             trackingInstance = t;
+        } else if(a.print.equalsIgnoreCase("remote")) {
+            System.err.println("[yajta] remote");
+            if(a.output != null) {
+                RemoteLogger.defaultLogFile = a.output;
+            }
+            RemoteLogger t = RemoteLogger.getInstance();
+            /*if(a.output != null)
+                t.log = a.output;*/
+            trackingInstance = t;
         } else if(a.print.equalsIgnoreCase("count")) {
             CountLogger t = CountLogger.getInstance();
             if(a.output != null)
@@ -95,9 +104,9 @@ public class Agent {
             } catch (MalformedTrackingClassException e) {
                 e.printStackTrace();
             }
-        } else if(a.print.equalsIgnoreCase("branch") || a.print.equalsIgnoreCase("count")) {
-            System.err.println("[yajta] Branch logging");
-            //transformer = new SimpleTracer(a.cl, "fr.inria.yajta.Agent.getInstance()", false);
+        } else if(a.print.equalsIgnoreCase("branch")
+                || a.print.equalsIgnoreCase("count")
+                || a.print.equalsIgnoreCase("remote")) {
             transformer = new SimpleTracer(a.cl);
             if (a.strictIncludes) ((SimpleTracer)transformer).strictIncludes = true;
             try {
