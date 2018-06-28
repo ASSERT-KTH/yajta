@@ -19,7 +19,7 @@ java -javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="Args
 
 Ex:
 ```
-java javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|output=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
+java -javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|output=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
 ```
 
 Note that not excluding java,javax,sun,sunw might still result into carshes
