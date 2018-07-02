@@ -23,7 +23,7 @@ public class DynamicGraph implements Tracking {
     }
 
     @Override
-    public void stepIn(String thread, String clazz, String method) {
+    public synchronized void stepIn(String thread, String clazz, String method) {
         MyStack<String> threadPrevious = previous.get(thread);
         String callee = clazz + "." + method;
         if(threadPrevious == null) threadPrevious = new MyStack<>();
@@ -47,7 +47,7 @@ public class DynamicGraph implements Tracking {
     }
 
     @Override
-    public void stepOut(String thread) {
+    public synchronized void stepOut(String thread) {
         if(previous.get(thread) == null) {
             System.err.println("[ERROR] step out of an unknown thread");
         } else {
