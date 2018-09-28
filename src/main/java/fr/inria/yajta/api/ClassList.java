@@ -30,6 +30,7 @@ public class ClassList {
 
     public boolean isToBeProcessed(String className) {
         if (className == null) return false;
+        if (className.length() == 2 && className.charAt(0) == '[') return false;
         return rootTree.get(split(className,'/'));
     }
 

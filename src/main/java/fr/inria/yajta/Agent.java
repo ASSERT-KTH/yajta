@@ -128,9 +128,15 @@ public class Agent {
         }
 
         Class loadedClasses[] = inst.getAllLoadedClasses();
+        /*for(int i = 0; i < loadedClasses.length; i++) {
+            System.err.println("cl: " + loadedClasses[i]);
+            System.err.println("cl name: " + loadedClasses[i].getName());
+        }
         Object oFilteredLoadedClasses[] = Arrays.stream(loadedClasses)
-                .filter(el -> !el.getName().startsWith("fr.inria.yajta")
-                && !el.getName().startsWith("[Lfr.inria.yajta"))
+                .filter(el -> el != null)
+                .filter(el -> el.getName() != null)
+                .filter(el -> !el.getName().startsWith("fr.inria.yajta"))
+                .filter(el -> !el.getName().startsWith("[Lfr.inria.yajta"))
                 .toArray();
         Class filteredLoadedClasses[] = new Class[oFilteredLoadedClasses.length];
         for(int i = 0; i < oFilteredLoadedClasses.length; i++) {
@@ -140,7 +146,8 @@ public class Agent {
         //System.err.println("BSloadedClasses size: " + BSloadedClasses.length);
         //System.err.println("filteredLoadedClasses size: " + filteredLoadedClasses.length);
         retransform(BSloadedClasses, inst, a);
-        retransform(filteredLoadedClasses, inst, a);
+        retransform(filteredLoadedClasses, inst, a);*/
+        retransform(loadedClasses, inst, a);
 
         Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
             public void run() {

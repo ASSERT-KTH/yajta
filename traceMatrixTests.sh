@@ -9,6 +9,7 @@ testSrcDir="src/test"
 #testSrcDir="org.eclipse.jgit.test/tst org.eclipse.jgit.http.test/tst org.eclipse.jgit.pgm.test/tst"
 
 #exclude=$4
+exclude=""
 #exclude=",org.eclipse.jgit.ant"
 #exclude="$exclude,org.eclipse.jgit.archive"
 #exclude="$exclude,org.eclipse.jgit.console"
@@ -23,7 +24,7 @@ testSrcDir="src/test"
 
 listTests() {
 	#1 test dir
-	find $1 -name "*Test.java" | rev | cut -d '/' -f1 | rev | cut -d '.' -f1
+	find $1 -name "*.java" | rev | cut -d '/' -f1 | rev | cut -d '.' -f1
 }
 
 traceTest() {
