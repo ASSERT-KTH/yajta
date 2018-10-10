@@ -10,7 +10,7 @@ import java.io.File;
 
 
 public class Args {
-    public String[] INCLUDES, EXCLUDES, ISOTOPES;
+    public String[] INCLUDES, EXCLUDES, ISOTOPES, JARS;
     public File follow = null;
     public File mfollow = null;
     public File includeFile = null;
@@ -41,7 +41,7 @@ public class Args {
                 parseArg(p);
             }
         }
-        cl = new ClassList(Utils.format(INCLUDES),Utils.format(EXCLUDES),Utils.format(ISOTOPES),strictIncludes);
+        cl = new ClassList(Utils.format(INCLUDES),Utils.format(EXCLUDES),Utils.format(ISOTOPES),JARS,strictIncludes);
     }
 
     public void parseArg(String p) {
@@ -64,6 +64,8 @@ public class Args {
             parsemFollow(p);
         } else if (p.startsWith("output=")) {
             parseOutput(p);
+        } else if (p.startsWith("jars=")) {
+            parseJars(p);
         }
     }
 
@@ -80,6 +82,9 @@ public class Args {
     }
     public void parseExcludes(String p) {
         EXCLUDES = parseArray(p.split("excludes=")[1]);
+    }
+    public void parseJars(String p) {
+        JARS = parseArray(p.split("jars=")[1]);
     }
     public void parseStrictIncludes(String p) {
         strictIncludes = true;

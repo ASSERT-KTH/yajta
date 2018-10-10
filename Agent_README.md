@@ -4,6 +4,7 @@ Java agent tracing methods calls.
 
 Argument must belong to the following list (and be separated by |)
  * includes=org.package(,org.package2)* Default: Empty
+ * jars=/path/to/my/jar Default: Empty (trace only classes inside this jar list)
  * excludes=org.package(,org.package2)* Default: fr.inria.yajta (always added to excludes)
  * isotopes=org.package(,org.package2)* Default:Empty Deprecated
  * print=(list,tree,tie,matrix,branch,values) Default: tree

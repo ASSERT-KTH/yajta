@@ -10,10 +10,25 @@ public class ClassList {
     public static ClassList getDefault(String packageToTrace) {
         return new ClassList(new String[]{packageToTrace}, null, null, true);
     }
+    String[] JARS;
+
+    public boolean isInJars(String classFilePath) {
+        if(JARS == null) return true;
+        //System.err.println("jar 0: " + JARS[0]);
+        //System.err.println("classPath: " + classFilePath);
+        for(String jar: JARS) {
+            if(classFilePath.startsWith(jar)) return true;
+        }
+        return false;
+    }
 
     PackTree rootTree;
 
     public ClassList(String[] includes, String[] excludes, String[] isotopes, boolean strictIncludes) {
+        this(includes,excludes,isotopes,null,strictIncludes);
+
+    }
+    public ClassList(String[] includes, String[] excludes, String[] isotopes, String[] jars, boolean strictIncludes) {
         rootTree = new PackTree(!strictIncludes);
         if(includes != null) {
             for(String in : includes) {
@@ -26,6 +41,7 @@ public class ClassList {
             }
         }
         rootTree.add(new String[]{"fr","inria","yajta"},false, !strictIncludes);
+        this.JARS = jars;
     }
 
     public boolean isToBeProcessed(String className) {

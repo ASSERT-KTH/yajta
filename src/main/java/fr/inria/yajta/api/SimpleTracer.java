@@ -23,6 +23,7 @@ import javassist.compiler.Javac;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Arrays;
 
 //public class SimpleTracer implements ClassFileTransformer {
@@ -117,6 +118,10 @@ public class SimpleTracer implements TracerI {
 
     public byte[] transform( final ClassLoader loader, final String className, final Class clazz,
                              final java.security.ProtectionDomain domain, final byte[] bytes ) {
+        if(verbose) System.out.println("className: " + className + " ? ");
+        URL classURL = loader.getResource(className + ".class");
+        String classFilePath = classURL == null ? null : classURL.getFile().replace("file:","");
+        if(classFilePath == null || !cl.isInJars(classFilePath)) return bytes;
         if(verbose) System.out.println("className: " + className + " -> " + cl.isToBeProcessed(className));
         if( cl.isToBeProcessed(className) ) {
             return doClass( className, clazz, bytes );
