@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class Tracer implements ClassFileTransformer {
 
-    public boolean verbose = false;
+    public boolean verbose = true;
     public boolean strictIncludes = false;
     ClassList cl;
 
@@ -26,7 +26,7 @@ public class Tracer implements ClassFileTransformer {
 
     public byte[] transform( final ClassLoader loader, final String className, final Class clazz,
                              final java.security.ProtectionDomain domain, final byte[] bytes ) {
-        if(verbose) System.out.println("className: " + className + " ? ");
+        //if(verbose) System.out.println("className: " + className + " ? ");
         URL classURL = loader.getResource(className + ".class");
         String classFilePath = classURL == null ? null : classURL.getFile().replace("file:","");
         if(classFilePath == null || !cl.isInJars(classFilePath)) return bytes;
@@ -131,7 +131,7 @@ public class Tracer implements ClassFileTransformer {
                 pprefix = "if(false) {";
                 ppostfix = "}";
             } else {
-                if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
+                //if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
             }
             String params = "(";
             boolean first = true;

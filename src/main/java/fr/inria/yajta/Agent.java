@@ -1,10 +1,7 @@
 package fr.inria.yajta;
 
 
-import fr.inria.yajta.api.MalformedTrackingClassException;
-import fr.inria.yajta.api.SimpleTracer;
-import fr.inria.yajta.api.Tracking;
-import fr.inria.yajta.api.ValueTracking;
+import fr.inria.yajta.api.*;
 import fr.inria.yajta.processor.*;
 
 import java.io.File;
@@ -17,6 +14,7 @@ import java.util.Arrays;
 public class Agent {
     //Initialized from pom (pom > project.properties > Yajta
     public static String yajtaVersionUID;
+    static boolean verbose = true;
 
     static String[] INCLUDES = new String[] {};
     static String[] ISOTOPES = new String[] {};
@@ -24,6 +22,7 @@ public class Agent {
 
     static Tracking trackingInstance;
     static ValueTracking valueTrackingInstance;
+    public static FastTracking fastTrackingInstance;
 
     public static Tracking getTrackingInstance() {
         if(trackingInstance == null) {
@@ -38,35 +37,54 @@ public class Agent {
         a.parseArgs(agentArgs);
 
         if(a.follow != null) {
+            if(verbose) System.err.println("[Yajta] Follower selected");
             Follower f = new Follower();
             f.load(a.follow);
             trackingInstance = f;
         } else if(a.mfollow != null) {
+            if(verbose) System.err.println("[Yajta] DynamicGraphFollower selected");
                 DynamicGraphFollower f = new DynamicGraphFollower();
                 f.load(a.mfollow);
                 trackingInstance = f;
         } else if(a.print.equalsIgnoreCase("tie")) {
+            if(verbose) System.err.println("[Yajta] Tie selected");
             Tie t = new Tie();
             if(a.output != null)
                 t.log = a.output;
             trackingInstance = t;
+        } else if(a.print.equalsIgnoreCase("fasttie")) {
+            if(verbose) System.err.println("[Yajta] FastTie selected");
+            FastTie t = new FastTie();
+            if(a.output != null)
+                t.log = a.output;
+            fastTrackingInstance = t;
+        } else if(a.print.equalsIgnoreCase("fasttree")) {
+            if(verbose) System.err.println("[Yajta] FastTie selected");
+            FastLogger t = new FastLogger();
+            if(a.output != null)
+                t.log = a.output;
+            fastTrackingInstance = t;
         } else if(a.print.equalsIgnoreCase("matrix")) {
+            if(verbose) System.err.println("[Yajta] DynamicGraph selected");
             DynamicGraph t = new DynamicGraph();
             if(a.output != null)
                 t.log = a.output;
             trackingInstance = t;
         } else if(a.print.equalsIgnoreCase("values")) {
+            if(verbose) System.err.println("[Yajta] ValueLogger selected");
             ValueLogger t = ValueLogger.getInstance();
             if(a.output != null)
                 t.log = a.output;
             valueTrackingInstance = t;
         } else if(a.print.equalsIgnoreCase("branch")) {
+            if(verbose) System.err.println("[Yajta] Logger selected");
             Logger t = Logger.getInstance();
             t.tree = true;
             if(a.output != null)
                 t.log = a.output;
             trackingInstance = t;
         } else if(a.print.equalsIgnoreCase("remote")) {
+            if(verbose) System.err.println("[Yajta] RemoteLogger selected");
             System.err.println("[yajta] remote");
             if(a.output != null) {
                 RemoteLogger.defaultLogFile = a.output;
@@ -76,11 +94,13 @@ public class Agent {
                 t.log = a.output;*/
             trackingInstance = t;
         } else if(a.print.equalsIgnoreCase("count")) {
+            if(verbose) System.err.println("[Yajta] CountLogger selected");
             CountLogger t = CountLogger.getInstance();
             if(a.output != null)
                 t.log = a.output;
             trackingInstance = t;
         } else {
+            if(verbose) System.err.println("[Yajta] Logger selected");
             Logger l = Logger.getInstance();
             if(a.output != null)
                 l.log = a.output;
@@ -95,6 +115,7 @@ public class Agent {
         ISOTOPES = a.ISOTOPES;
 
         if(a.print.equalsIgnoreCase("values")) {
+            if(verbose) System.err.println("[Yajta] SimpleTracer selected");
             //transformer = new ReturnTracer(Utils.format(a.INCLUDES), Utils.format(a.EXCLUDES), Utils.format(a.ISOTOPES));
             //if (a.strictIncludes) ((ReturnTracer)transformer).strictIncludes = true;
             transformer = new SimpleTracer(a.cl);
@@ -104,9 +125,20 @@ public class Agent {
             } catch (MalformedTrackingClassException e) {
                 e.printStackTrace();
             }
+        } else if(a.print.equalsIgnoreCase("fasttie")
+                || a.print.equalsIgnoreCase("fasttree")) {
+            if(verbose) System.err.println("[Yajta] FastTracer selected");
+            transformer = new FastTracer(a.cl);
+            if (a.strictIncludes) ((FastTracer)transformer).strictIncludes = true;
+            try {
+                ((FastTracer)transformer).setTrackingClass(fastTrackingInstance.getClass(),fastTrackingInstance);
+            } catch (MalformedTrackingClassException e) {
+                e.printStackTrace();
+            }
         } else if(a.print.equalsIgnoreCase("branch")
                 || a.print.equalsIgnoreCase("count")
                 || a.print.equalsIgnoreCase("remote")) {
+            if(verbose) System.err.println("[Yajta] SimpleTracer selected");
             transformer = new SimpleTracer(a.cl);
             if (a.strictIncludes) ((SimpleTracer)transformer).strictIncludes = true;
             try {
@@ -115,9 +147,11 @@ public class Agent {
                 e.printStackTrace();
             }
         } else if(a.includeFile == null) {
+            if(verbose) System.err.println("[Yajta] Tracer selected");
             transformer = new Tracer(a.cl, Utils.format(a.ISOTOPES));
             if (a.strictIncludes) ((Tracer)transformer).strictIncludes = true;
         } else {
+            if(verbose) System.err.println("[Yajta] SpecializedTracer selected");
             transformer = new SpecializedTracer(a.includeFile);
         }
 
@@ -155,6 +189,8 @@ public class Agent {
                     getTrackingInstance().flush();
                 } else if (valueTrackingInstance != null) {
                     valueTrackingInstance.flush();
+                } else if (fastTrackingInstance != null) {
+                    fastTrackingInstance.flush();
                 } else {
                     System.err.println("[Premain] No tracking instance found.");
                 }

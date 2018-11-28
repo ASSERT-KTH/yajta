@@ -50,6 +50,37 @@ public class TreeNode {
         if(tree) b.append("]}");
     }
 
+    public void alternativePrint(BufferedWriter b, boolean tree) throws IOException {
+        String src;
+        if(clazz == null) src = null;
+        else {
+            if (clazz.startsWith("javafx")) src = "javafx";
+            else if (clazz.startsWith("java")
+                    || clazz.startsWith("sun")
+                    || clazz.startsWith("com.sun")
+                    ) src = "stdlib";
+            else if (clazz.startsWith("Main")
+                    || clazz.startsWith("Controllers")
+                    || clazz.startsWith("Models")
+                    || clazz.startsWith("Styling")
+                    || clazz.startsWith("Views")
+                    ) src = "App";
+            else src = "other";
+        }
+
+        if(tree) b.append("{\"source\": \"" + src + "\", \"name\":\"" + clazz + "." + method + "\", \"children\":[\n");
+        else b.append(method + "\n");
+        if(children != null) {
+            boolean isFirst = true;
+            for (TreeNode t : children) {
+                if (isFirst) isFirst = false;
+                else if(tree) b.append(",");
+                t.alternativePrint(b, tree);
+            }
+        }
+        if(tree) b.append("\n]}");
+    }
+
     public boolean hasNext() {
         return (children != null && (c < children.size())) || (parent != null && parent.hasNext());
     }

@@ -29,7 +29,7 @@ import java.util.Arrays;
 //public class SimpleTracer implements ClassFileTransformer {
 public class SimpleTracer implements TracerI {
 
-    public boolean verbose = false;
+    public boolean verbose = true;
     public boolean strictIncludes = false;
     ClassList cl;
 

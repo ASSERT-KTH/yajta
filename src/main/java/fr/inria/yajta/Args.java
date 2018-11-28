@@ -119,6 +119,10 @@ public class Args {
             print = "count";
         } else if(p.compareTo("print=remote") == 0) {
             print = "remote";
+        } else if(p.compareTo("print=fasttie") == 0) {
+            print = "fasttie";
+        } else if(p.compareTo("print=fasttree") == 0) {
+            print = "fasttree";
         }
     }
 

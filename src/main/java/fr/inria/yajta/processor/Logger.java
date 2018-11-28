@@ -97,12 +97,15 @@ public class Logger implements Tracking, BranchTracking {
                     "\"serialization-version\": " + TreeNode.serialVersionUID + ", " +
                     "\"nodes\": " + nodes + ", " +
                     "\"branches\": " + branches + ", " +
-                    "\"children\":[");
+                    "\"threads\": " + threadLogs.entryList().size() + ", " +
+                    "\"children\":[\n");
             boolean isFirst = true;
             for(MyEntry<String, MyEntry<TreeNode, TreeNode>> e: threadLogs.entryList()) {
                 if (isFirst) isFirst = false;
                 else if(tree) bufferedWriter.append(",");
-                e.getValue().getKey().print(bufferedWriter, tree);
+                //e.getValue().getKey().print(bufferedWriter, tree);
+                e.getValue().getKey().alternativePrint(bufferedWriter, tree);
+                bufferedWriter.append("\n");
             }
             if(tree) bufferedWriter.append("]}");
             bufferedWriter.flush();
