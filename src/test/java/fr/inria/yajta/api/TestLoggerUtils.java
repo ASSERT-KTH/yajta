@@ -7,10 +7,16 @@ import java.io.File;
 import java.util.List;
 
 public class TestLoggerUtils {
-	public static InstrumentationBuilder instrumentAndRun(String classDirPath, String entryClass, String entryMethod, List<TestFastLogger.Log> logsToFill) throws MalformedTrackingClassException {
+	public static InstrumentationBuilder instrumentAndRun(
+			String classDirPath,
+			String entryClass,
+			String entryMethod,
+			List<TestFastLogger.Log> logsToFill
+	) throws MalformedTrackingClassException {
+
 		TestFastLogger.getInstance().logs.clear();
 
-		File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource(classDirPath).getPath());
+		File classDir = new File(TestLoggerUtils.class.getClassLoader().getResource(classDirPath).getPath());
 		InstrumentationBuilder builder = new InstrumentationBuilder(classDir, TestFastLogger.class);
 		builder.instrument();
 		builder.setEntryPoint(entryClass, entryMethod, String[].class);

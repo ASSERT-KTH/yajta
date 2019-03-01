@@ -71,4 +71,35 @@ public class FastRemoteReaderTest {
 
 	}
 
+	@Test
+	public void testReadTrace() throws InterruptedException {
+
+
+		File traceDir = new File(FastRemoteReaderTest.class.getClassLoader().getResource("remote").getPath());
+		TestFastLogger.traceBranch = true;
+		TestFastLogger.getInstance().logs.clear();
+		FastRemoteReader reader = new FastRemoteReader(TestFastLogger.getInstance(),traceDir);
+
+		//Reconstitute logs
+		reader.read();
+
+		//Check that the logs collected are consistent with what was expected
+		List<TestFastLogger.Log> logs = TestFastLogger.getInstance().logs;
+		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDico().inverse();
+
+
+		//contract: Every method and each branch is indeed logged (in and out)
+		assertTrue(logs.size() == 97);
+
+		//contract: Every method logged in is also logged out
+		assertEquals(
+				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN && !l.isBranch(dico)).count(),
+				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.OUT).count()
+		);
+
+		//contract: every branch entered is logged
+		assertTrue(logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN && l.isBranch(dico)).count() == 63);
+
+	}
+
 }
