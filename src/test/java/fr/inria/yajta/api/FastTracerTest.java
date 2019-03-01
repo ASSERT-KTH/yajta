@@ -6,6 +6,7 @@ import fr.inria.yajta.api.loggerimplem.TestFastLogger;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -15,15 +16,15 @@ public class FastTracerTest {
 
 	@Test
 	public void testProbesInsertion() throws MalformedTrackingClassException {
-		File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("classes-fast").getPath());
-		TestFastLogger.traceBranch = false;
-		TestFastLogger.getInstance().logs.clear();
-		InstrumentationBuilder builder = new InstrumentationBuilder(classDir, TestFastLogger.class);
-		builder.instrument();
-		builder.setEntryPoint("fr.inria.helloworldf.App", "main", String[].class);
-		builder.runInstrumented((Object) new String[]{""});
 
-		List<TestFastLogger.Log> logs = TestFastLogger.getInstance().logs;
+		TestFastLogger.traceBranch = false;
+		List<TestFastLogger.Log> logs = new ArrayList<>();
+		InstrumentationBuilder builder = TestLoggerUtils.instrumentAndRun(
+				"classes-fast",
+				"fr.inria.helloworldf.App",
+				"main",
+				logs);
+
 		//Every method is indeed logged (in and out)
 		assertTrue(logs.size() == 36);
 		//Every method logged in is also logged out
@@ -42,22 +43,15 @@ public class FastTracerTest {
 
 	@Test
 	public void testBranchProbesInsertion() throws MalformedTrackingClassException {
-		//Initialization
-		File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("classes-fast-branch").getPath());
+
 		TestFastLogger.traceBranch = true;
-		TestFastLogger.getInstance().logs.clear();
-		InstrumentationBuilder builder = new InstrumentationBuilder(classDir, TestFastLogger.class);
-		//InstrumentationBuilder builder = new InstrumentationBuilder(classDir, Logger.class);
+		List<TestFastLogger.Log> logs = new ArrayList<>();
+		InstrumentationBuilder builder = TestLoggerUtils.instrumentAndRun(
+				"classes-fast-branch",
+				"fr.inria.hellobranchf.AppBranch",
+				"main",
+				logs);
 
-		//Instrument bytecode of class in classDir
-		builder.instrument();
-
-		//Run the instrumented code from fr.inria.hellobranch.AppBranch()
-		builder.setEntryPoint("fr.inria.hellobranchf.AppBranch", "main", String[].class);
-		builder.runInstrumented((Object) new String[]{"Input"});
-
-		//Check that the logs collected are consistent with what was expected
-		List<TestFastLogger.Log> logs = TestFastLogger.getInstance().logs;
 		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDico().inverse();
 
 
