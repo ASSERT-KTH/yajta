@@ -32,8 +32,8 @@ public class TraceAlign {
         File t1 = new File(args[0]);
         File t2 = new File(args[1]);
         Run.initGenerators();
-        ITree tree1 = load(t2);
-        ITree tree2 = load(t2);
+        ITree tree1 = loadTrace(t2);
+        ITree tree2 = loadTrace(t2);
 
 
         final MappingStore mappingsComp = new MappingStore();
@@ -61,7 +61,7 @@ public class TraceAlign {
         System.out.println("Done");
     }
 
-    public static ITree load(File trace) {
+    public static ITree loadTrace(File trace) {
         ITree root = treeContext.createTree(-1, "root", "root");
         JSONObject o = FileHelper.readFromFile(trace);
 
