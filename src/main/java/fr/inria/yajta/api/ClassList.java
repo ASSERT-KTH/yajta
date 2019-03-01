@@ -108,7 +108,7 @@ public class ClassList {
             }
         }
 
-        public String ntab(int n) {
+        public String printNTabs(int n) {
             String res = "";
             for(int i = 0; i < n; i++) {
                 res += "\t";
@@ -122,7 +122,7 @@ public class ClassList {
         public String print(int tab) {
             String res = "";
             for(MyEntry<String, PackTree> entry : children.entryList()) {
-                res += ntab(tab) + entry.getKey() + " " + entry.getValue().toInclude + "\n";
+                res += printNTabs(tab) + entry.getKey() + " " + entry.getValue().toInclude + "\n";
                 res += entry.getValue().print(tab+1);
             }
             return res;
