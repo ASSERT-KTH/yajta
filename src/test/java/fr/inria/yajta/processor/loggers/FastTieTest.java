@@ -22,13 +22,13 @@ public class FastTieTest {
 
 		//Feed traces to FastTie
 		Set<Integer> logs = FastTie.getInstance().visited;
-		BiMap<Integer, String> dico = FastTie.getInstance().getDico().inverse();
+		BiMap<Integer, String> dico = FastTie.getInstance().getDictionary().inverse();
 
 
 		//contract: Every method and each branch is indeed logged (in and out)
 		assertTrue(logs.size() == 47);
 
-		//contract: As we only log each distinct method once, dico should have the same size as log
+		//contract: As we only log each distinct method once, dictionary should have the same size as log
 		assertEquals(logs.size(), dico.size());
 
 	}

@@ -50,11 +50,11 @@ public class FastFollower extends AbstractFastTracking implements FastTracking {
 	public void load(MyMap<Long, IdTreeNode> threadLogs, MyMap<Long, Boolean> threadOfftrack, BiMap<String,Integer> dico) {
 		this.threadLogs = threadLogs;
 		this.threadOfftrack = threadOfftrack;
-		this.dico = dico;
+		this.dictionary = dico;
 	}
 
 	public void offTrack(long thread, int method, int cur) {
-		BiMap<Integer, String> d = dico.inverse();
+		BiMap<Integer, String> d = dictionary.inverse();
 		System.err.println("[OFF TRACK] <" + d.get(method) + "> instead of <" + d.get(cur) + ">");
 		threadOfftrack.put(thread,true);
 

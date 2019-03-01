@@ -5,7 +5,6 @@ import fr.inria.offline.InstrumentationBuilder;
 import fr.inria.yajta.api.loggerimplem.TestFastLogger;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class FastTracerTest {
 				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.OUT).count()
 		);
 
-		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDico().inverse();
+		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDictionary().inverse();
 
 		//First method logged is "main", "fr.inria.helloworld.App", "main(java.lang.String[])"
 		assertEquals("fr.inria.helloworldf.App.main(java.lang.String[])", logs.get(0).getElementName(dico));
@@ -52,7 +51,7 @@ public class FastTracerTest {
 				"main",
 				logs);
 
-		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDico().inverse();
+		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDictionary().inverse();
 
 
 		//contract: Every method and each branch is indeed logged (in and out)

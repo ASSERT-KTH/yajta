@@ -52,7 +52,7 @@ public class FastRemoteReaderTest {
 
 		//Check that the logs collected are consistent with what was expected
 		List<TestFastLogger.Log> logs = TestFastLogger.getInstance().logs;
-		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDico().inverse();
+		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDictionary().inverse();
 
 
 		//contract: Every method and each branch is indeed logged (in and out)
@@ -83,7 +83,7 @@ public class FastRemoteReaderTest {
 
 		//Check that the logs collected are consistent with what was expected
 		List<TestFastLogger.Log> logs = TestFastLogger.getInstance().logs;
-		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDico().inverse();
+		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDictionary().inverse();
 
 
 		//contract: Every method and each branch is indeed logged (in and out)

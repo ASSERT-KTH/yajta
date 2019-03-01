@@ -24,7 +24,7 @@ public class FastFollowerTest {
 
 		//Feed traces to FastTie
 		MyMap<Long, IdTreeNode> oldLogs = FastLogger.getInstance().exportLogs();
-		BiMap<String, Integer> oldDico = FastLogger.getInstance().getDico();
+		BiMap<String, Integer> oldDico = FastLogger.getInstance().getDictionary();
 
 		FastFollower follower = new FastFollower();
 		MyMap<Long, Boolean> threadOfftrack = new MyMap<>();
@@ -56,7 +56,7 @@ public class FastFollowerTest {
 
 		//Feed traces to FastTie
 		MyMap<Long, IdTreeNode> oldLogs = FastLogger.getInstance().exportLogs();
-		BiMap<String, Integer> oldDico = FastLogger.getInstance().getDico();
+		BiMap<String, Integer> oldDico = FastLogger.getInstance().getDictionary();
 
 		FastFollower follower = new FastFollower();
 		MyMap<Long, Boolean> threadOfftrack = new MyMap<>();

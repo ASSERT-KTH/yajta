@@ -8,9 +8,9 @@ import java.io.File;
 public abstract class AbstractFastTracking implements FastTracking {
 	private int elementCount = 1;
 
-	protected BiMap<String, Integer> dico = HashBiMap.create();
-	public BiMap<String, Integer> getDico() {
-		return dico;
+	protected BiMap<String, Integer> dictionary = HashBiMap.create();
+	public BiMap<String, Integer> getDictionary() {
+		return dictionary;
 	}
 
 	public File log;
@@ -24,9 +24,9 @@ public abstract class AbstractFastTracking implements FastTracking {
 	public int register(String clazz, String method, String branch) {
 		String id = clazz + "." + method + "#" + branch;
 		int r;
-		if(dico.containsKey(id)) r = dico.get(id);
+		if(dictionary.containsKey(id)) r = dictionary.get(id);
 		else {
-			dico.put(id,elementCount);
+			dictionary.put(id,elementCount);
 			r = elementCount;
 			elementCount++;
 		}
@@ -37,9 +37,9 @@ public abstract class AbstractFastTracking implements FastTracking {
 	public int register(String clazz, String method) {
 		String id = clazz + "." + method;
 		int r;
-		if(dico.containsKey(id)) r = dico.get(id);
+		if(dictionary.containsKey(id)) r = dictionary.get(id);
 		else {
-			dico.put(id,elementCount);
+			dictionary.put(id,elementCount);
 			r = elementCount;
 			elementCount++;
 		}

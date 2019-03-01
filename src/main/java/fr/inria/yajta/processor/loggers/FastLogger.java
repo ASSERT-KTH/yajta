@@ -91,7 +91,7 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 			else log = new File("log" + i);
 		}
 		try {
-			BiMap<Integer, String> rdico = dico.inverse();
+			BiMap<Integer, String> rdico = dictionary.inverse();
 			IdTreeNode.dico = i -> rdico.get(i);
 
 			if(log.exists()) log.delete();
