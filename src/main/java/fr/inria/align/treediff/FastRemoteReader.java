@@ -38,7 +38,7 @@ public class FastRemoteReader {
 					w.read("trace").marshallable(
 							m -> {
 								String type = m.read("type").text();
-								System.err.println("t:" + type);
+								//System.err.println("t:" + type);
 								switch (type) {
 									case "in":
 										logger.stepIn(m.read("thread").int64(),
