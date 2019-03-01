@@ -1,6 +1,7 @@
 package fr.inria.yajta.api;
 
 import java.io.File;
+import java.lang.invoke.MethodHandles;
 
 /**
  * This interface can be extended by the user to create new logging structure.

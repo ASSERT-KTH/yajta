@@ -10,16 +10,6 @@ import java.io.File;
 
 public class FastRemoteReader {
 
-	/*public static void main(String arg[]) throws InterruptedException {
-		FastRemoteReader r = new FastRemoteReader();
-		r.logger = FastLogger.getInstance();
-		File dd = new File("/home/nharrand/Documents/helloworld");
-		r.dir = new File(dd,"d2");
-		r.logger.setLogFile(new File("out.json"));
-		r.read();
-		r.logger.flush();
-	}*/
-
 	public FastRemoteReader(FastTracking logger, File inTraceDir) {
 		this.logger = logger;
 		this.dir= inTraceDir;

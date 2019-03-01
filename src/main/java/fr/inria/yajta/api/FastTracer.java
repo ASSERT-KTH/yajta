@@ -23,17 +23,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 
-public class FastTracer implements TracerI {
+public class FastTracer extends AbstractTracer implements TracerI {
 
-	public boolean verbose = false;
 	public boolean strictIncludes = false;
-	ClassList cl;
 
 	String loggerInstance;
 	FastTracking realLoggerInstance;
 	boolean logValue = false;
 	boolean logBranch = false;
-	ClassPool pool = ClassPool.getDefault();
 
 
 	public FastTracer (ClassList cl) {
@@ -68,44 +65,6 @@ public class FastTracer implements TracerI {
 			}
 		}
 		return false;
-	}
-
-	public byte[] transform( final ClassLoader loader, final String className, final Class clazz,
-	                         final java.security.ProtectionDomain domain, final byte[] bytes ) {
-		//if(verbose) System.out.println("className: " + className + " ? ");
-		URL classURL = loader.getResource(className + ".class");
-		String classFilePath = classURL == null ? null : classURL.getFile().replace("file:","");
-		if(classFilePath == null || !cl.isInJars(classFilePath)) return bytes;
-		if(verbose) System.out.println("className: " + className + " -> " + cl.isToBeProcessed(className));
-		if( cl.isToBeProcessed(className) ) {
-			return doClass( className, clazz, bytes );
-		} else {
-			return bytes;
-		}
-	}
-
-	public byte[] doClass( final String name, final Class clazz, byte[] b ) {
-		CtClass cl = null;
-		try {
-			cl = pool.makeClass( new java.io.ByteArrayInputStream( b ) );
-			if( cl.isInterface() == false ) {
-
-				doClass(cl,name);
-
-				b = cl.toBytecode();
-
-				if(verbose) System.err.println( "-> Instrument  " + name);
-			}
-		} catch( Exception e ) {
-			if(verbose) System.err.println( "Could not instrument  " + name + ",  exception : " + e.getMessage() );
-		} finally {
-
-			if( cl != null ) {
-				cl.detach();
-			}
-		}
-
-		return b;
 	}
 
 	@Override
@@ -154,21 +113,6 @@ public class FastTracer implements TracerI {
 		this.realLoggerInstance = realLoggerInstance;
 	}
 
-	public void doClass(CtClass cl, String name) throws NotFoundException, CannotCompileException {
-		CtBehavior[] methods = cl.getDeclaredBehaviors();
-
-		for( int i = 0; i < methods.length; i++ ) {
-
-			if( methods[i].isEmpty() == false ) {
-				doMethod( methods[i] , name);
-			}
-		}
-	}
-
-	private void doMethod( final CtBehavior method , String className) throws NotFoundException, CannotCompileException {
-		doMethod(method,className,false,null);
-	}
-
 	private Bytecode getBytecode(String print, CtClass cc) throws CompileError {
 		Javac jv = new Javac(cc);
 		jv.compileStmnt(print);
@@ -209,7 +153,7 @@ public class FastTracer implements TracerI {
 		return true;
 	}
 
-	private void doMethod( final CtBehavior method , String className, boolean isIsotope, String isotope) throws NotFoundException, CannotCompileException {
+	protected void doMethod( final CtBehavior method , String className, boolean isIsotope, String isotope) throws NotFoundException, CannotCompileException {
 		if(!Modifier.isNative(method.getModifiers())) {
 			if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
 			String params = "(";
