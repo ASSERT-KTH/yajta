@@ -26,14 +26,18 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 
 	private MyMap<Long, MyEntry<IdTreeNode, IdTreeNode>> threadLogs; // thread -> Root, Actual
 
+	public void clear() {
+		threadLogs = new MyMap<>();
+		nodes = 0;
+		branches = 0;
+	}
+
 	public FastLogger() {
 		this(false);
 	}
 
 	public FastLogger(boolean traceBranches) {
-		threadLogs = new MyMap<>();
-		nodes = 0;
-		branches = 0;
+		clear();
 		this.traceBranches = traceBranches;
 	}
 
