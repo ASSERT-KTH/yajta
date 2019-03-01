@@ -104,10 +104,12 @@ public class ClassListTest {
         ClassList cl = new ClassList(includes,excludes,isotopes,strictIncludes);
 
         for(int i = 0; i < ok.length; i++) {
+            //contract: All classes that should be included pass the filter
             assertTrue("Class " + ok[i] + " should be ok", cl.isToBeProcessed(ok[i]));
         }
 
         for(int i = 0; i < notOk.length; i++) {
+            //contract: No classes that should be exluded do not pass the filter
             assertFalse("Class " + notOk[i] + " should NOT be ok", cl.isToBeProcessed(notOk[i]));
         }
     }

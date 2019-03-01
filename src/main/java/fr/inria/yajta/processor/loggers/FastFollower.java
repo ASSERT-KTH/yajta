@@ -1,15 +1,10 @@
 package fr.inria.yajta.processor.loggers;
 
 import com.google.common.collect.BiMap;
-import fr.inria.yajta.FileHelper;
 import fr.inria.yajta.api.AbstractFastTracking;
 import fr.inria.yajta.api.FastTracking;
 import fr.inria.yajta.processor.IdTreeNode;
-import fr.inria.yajta.processor.TreeNode;
 import fr.inria.yajta.processor.util.MyMap;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 

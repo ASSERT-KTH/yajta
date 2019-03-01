@@ -61,6 +61,11 @@ public class Utils {
     }
 
     static MyMap<Integer,String> opcode;
+
+    /**
+     * @param code
+     * @return the string name of the corresponding opcode
+     */
     public static String getOpcode(int code) {
         if(opcode == null) {
             opcode = new MyMap<>();
