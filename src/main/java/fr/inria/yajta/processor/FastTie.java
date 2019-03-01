@@ -2,15 +2,14 @@ package fr.inria.yajta.processor;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import fr.inria.yajta.api.AbstractFastTracking;
 import fr.inria.yajta.api.FastTracking;
 
 import java.io.File;
 import java.net.URLClassLoader;
 import java.util.*;
 
-public class FastTie implements FastTracking {
-	int elementCount = 0;
-	BiMap<String, Integer> dico = HashBiMap.create();
+public class FastTie extends AbstractFastTracking implements FastTracking {
 	//Set<Integer> visited = new HashSet<>();
 	Set<Integer> visited = new TreeSet<>();
 
@@ -26,32 +25,6 @@ public class FastTie implements FastTracking {
 		for(Map.Entry<String, Integer> e :dico.entrySet()) {
 			System.err.println("M: " + e.getKey() + " -> " + e.getValue());
 		}
-	}
-
-	@Override
-	public int register(String clazz, String method, String branch) {
-		String id = clazz + "." + method + "#" + branch;
-		int r;
-		if(dico.containsKey(id)) r = dico.get(id);
-		else {
-			dico.put(id,elementCount);
-			r = elementCount;
-			elementCount++;
-		}
-		return r;
-	}
-
-	@Override
-	public int register(String clazz, String method) {
-		String id = clazz + "." + method;
-		int r;
-		if(dico.containsKey(id)) r = dico.get(id);
-		else {
-			dico.put(id,elementCount);
-			r = elementCount;
-			elementCount++;
-		}
-		return r;
 	}
 
 	@Override
@@ -76,12 +49,6 @@ public class FastTie implements FastTracking {
 	@Override
 	public void stepOut(long thread) {
 
-	}
-
-	public File log;
-	@Override
-	public void setLogFile(File log) {
-		this.log = log;
 	}
 
 	@Override

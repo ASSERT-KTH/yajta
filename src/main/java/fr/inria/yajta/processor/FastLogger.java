@@ -3,6 +3,7 @@ package fr.inria.yajta.processor;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import fr.inria.yajta.Agent;
+import fr.inria.yajta.api.AbstractFastTracking;
 import fr.inria.yajta.api.FastTracking;
 import fr.inria.yajta.processor.util.MyEntry;
 import fr.inria.yajta.processor.util.MyMap;
@@ -12,11 +13,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class FastLogger implements FastTracking {
-	int elementCount = 1;
-	BiMap<String, Integer> dico = HashBiMap.create();
+public class FastLogger extends AbstractFastTracking implements FastTracking {
 
-	public File log;
 	public boolean tree = true;
 	BufferedWriter bufferedWriter;
 	int nodes;
@@ -37,32 +35,6 @@ public class FastLogger implements FastTracking {
 	public static FastLogger getInstance() {
 		if(instance == null) instance = new FastLogger();
 		return instance;
-	}
-
-	@Override
-	public int register(String clazz, String method, String branch) {
-		String id = clazz + "." + method + "#" + branch;
-		int r;
-		if(dico.containsKey(id)) r = dico.get(id);
-		else {
-			dico.put(id,elementCount);
-			r = elementCount;
-			elementCount++;
-		}
-		return r;
-	}
-
-	@Override
-	public int register(String clazz, String method) {
-		String id = clazz + "." + method;
-		int r;
-		if(dico.containsKey(id)) r = dico.get(id);
-		else {
-			dico.put(id,elementCount);
-			r = elementCount;
-			elementCount++;
-		}
-		return r;
 	}
 
 	@Override
@@ -92,11 +64,6 @@ public class FastLogger implements FastTracking {
 				System.err.println("out");
 			}
 		}
-	}
-
-	@Override
-	public void setLogFile(File log) {
-		this.log = log;
 	}
 
 	public void flush() {
