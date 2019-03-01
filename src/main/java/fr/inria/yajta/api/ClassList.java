@@ -6,6 +6,18 @@ import fr.inria.yajta.processor.util.MyMap;
 
 import java.util.Arrays;
 
+/**
+ * ClassList implements alternative inclusion exclusion filter
+ * For exemple if a ClassList cl includes a, a/a/a and excludes a/a with strict includes
+ * cl.isToBeProcessed("a") -> true
+ * cl.isToBeProcessed("a/b") -> true
+ * cl.isToBeProcessed("a/a/a") -> true
+ * cl.isToBeProcessed("a/a/a/b") -> true
+ * but
+ * cl.isToBeProcessed("b") -> false
+ * cl.isToBeProcessed("a/a") -> false
+ * cl.isToBeProcessed("a/a/b") -> false
+ */
 public class ClassList {
     public static ClassList getDefault(String packageToTrace) {
         return new ClassList(new String[]{packageToTrace}, null, null, true);
@@ -28,6 +40,7 @@ public class ClassList {
         this(includes,excludes,isotopes,null,strictIncludes);
 
     }
+
     public ClassList(String[] includes, String[] excludes, String[] isotopes, String[] jars, boolean strictIncludes) {
         rootTree = new PackTree(!strictIncludes);
         if(includes != null) {
