@@ -73,8 +73,6 @@ public class FastRemoteReaderTest {
 
 	@Test
 	public void testReadTrace() throws InterruptedException {
-
-
 		File traceDir = new File(FastRemoteReaderTest.class.getClassLoader().getResource("remote").getPath());
 		TestFastLogger.traceBranch = true;
 		TestFastLogger.getInstance().logs.clear();
