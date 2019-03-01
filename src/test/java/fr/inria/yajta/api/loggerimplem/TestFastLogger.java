@@ -1,21 +1,22 @@
-package fr.inria.yajta.api.fastloggerimplem;
+package fr.inria.yajta.api.loggerimplem;
 
+import com.google.common.collect.BiMap;
 import fr.inria.yajta.api.AbstractFastTracking;
-import fr.inria.yajta.api.BranchTracking;
-import fr.inria.yajta.api.Tracking;
+import fr.inria.yajta.api.FastTracking;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestFastBranchLogger extends AbstractFastTracking {
-    static TestFastBranchLogger instance;
+public class TestFastLogger extends AbstractFastTracking implements FastTracking {
+    public static boolean traceBranch = false;
+    static TestFastLogger instance;
 
-    private List<Log> log = new ArrayList<>();
+    public List<Log> logs = new ArrayList<>();
 
-    public static TestFastBranchLogger getInstance() {
+    public static TestFastLogger getInstance() {
         if(instance == null) {
-            instance = new TestFastBranchLogger();
+            instance = new TestFastLogger();
             // This logger is not meant to be used outside of tests, therefor,
             // logs will never be written down in a file, so
             // there is no needs to register a shutdown hook but it would look like this:
@@ -24,7 +25,7 @@ public class TestFastBranchLogger extends AbstractFastTracking {
              * instance.setLogFile(new File("my-traces.json"));
              * Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
              *   public void run() {
-             *      TestLogger.getInstance().flush();
+             *      TestFastLogger.getInstance().flush();
              *   }
              * });
             */
@@ -39,12 +40,17 @@ public class TestFastBranchLogger extends AbstractFastTracking {
 
     @Override
     public void stepIn(long thread, int id) {
-        log.add(new Log(thread, id));
+        logs.add(new Log(thread, id));
     }
 
     @Override
     public void stepOut(long thread) {
-        log.add(new Log(thread));
+        logs.add(new Log(thread));
+    }
+
+    @Override
+    public boolean traceBranch() {
+        return traceBranch;
     }
 
     @Override
@@ -52,7 +58,7 @@ public class TestFastBranchLogger extends AbstractFastTracking {
         //This logger is not meant to be used outside of tests, therefor, logs will never be written down in a file
     }
 
-    public enum LOGTYPE {IN, OUT}
+    public enum LOGTYPE {IN,OUT}
     public class Log {
         public LOGTYPE type;
         public long thread;
@@ -65,6 +71,14 @@ public class TestFastBranchLogger extends AbstractFastTracking {
         public Log(long thread) {
             this.thread = thread;
             type = LOGTYPE.OUT;
+        }
+
+        public boolean isBranch(BiMap<Integer, String> dico) {
+            return dico.get(id).contains("#");
+        }
+
+        public String getElementName(BiMap<Integer, String> dico) {
+            return dico.get(id);
         }
     }
 }

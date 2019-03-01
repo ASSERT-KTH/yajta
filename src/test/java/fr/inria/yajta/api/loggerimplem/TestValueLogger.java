@@ -9,7 +9,7 @@ import java.util.List;
 public class TestValueLogger implements ValueTracking {
     static TestValueLogger instance = new TestValueLogger();
 
-    public List<Log> log = new ArrayList<>();
+    public List<Log> logs = new ArrayList<>();
 
     public static TestValueLogger getInstance() {
         return instance;
@@ -21,12 +21,12 @@ public class TestValueLogger implements ValueTracking {
 
     @Override
     public void stepIn(String thread, String clazz, String method, Object[] parameter) {
-        log.add(new Log(thread,clazz,method,parameter));
+        logs.add(new Log(thread,clazz,method,parameter));
     }
 
     @Override
     public void stepOut(String thread, Object returnValue) {
-        log.add(new Log(thread,returnValue));
+        logs.add(new Log(thread,returnValue));
     }
 
 

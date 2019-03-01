@@ -116,6 +116,11 @@ public class SimpleTracer implements TracerI {
         }
     }
 
+    @Override
+    public void setFastTrackingClass(Class<? extends FastTracking> trackingClass) throws MalformedTrackingClassException {
+        throw new UnsupportedOperationException("SimpleTracer only supports TracingInstance that implements ValueTracking or Tracking");
+    }
+
     public byte[] transform( final ClassLoader loader, final String className, final Class clazz,
                              final java.security.ProtectionDomain domain, final byte[] bytes ) {
         if(verbose) System.out.println("className: " + className + " ? ");

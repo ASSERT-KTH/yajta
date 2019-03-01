@@ -9,6 +9,9 @@ public abstract class AbstractFastTracking implements FastTracking {
 	private int elementCount = 1;
 
 	protected BiMap<String, Integer> dico = HashBiMap.create();
+	public BiMap<String, Integer> getDico() {
+		return dico;
+	}
 
 	public File log;
 

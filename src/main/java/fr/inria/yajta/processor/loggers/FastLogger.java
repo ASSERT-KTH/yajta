@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FastLogger extends AbstractFastTracking implements FastTracking {
+	boolean traceBranches;
 
 	public boolean tree = true;
 	BufferedWriter bufferedWriter;
@@ -26,9 +27,14 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 	private MyMap<Long, MyEntry<IdTreeNode, IdTreeNode>> threadLogs; // thread -> Root, Actual
 
 	public FastLogger() {
+		this(false);
+	}
+
+	public FastLogger(boolean traceBranches) {
 		threadLogs = new MyMap<>();
 		nodes = 0;
 		branches = 0;
+		this.traceBranches = traceBranches;
 	}
 
 	//If used outside of agent
@@ -65,6 +71,11 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 				System.err.println("out");
 			}
 		}
+	}
+
+	@Override
+	public boolean traceBranch() {
+		return traceBranches;
 	}
 
 	public void flush() {

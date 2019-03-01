@@ -10,7 +10,7 @@ import java.util.List;
 public class TestBranchLogger implements Tracking,BranchTracking {
     static TestBranchLogger instance;
 
-    public List<Log> log = new ArrayList<>();
+    public List<Log> logs = new ArrayList<>();
 
     public static TestBranchLogger getInstance() {
         if(instance == null) {
@@ -23,7 +23,7 @@ public class TestBranchLogger implements Tracking,BranchTracking {
              * instance.setLogFile(new File("my-traces.json"));
              * Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
              *   public void run() {
-             *      TestLogger.getInstance().flush();
+             *      TestFastLogger.getInstance().flush();
              *   }
              * });
             */
@@ -38,22 +38,22 @@ public class TestBranchLogger implements Tracking,BranchTracking {
 
     @Override
     public void stepIn(String thread, String clazz, String method) {
-        log.add(new Log(thread, clazz, method));
+        logs.add(new Log(thread, clazz, method));
     }
 
     @Override
     public void stepOut(String thread) {
-        log.add(new Log(thread));
+        logs.add(new Log(thread));
     }
 
     @Override
     public void branchIn(String thread, String branch) {
-        log.add(new Log(thread, branch));
+        logs.add(new Log(thread, branch));
     }
 
     @Override
     public void branchOut(String thread) {
-        log.add(new Log(thread, 0));
+        logs.add(new Log(thread, 0));
     }
 
     @Override

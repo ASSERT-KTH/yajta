@@ -3,6 +3,8 @@ package fr.inria.offline;
 import fr.inria.yajta.TracerI;
 import fr.inria.yajta.Utils;
 import fr.inria.yajta.api.ClassList;
+import fr.inria.yajta.api.FastTracer;
+import fr.inria.yajta.api.FastTracking;
 import fr.inria.yajta.api.MalformedTrackingClassException;
 import fr.inria.yajta.api.SimpleTracer;
 import fr.inria.yajta.api.Tracking;
@@ -36,13 +38,17 @@ public class InstrumentationBuilder {
         this.outputDir = outputDir;
         this.list = filter;
         this.loggerClass = trackingClass;
-        tracer = new SimpleTracer(list, null);
         if (implementsInterface(trackingClass, Tracking.class)) {
+            tracer = new SimpleTracer(list, null);
             tracer.setTrackingClass(trackingClass);
         } else if (implementsInterface(trackingClass, ValueTracking.class)) {
+            tracer = new SimpleTracer(list, null);
             tracer.setValueTrackingClass(trackingClass);
+        } else if (implementsInterface(trackingClass, FastTracking.class)) {
+            tracer = new FastTracer(list, null);
+            tracer.setFastTrackingClass(trackingClass);
         } else {
-            throw new MalformedTrackingClassException("Tracking class must implements either Tracking, BranchTracking or ValueTracking");
+            throw new MalformedTrackingClassException("Tracking class must implements either Tracking, BranchTracking, FastTracking or ValueTracking");
         }
         if(outputDir == null) {
             tmpOutput = true;
@@ -74,13 +80,13 @@ public class InstrumentationBuilder {
     /** instrument all classes (unless a class filter us given) from the given input directory and writes the instrumented classed to disk */
     public void instrument() throws MalformedTrackingClassException {
         try {
-            if(implementsInterface(loggerClass,Tracking.class)) {
+            /*if(implementsInterface(loggerClass,Tracking.class)) {
                 tracer.setTrackingClass(loggerClass);
             } else if (implementsInterface(loggerClass,ValueTracking.class)) {
                 tracer.setValueTrackingClass(loggerClass);
             } else {
-                throw new MalformedTrackingClassException("logger class must be a class that implements either Tracking or ValueTracking");
-            }
+                throw new MalformedTrackingClassException("Tracking class must implements either Tracking, BranchTracking, FastTracking or ValueTracking");
+            }*/
             ClassPool pool = ClassPool.getDefault();
             pool.appendClassPath(InstrumentationBuilder.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             pool.appendClassPath(loggerClass.getProtectionDomain().getCodeSource().getLocation().getPath());

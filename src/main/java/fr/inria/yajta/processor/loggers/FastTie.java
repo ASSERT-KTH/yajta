@@ -48,6 +48,11 @@ public class FastTie extends AbstractFastTracking implements FastTracking {
 	}
 
 	@Override
+	public boolean traceBranch() {
+		return false;
+	}
+
+	@Override
 	public void flush() {
 
 	}

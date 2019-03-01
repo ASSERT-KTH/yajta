@@ -82,7 +82,7 @@ public class SimpleTracerTest {
         builder.setEntryPoint("fr.inria.helloworld.App", "main", String[].class);
         builder.runInstrumented((Object) new String[]{""});
 
-        List<TestLogger.Log> logs = TestLogger.getInstance().log;
+        List<TestLogger.Log> logs = TestLogger.getInstance().logs;
         //Every method is indeed logged (in and out)
         assertTrue(logs.size() == 22);
         //Every method logged in is also logged out
@@ -110,7 +110,7 @@ public class SimpleTracerTest {
         builder.runInstrumented((Object) new String[]{"Input"});
 
         //Check that the logs collected are consistent with what was expected
-        List<TestValueLogger.Log> logs = TestValueLogger.getInstance().log;
+        List<TestValueLogger.Log> logs = TestValueLogger.getInstance().logs;
         //contract: Every method is indeed logged (in and out)
         assertTrue(logs.size() == 22);
         //contract: Every method logged in is also logged out
@@ -161,7 +161,7 @@ public class SimpleTracerTest {
         builder.runInstrumented((Object) new String[]{"Input"});
 
         //Check that the logs collected are consistent with what was expected
-        List<TestBranchLogger.Log> logs = TestBranchLogger.getInstance().log;
+        List<TestBranchLogger.Log> logs = TestBranchLogger.getInstance().logs;
 
 
         //contract: Every method and each branch is indeed logged (in and out)

@@ -10,6 +10,10 @@ public interface FastTracking {
 
 	void stepIn(long thread, int id);
 	void stepOut(long thread);
+
+
+	boolean traceBranch();
+
 	// OPTIONAL PART (can be empty, not called by default by the framework)
 	void setLogFile(File log);
 	void flush();

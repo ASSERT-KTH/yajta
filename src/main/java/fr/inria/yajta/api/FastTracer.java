@@ -1,5 +1,6 @@
 package fr.inria.yajta.api;
 
+import fr.inria.yajta.TracerI;
 import fr.inria.yajta.Utils;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -18,10 +19,11 @@ import javassist.bytecode.analysis.ControlFlow;
 import javassist.compiler.CompileError;
 import javassist.compiler.Javac;
 
-import java.lang.instrument.ClassFileTransformer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 
-public class FastTracer implements ClassFileTransformer {
+public class FastTracer implements TracerI {
 
 	public boolean verbose = false;
 	public boolean strictIncludes = false;
@@ -68,14 +70,6 @@ public class FastTracer implements ClassFileTransformer {
 		return false;
 	}
 
-	public void setTrackingClass(Class<? extends FastTracking> trackingClass, FastTracking realLoggerInstance) throws MalformedTrackingClassException {
-		if(verbose) System.err.println( "[yajta] setTrackingClass " + trackingClass.getName());
-		logValue = false;
-		//logBranch = true;
-		loggerInstance = "fr.inria.yajta.Agent.fastTrackingInstance";
-		this.realLoggerInstance = realLoggerInstance;
-	}
-
 	public byte[] transform( final ClassLoader loader, final String className, final Class clazz,
 	                         final java.security.ProtectionDomain domain, final byte[] bytes ) {
 		//if(verbose) System.out.println("className: " + className + " ? ");
@@ -113,6 +107,52 @@ public class FastTracer implements ClassFileTransformer {
 		}
 
 		return b;
+	}
+
+	@Override
+	public void setTrackingClass(Class<? extends Tracking> trackingClass) throws MalformedTrackingClassException {
+		throw new UnsupportedOperationException("FastTracer only supports TracingInstance that implements FastTracking");
+	}
+
+	@Override
+	public void setValueTrackingClass(Class<? extends ValueTracking> trackingClass) throws MalformedTrackingClassException {
+		throw new UnsupportedOperationException("FastTracer only supports TracingInstance that implements FastTracking");
+	}
+
+	@Override
+	public void setFastTrackingClass(Class<? extends FastTracking> trackingClass) throws MalformedTrackingClassException {
+		if(verbose) System.err.println( "[yajta] setTrackingClass " + trackingClass.getName());
+		if(trackingClass.isAnonymousClass()) {
+			throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " should not be anonymous.)");
+		}
+		try {
+			Method m = trackingClass.getDeclaredMethod("getInstance");
+			if(!java.lang.reflect.Modifier.isStatic(m.getModifiers())) {
+				throw new MalformedTrackingClassException("Method " + trackingClass.getName() + ".getInstance() is not static");
+			}
+			loggerInstance = trackingClass.getName() + ".getInstance()";
+			logValue = false;
+			FastTracking instance = (FastTracking) trackingClass.getMethod("getInstance", new Class[]{}).invoke(null,new Object[]{});
+			realLoggerInstance = instance;
+			if(instance.traceBranch()) {
+				if(verbose) System.err.println( "[yajta] set Branch tracking on.");
+				logBranch = true;
+			}
+		} catch (NoSuchMethodException e) {
+			throw new MalformedTrackingClassException("Class " + trackingClass.getName() + " does not have a static method getInstance()");
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setTrackingClass(Class<? extends FastTracking> trackingClass, FastTracking realLoggerInstance) throws MalformedTrackingClassException {
+		if(verbose) System.err.println( "[yajta] setTrackingClass " + trackingClass.getName());
+		logValue = false;
+		//logBranch = true;
+		loggerInstance = "fr.inria.yajta.Agent.fastTrackingInstance";
+		this.realLoggerInstance = realLoggerInstance;
 	}
 
 	public void doClass(CtClass cl, String name) throws NotFoundException, CannotCompileException {
@@ -228,7 +268,8 @@ public class FastTracer implements ClassFileTransformer {
 						int tracePointBlockId = realLoggerInstance.register(className.replace("/", "."), method.getName() + params, ""+i);
 						//for(int i = 1; i < blocks.length-1; i++) {
 						int sizeBefore = ca.getCode().length;
-						String inser = branchIn + i + branchInEnd;
+						//String inser = branchIn + i + branchInEnd;
+						String inser = branchIn + tracePointBlockId + branchInEnd;
                         /*if(i == 0) {
                             inser = loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
                                     + className.replace("/", ".") + "\", \""

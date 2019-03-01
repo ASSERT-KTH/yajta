@@ -9,7 +9,7 @@ import java.util.List;
 public class TestLogger implements Tracking {
     static TestLogger instance;
 
-    public List<Log> log = new ArrayList<>();
+    public List<Log> logs = new ArrayList<>();
 
     public static TestLogger getInstance() {
         if(instance == null) {
@@ -22,7 +22,7 @@ public class TestLogger implements Tracking {
              * instance.setLogFile(new File("my-traces.json"));
              * Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
              *   public void run() {
-             *      TestLogger.getInstance().flush();
+             *      TestFastLogger.getInstance().flush();
              *   }
              * });
             */
@@ -37,12 +37,12 @@ public class TestLogger implements Tracking {
 
     @Override
     public void stepIn(String thread, String clazz, String method) {
-        log.add(new Log(thread, clazz, method));
+        logs.add(new Log(thread, clazz, method));
     }
 
     @Override
     public void stepOut(String thread) {
-        log.add(new Log(thread));
+        logs.add(new Log(thread));
     }
 
     @Override
