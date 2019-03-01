@@ -77,7 +77,6 @@ public class FastTracer implements TracerI {
 		String classFilePath = classURL == null ? null : classURL.getFile().replace("file:","");
 		if(classFilePath == null || !cl.isInJars(classFilePath)) return bytes;
 		if(verbose) System.out.println("className: " + className + " -> " + cl.isToBeProcessed(className));
-		//if(className.contains("spoon/pattern")) System.out.println("!!!!!!!!!!!!!!!!!!!! className: " + className + " -> " + cl.isToBeProcessed(className));
 		if( cl.isToBeProcessed(className) ) {
 			return doClass( className, clazz, bytes );
 		} else {
@@ -211,7 +210,6 @@ public class FastTracer implements TracerI {
 	}
 
 	private void doMethod( final CtBehavior method , String className, boolean isIsotope, String isotope) throws NotFoundException, CannotCompileException {
-		//System.out.println("\t\tMethod: " + method.getLongName() + " -> " + !Modifier.isNative(method.getModifiers()));
 		if(!Modifier.isNative(method.getModifiers())) {
 			if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
 			String params = "(";
@@ -223,20 +221,6 @@ public class FastTracer implements TracerI {
 			}
 			params += ")";
 			int tracePointId = realLoggerInstance.register(className.replace("/", "."), method.getName() + params);
-
-            /*System.err.println(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
-                    + className.replace("/", ".") + "\", \""
-                    + method.getName() + params + "\""
-                    + parameterValues
-                    + ");");*/
-            /*method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
-                    + className.replace("/", ".") + "\", \""
-                    + method.getName() + params + "\""
-                    + parameterValues
-                    + ");");
-            method.insertAfter(loggerInstance + ".stepOut(Thread.currentThread().getName()"
-                    + returnValue
-                    +");");*/
 
 			// !!!! This only work because the inserted call for branch logging does not have more arguments than the method logging one.
 			if(logBranch && method instanceof CtMethod) {
