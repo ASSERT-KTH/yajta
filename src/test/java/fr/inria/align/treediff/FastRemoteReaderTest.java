@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class FastRemoteReaderTest {
 
 	@Test
-	public void testReadTrace() throws MalformedTrackingClassException, InterruptedException {
+	public void testProduceRemoteTraceThenReadTrace() throws MalformedTrackingClassException, InterruptedException {
 		File tmpTrace = new File("tmpTrace");
 		if(tmpTrace.exists()) tmpTrace.delete();
 		tmpTrace.mkdir();
