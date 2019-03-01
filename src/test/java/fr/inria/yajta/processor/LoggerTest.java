@@ -2,9 +2,8 @@ package fr.inria.yajta.processor;
 
 import fr.inria.yajta.api.MalformedTrackingClassException;
 import fr.inria.yajta.api.SimpleTracer;
+import fr.inria.yajta.processor.loggers.Logger;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class LoggerTest {
     @Test

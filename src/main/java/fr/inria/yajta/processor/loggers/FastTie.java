@@ -1,12 +1,8 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.loggers;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import fr.inria.yajta.api.AbstractFastTracking;
 import fr.inria.yajta.api.FastTracking;
 
-import java.io.File;
-import java.net.URLClassLoader;
 import java.util.*;
 
 public class FastTie extends AbstractFastTracking implements FastTracking {

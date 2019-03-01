@@ -50,7 +50,7 @@ public class TestLogger implements Tracking {
         //This logger is not meant to be used outside of tests, therefor, logs will never be written down in a file
     }
 
-    public enum LOGTYPE {IN,OUT;}
+    public enum LOGTYPE {IN,OUT}
     public class Log {
         public LOGTYPE type;
         public String thread;

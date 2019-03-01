@@ -1,10 +1,11 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.loggers;
 
 import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import fr.inria.yajta.Agent;
 import fr.inria.yajta.api.AbstractFastTracking;
 import fr.inria.yajta.api.FastTracking;
+import fr.inria.yajta.processor.IdTreeNode;
+import fr.inria.yajta.processor.TreeNode;
 import fr.inria.yajta.processor.util.MyEntry;
 import fr.inria.yajta.processor.util.MyMap;
 

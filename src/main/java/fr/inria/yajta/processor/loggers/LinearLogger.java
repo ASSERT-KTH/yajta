@@ -1,10 +1,9 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.loggers;
 
 import fr.inria.yajta.Agent;
 import fr.inria.yajta.api.BranchTracking;
 import fr.inria.yajta.api.Tracking;
-import fr.inria.yajta.processor.util.MyEntry;
-import fr.inria.yajta.processor.util.MyList;
+import fr.inria.yajta.processor.TreeNode;
 
 import java.io.BufferedWriter;
 import java.io.File;

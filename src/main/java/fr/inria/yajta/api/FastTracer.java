@@ -1,13 +1,11 @@
 package fr.inria.yajta.api;
 
-import fr.inria.yajta.TracerI;
 import fr.inria.yajta.Utils;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
 import javassist.CtClass;
 import javassist.CtMethod;
-import javassist.CtPrimitiveType;
 import javassist.Modifier;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -16,17 +14,13 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Mnemonic;
-import javassist.bytecode.Opcode;
 import javassist.bytecode.analysis.ControlFlow;
 import javassist.compiler.CompileError;
 import javassist.compiler.Javac;
 
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Arrays;
 
-//public class SimpleTracer implements ClassFileTransformer {
 public class FastTracer implements ClassFileTransformer {
 
 	public boolean verbose = false;

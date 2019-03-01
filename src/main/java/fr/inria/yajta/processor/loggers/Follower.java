@@ -1,7 +1,8 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.loggers;
 
 import fr.inria.yajta.FileHelper;
 import fr.inria.yajta.api.Tracking;
+import fr.inria.yajta.processor.TreeNode;
 import fr.inria.yajta.processor.util.MyMap;
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,10 +1,9 @@
 package fr.inria.yajta.processor;
 
+import fr.inria.yajta.processor.loggers.FastLogger;
 import org.junit.Test;
 
 import java.io.File;
-
-import static org.junit.Assert.*;
 
 public class FastLoggerTest {
 

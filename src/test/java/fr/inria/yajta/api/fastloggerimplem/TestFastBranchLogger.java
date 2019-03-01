@@ -13,7 +13,6 @@ public class TestFastBranchLogger extends AbstractFastTracking {
 
     private List<Log> log = new ArrayList<>();
 
-
     public static TestFastBranchLogger getInstance() {
         if(instance == null) {
             instance = new TestFastBranchLogger();

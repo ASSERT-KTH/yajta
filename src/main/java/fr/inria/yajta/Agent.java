@@ -2,13 +2,21 @@ package fr.inria.yajta;
 
 
 import fr.inria.yajta.api.*;
-import fr.inria.yajta.processor.*;
+import fr.inria.yajta.processor.loggers.CountLogger;
+import fr.inria.yajta.processor.loggers.DynamicGraph;
+import fr.inria.yajta.processor.loggers.DynamicGraphFollower;
+import fr.inria.yajta.processor.loggers.FastLogger;
+import fr.inria.yajta.processor.loggers.FastTie;
+import fr.inria.yajta.processor.loggers.Follower;
+import fr.inria.yajta.processor.loggers.Logger;
+import fr.inria.yajta.processor.loggers.RemoteLogger;
+import fr.inria.yajta.processor.loggers.Tie;
+import fr.inria.yajta.processor.loggers.ValueLogger;
 
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
-import java.util.Arrays;
 
 
 public class Agent {

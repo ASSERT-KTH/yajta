@@ -1,4 +1,4 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.loggers;
 
 
 import fr.inria.yajta.api.ValueTracking;

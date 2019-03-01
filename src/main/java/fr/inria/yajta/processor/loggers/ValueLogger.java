@@ -1,20 +1,16 @@
-package fr.inria.yajta.processor;
+package fr.inria.yajta.processor.loggers;
 
 import fr.inria.yajta.Agent;
 import fr.inria.yajta.api.ValueTrace;
 import fr.inria.yajta.api.ValueTracking;
+import fr.inria.yajta.processor.TreeNode;
 import fr.inria.yajta.processor.util.MyEntry;
-import fr.inria.yajta.processor.util.MyList;
 import fr.inria.yajta.processor.util.MyMap;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 public class ValueLogger implements ValueTracking {
 

@@ -3,7 +3,7 @@ package fr.inria.align.treediff;
 import fr.inria.yajta.api.BranchTracking;
 import fr.inria.yajta.api.Tracking;
 import fr.inria.yajta.api.ValueTracking;
-import fr.inria.yajta.processor.Logger;
+import fr.inria.yajta.processor.loggers.Logger;
 import net.openhft.chronicle.queue.ChronicleQueue;
 import net.openhft.chronicle.queue.ExcerptTailer;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;

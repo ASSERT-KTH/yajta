@@ -2,9 +2,6 @@ package fr.inria.yajta.api;
 
 
 import fr.inria.offline.InstrumentationBuilder;
-import fr.inria.yajta.Agent;
-import fr.inria.yajta.Tracer;
-import fr.inria.yajta.Utils;
 import fr.inria.yajta.api.loggerimplem.IncompleteLogger1;
 import fr.inria.yajta.api.loggerimplem.IncompleteLogger2;
 import fr.inria.yajta.api.loggerimplem.IncompleteLogger3;
@@ -14,21 +11,9 @@ import fr.inria.yajta.api.loggerimplem.IncompleteValueLogger3;
 import fr.inria.yajta.api.loggerimplem.TestBranchLogger;
 import fr.inria.yajta.api.loggerimplem.TestLogger;
 import fr.inria.yajta.api.loggerimplem.TestValueLogger;
-import fr.inria.yajta.processor.Logger;
-import fr.inria.yajta.processor.LoggerTest;
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.NotFoundException;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 
 import static org.junit.Assert.*;
