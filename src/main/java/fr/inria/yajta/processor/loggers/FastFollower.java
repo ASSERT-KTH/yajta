@@ -1,4 +1,71 @@
 package fr.inria.yajta.processor.loggers;
 
-public class FastFollower {
+import com.google.common.collect.BiMap;
+import fr.inria.yajta.FileHelper;
+import fr.inria.yajta.api.AbstractFastTracking;
+import fr.inria.yajta.api.FastTracking;
+import fr.inria.yajta.processor.IdTreeNode;
+import fr.inria.yajta.processor.TreeNode;
+import fr.inria.yajta.processor.util.MyMap;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+
+public class FastFollower extends AbstractFastTracking implements FastTracking {
+
+	MyMap<Long, IdTreeNode> threadLogs = new MyMap<>();
+	MyMap<Long, Boolean> threadOfftrack = new MyMap<>();
+
+	@Override
+	public void stepIn(long thread, int id) {
+		if(!threadOfftrack.containsKey(thread) || threadOfftrack.get(thread)) return;
+		//System.err.println("[" + thread + "] " + method + "{");
+		IdTreeNode cur = threadLogs.get(thread);
+		if(cur == null) offTrack(thread,id, 0);
+		else {
+			if(cur.hasNext()) {
+				cur = cur.next();
+				if(cur.id != id) {
+					offTrack(thread, id, cur.id);
+				} else {
+					threadLogs.put(thread,cur);
+				}
+			} else offTrack(thread, id, 0);
+		}
+
+	}
+
+	@Override
+	public void stepOut(long thread) {
+
+	}
+
+	@Override
+	public boolean traceBranch() {
+		return false;
+	}
+
+	@Override
+	public void setLogFile(File log) {
+
+	}
+
+	public void load(MyMap<Long, IdTreeNode> threadLogs, MyMap<Long, Boolean> threadOfftrack, BiMap<String,Integer> dico) {
+		this.threadLogs = threadLogs;
+		this.threadOfftrack = threadOfftrack;
+		this.dico = dico;
+	}
+
+	public void offTrack(long thread, int method, int cur) {
+		BiMap<Integer, String> d = dico.inverse();
+		System.err.println("[OFF TRACK] <" + d.get(method) + "> instead of <" + d.get(cur) + ">");
+		threadOfftrack.put(thread,true);
+
+	}
+
+	public void flush() {
+
+	}
 }

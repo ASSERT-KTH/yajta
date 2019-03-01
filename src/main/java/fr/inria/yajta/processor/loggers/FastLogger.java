@@ -24,7 +24,7 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 
 	private boolean stop = false;
 
-	private MyMap<Long, MyEntry<IdTreeNode, IdTreeNode>> threadLogs; // thread -> Root, Actual
+	protected MyMap<Long, MyEntry<IdTreeNode, IdTreeNode>> threadLogs; // thread -> Root, Actual
 
 	public void clear() {
 		threadLogs = new MyMap<>();
@@ -74,6 +74,7 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 			} else {
 				System.err.println("out");
 			}
+			threadLogs.put(thread, entry);
 		}
 	}
 
@@ -116,5 +117,14 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public MyMap<Long, IdTreeNode> exportLogs() {
+		MyMap<Long, IdTreeNode> res = new MyMap<>();
+		for(MyEntry<Long, MyEntry<IdTreeNode, IdTreeNode>> e: threadLogs.entryList()) {
+			res.put(e.getKey(),e.getValue().getKey());
+		}
+		return res;
 	}
 }

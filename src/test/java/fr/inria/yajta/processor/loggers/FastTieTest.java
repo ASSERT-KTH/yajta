@@ -3,11 +3,9 @@ package fr.inria.yajta.processor.loggers;
 import com.google.common.collect.BiMap;
 import fr.inria.align.treediff.FastRemoteReader;
 import fr.inria.align.treediff.FastRemoteReaderTest;
-import fr.inria.yajta.api.loggerimplem.TestFastLogger;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
