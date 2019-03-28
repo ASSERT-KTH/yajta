@@ -2,7 +2,13 @@ package fr.inria.yajta.processor.loggers;
 
 import fr.inria.yajta.api.AbstractFastTracking;
 import fr.inria.yajta.api.FastTracking;
+import fr.inria.yajta.processor.util.MyEntry;
+import fr.inria.yajta.processor.util.MySet;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class FastTie extends AbstractFastTracking implements FastTracking {
@@ -27,7 +33,7 @@ public class FastTie extends AbstractFastTracking implements FastTracking {
 		//System.err.println("[FastTie] step in " + id);
 		if(visited.contains(id)) return;
 		visited.add(id);
-		System.out.println(dictionary.inverse().get(id) + " is new.");
+		//System.out.println(dictionary.inverse().get(id) + " is new.");
 		/*ClassLoader cl = FastTie.class.getClassLoader();
 		try {
 			System.out.println("path: " + (String) cl.loadClass("spoon.test.main.MainTest").getField("curPath").get(null));
@@ -53,6 +59,29 @@ public class FastTie extends AbstractFastTracking implements FastTracking {
 
 	@Override
 	public void flush() {
+		if(log == null) {
+			int i = (int) Math.floor(Math.random() * (double) Integer.MAX_VALUE);
+			log = new File("log" + i);
+		}
+		try {
+			if(log.exists()) log.delete();
+			log.createNewFile();
+
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(log, true));
+			bufferedWriter.append("{\"report\":[");
+			bufferedWriter.append("{\"thread\":\"all\", \"methods\":[");
+			boolean f = true;
+			for(Integer m: visited) {
+				if(f) f = false;
+				else bufferedWriter.append(",");
+				bufferedWriter.append("\"" + dictionary.inverse().get(m) + "\"");
+			}
+			bufferedWriter.append("]}");
+			bufferedWriter.append("]}");
+			bufferedWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 

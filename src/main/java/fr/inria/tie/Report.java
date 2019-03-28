@@ -25,6 +25,10 @@ public class Report {
     private String inputFileName;
     @Parameter(names = {"--output-file", "-o"}, description = "File containing the dictionary. Default: tie-report.json")
     private String outputFileName = "tie-report.json";
+    @Parameter(names = {"--granularity", "-g"}, description = "Granularity (Class | Method)")
+    String granularity = "Method";
+
+    boolean methodGranularity = true;
 
     boolean printTests = true;
 
@@ -47,6 +51,9 @@ public class Report {
                 return;
             }
             out = new File(report.outputFileName);
+            if(report.granularity.equalsIgnoreCase("Class")) {
+                report.methodGranularity = false;
+            }
             report.gatherReport(in,out);
         }
     }
@@ -69,6 +76,12 @@ public class Report {
                     JSONArray methods = methods = t.getJSONArray("methods");
                     for(int j = 0; j < methods.length(); j++) {
                         String m = methods.getString(j);
+                        if(!methodGranularity) {
+                            String cl = m.split("\\(")[0];
+                            m = cl.substring(0,
+                                    cl.lastIndexOf('.'));
+                        }
+
                         Set<String> tests;
                         if(methodTests.containsKey(m)) tests =  methodTests.get(m);
                         else tests = new HashSet<>();
