@@ -189,7 +189,9 @@ public class Agent {
         //System.err.println("filteredLoadedClasses size: " + filteredLoadedClasses.length);
         retransform(BSloadedClasses, inst, a);
         retransform(filteredLoadedClasses, inst, a);*/
-        retransform(loadedClasses, inst, a);
+        if (!a.strictJar) {
+            retransform(loadedClasses, inst, a);
+        }
 
         Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
             public void run() {

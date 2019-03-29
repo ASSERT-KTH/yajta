@@ -16,6 +16,7 @@ public class Args {
     public File includeFile = null;
     public File output = null;
     public boolean strictIncludes = false;
+    public boolean strictJar = false;
     public String print = "tree";
     public ClassList cl = null;
     //includes=|excludes=
@@ -66,6 +67,8 @@ public class Args {
             parseOutput(p);
         } else if (p.startsWith("jars=")) {
             parseJars(p);
+        } else if (p.startsWith("strict-jar")) {
+            parseStrictJar(p);
         }
     }
 
@@ -88,6 +91,9 @@ public class Args {
     }
     public void parseStrictIncludes(String p) {
         strictIncludes = true;
+    }
+    public void parseStrictJar(String p) {
+        strictJar = true;
     }
 
     public void parseFollow(String p) {
