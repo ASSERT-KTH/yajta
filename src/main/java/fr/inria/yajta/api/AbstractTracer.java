@@ -53,7 +53,12 @@ public abstract class AbstractTracer {
 	}
 
 	public void doClass(CtClass cl, String name) throws NotFoundException, CannotCompileException {
-		CtBehavior[] methods = cl.getDeclaredBehaviors();
+		//CtBehavior[] methods = cl.getDeclaredBehaviors();
+		CtBehavior[] behaviors = cl.getDeclaredBehaviors();
+		CtBehavior[] methods = new CtBehavior[behaviors.length+1];
+		for(int i = 0; i < behaviors.length; i++) methods[i] = behaviors[i];
+		methods[behaviors.length] = cl.getClassInitializer();
+		if(methods[behaviors.length]==null) methods[behaviors.length] = cl.makeClassInitializer();
 
 		for( int i = 0; i < methods.length; i++ ) {
 
