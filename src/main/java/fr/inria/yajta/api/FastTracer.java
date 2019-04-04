@@ -108,7 +108,7 @@ public class FastTracer extends AbstractTracer implements TracerI {
 	public void setTrackingClass(Class<? extends FastTracking> trackingClass, FastTracking realLoggerInstance) throws MalformedTrackingClassException {
 		if(verbose) System.err.println( "[yajta] setTrackingClass " + trackingClass.getName());
 		logValue = false;
-		//logBranch = true;
+		logBranch = realLoggerInstance.traceBranch();
 		loggerInstance = "fr.inria.yajta.Agent.fastTrackingInstance";
 		this.realLoggerInstance = realLoggerInstance;
 	}
@@ -176,7 +176,7 @@ public class FastTracer extends AbstractTracer implements TracerI {
 					ControlFlow.Block[] blocks = controlFlow.basicBlocks();
 					String branchIn = loggerInstance + ".stepIn(Thread.currentThread().getId(),";
 					String branchInEnd = ");";
-					String branchOut = loggerInstance + ".branchOut(Thread.currentThread().getName());";
+					String branchOut = loggerInstance + ".stepOut(Thread.currentThread().getId());";
 					int offset = 0;
                     /*if(method.getName().equals("myIfElse")) {
                         System.out.println(" --- RAW --- ");
@@ -198,6 +198,7 @@ public class FastTracer extends AbstractTracer implements TracerI {
 						int sizeBefore = ca.getCode().length;
 						//String inser = branchIn + i + branchInEnd;
 						String inser = branchIn + tracePointBlockId + branchInEnd;
+						inser += branchOut;
                         /*if(i == 0) {
                             inser = loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
                                     + className.replace("/", ".") + "\", \""

@@ -6,6 +6,7 @@ import fr.inria.yajta.processor.loggers.CountLogger;
 import fr.inria.yajta.processor.loggers.DynamicGraph;
 import fr.inria.yajta.processor.loggers.DynamicGraphFollower;
 import fr.inria.yajta.processor.loggers.FastLogger;
+import fr.inria.yajta.processor.loggers.FastRemoteLogger;
 import fr.inria.yajta.processor.loggers.FastTie;
 import fr.inria.yajta.processor.loggers.Follower;
 import fr.inria.yajta.processor.loggers.Logger;
@@ -67,10 +68,17 @@ public class Agent {
                 t.log = a.output;
             fastTrackingInstance = t;
         } else if(a.print.equalsIgnoreCase("fasttree")) {
-            if(verbose) System.err.println("[Yajta] FastTie selected");
-            FastLogger t = new FastLogger();
+            if(verbose) System.err.println("[Yajta] FastLogger selected");
+            FastLogger t = new FastLogger(true);
             if(a.output != null)
                 t.log = a.output;
+            fastTrackingInstance = t;
+        } else if(a.print.equalsIgnoreCase("fastremote")) {
+            if(verbose) System.err.println("[Yajta] FastRemoteLogger selected");
+            FastRemoteLogger t = new FastRemoteLogger();
+            t.traceBranch = true;
+            //if(a.output != null)
+            //    t.log = a.output;
             fastTrackingInstance = t;
         } else if(a.print.equalsIgnoreCase("matrix")) {
             if(verbose) System.err.println("[Yajta] DynamicGraph selected");
@@ -134,7 +142,8 @@ public class Agent {
                 e.printStackTrace();
             }
         } else if(a.print.equalsIgnoreCase("fasttie")
-                || a.print.equalsIgnoreCase("fasttree")) {
+                || a.print.equalsIgnoreCase("fasttree")
+                || a.print.equalsIgnoreCase("fastremote")) {
             if(verbose) System.err.println("[Yajta] FastTracer selected");
             transformer = new FastTracer(a.cl);
             if (a.strictIncludes) ((FastTracer)transformer).strictIncludes = true;

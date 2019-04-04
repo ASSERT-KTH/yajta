@@ -2,7 +2,7 @@
 
 rootDir=`pwd`
 pathToJarAgent=$1
-tmpDir="$rootDir/log"
+tmpDir="$rootDir/trace"
 excude=""
 instrument=$(find . -type d -path '**/target/classes' | sed "s|\.|${PWD}|" | paste -sd "," -)
 
@@ -14,7 +14,7 @@ listTests() {
 
 traceTest() {
 	#1 test name
-	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-jar|jars=$instrument|exculdes=fr.inria.yalta$exclude|print=fasttie|output=$tmpDir/$1\"" test
+	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-jar|jars=$instrument|exculdes=fr.inria.yalta$exclude|print=fasttree|output=$tmpDir/$1\"" test
 }
 
 mkdir $tmpDir
@@ -23,6 +23,4 @@ do
 	traceTest $t
 done
 
-java -cp $pathToJarAgent fr.inria.tie.Report -i $tmpDir -o "tie-report.json"
-#genReport
 

@@ -32,7 +32,7 @@ public class IdTreeNode {
 
 		public void print(BufferedWriter b, boolean tree) throws IOException {
 			String name = dico.apply(id);
-			String src;
+			/*String src;
 			if(name == null) src = null;
 			else {
 				if (name.startsWith("javafx")) src = "javafx";
@@ -49,7 +49,8 @@ public class IdTreeNode {
 				else src = "other";
 			}
 
-			if(tree) b.append("{\"source\": \"" + src + "\", \"name\":\"" + name + "\", \"children\":[\n");
+			if(tree) b.append("{\"source\": \"" + src + "\", \"name\":\"" + name + "\", \"children\":[\n");*/
+			if(tree) b.append("{ \"name\":\"" + name + "\", \"children\":[\n");
 			else b.append(name + "\n");
 			if(children != null) {
 				boolean isFirst = true;

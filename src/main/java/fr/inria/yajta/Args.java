@@ -129,6 +129,8 @@ public class Args {
             print = "fasttie";
         } else if(p.compareTo("print=fasttree") == 0) {
             print = "fasttree";
+        } else if(p.compareTo("print=fastremote") == 0) {
+            print = "fastremote";
         }
     }
 

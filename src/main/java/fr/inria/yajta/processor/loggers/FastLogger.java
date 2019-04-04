@@ -13,6 +13,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 
 public class FastLogger extends AbstractFastTracking implements FastTracking {
 	boolean traceBranches;
@@ -21,6 +22,9 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 	BufferedWriter bufferedWriter;
 	int nodes;
 	int branches;
+
+	//TODO make it paramatric
+	int maxNodes = 20000000;
 
 	private boolean stop = false;
 
@@ -50,7 +54,7 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 
 	@Override
 	public synchronized void stepIn(long thread, int id) {
-		if(!stop) {
+		if(!stop && (nodes < maxNodes)) {
 			nodes++;
 			MyEntry<IdTreeNode, IdTreeNode> entry = threadLogs.get(thread);
 			if (entry == null) {
@@ -67,7 +71,7 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 
 	@Override
 	public synchronized void stepOut(long thread) {
-		if(!stop) {
+		if(!stop && (nodes < maxNodes)) {
 			MyEntry<IdTreeNode, IdTreeNode> entry = threadLogs.get(thread);
 			if(entry != null) {
 				if(entry.getValue() != null) entry.setValue(entry.getValue().parent);
@@ -90,6 +94,11 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 			if(tree) log = new File("log" + i + ".json");
 			else log = new File("log" + i);
 		}
+		//writeJSON(log);
+		writeCompact(log);
+	}
+
+	public void writeJSON(File out) {
 		try {
 			BiMap<Integer, String> rdico = dictionary.inverse();
 			IdTreeNode.dico = i -> rdico.get(i);
@@ -117,6 +126,37 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void writeCompact(File out) {
+		try {
+			BiMap<Integer, String> rdico = dictionary.inverse();
+			IdTreeNode.dico = i -> rdico.get(i);
+
+			if(log.exists()) log.delete();
+			log.createNewFile();
+			bufferedWriter = new BufferedWriter(new FileWriter(log, true));
+			for(Map.Entry<Integer,String> entry : rdico.entrySet()) {
+				bufferedWriter.append(entry.getKey() + ":" + entry.getValue() + "\n");
+			}
+			boolean isFirst = true;
+			for(MyEntry<Long, MyEntry<IdTreeNode, IdTreeNode>> e: threadLogs.entryList()) {
+				bufferedWriter.append("_" + e.getKey() + "\n");
+				writeTreeNode(e.getValue().getKey(), bufferedWriter);
+			}
+			bufferedWriter.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void writeTreeNode(IdTreeNode n, BufferedWriter bufferedWriter) throws IOException {
+		bufferedWriter.append(n.id + "\n");
+		if(n.children != null) {
+			for (IdTreeNode c : n.children) {
+				writeTreeNode(c, bufferedWriter);
+			}
+		}
+		bufferedWriter.append("-");
 	}
 
 

@@ -55,11 +55,12 @@ public class FastTracerTest {
 
 
 		//contract: Every method and each branch is indeed logged (in and out)
-		assertTrue(logs.size() == 97);
+		//assertTrue(logs.size() == 97);
+		assertTrue(logs.size() == 160);
 
 		//contract: Every method logged in is also logged out
 		assertEquals(
-				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN && !l.isBranch(dico)).count(),
+				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN).count(),
 				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.OUT).count()
 		);
 
