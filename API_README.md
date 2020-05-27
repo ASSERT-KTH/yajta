@@ -7,10 +7,10 @@ Note that in order to run them you must add the yajta jar to your classpath (as 
 
 ```
 #Instrument
-java -cp path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar fr.inria.offline.Instrumenter classDir outputDir
+java -cp yajta-offline/target/yajta-offline/-2.0.0-jar-with-dependencies.jar fr.inria.offline.Instrumenter -i classDir -o outputDir
 
 #Run
-java -cp outputDir:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar org.myApp
+java -cp outputDir:yajta-offline/target/yajta-offline/-2.0.0-jar-with-dependencies.jar org.myApp
 ```
 
 # API
