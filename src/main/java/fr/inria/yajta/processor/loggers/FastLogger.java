@@ -94,8 +94,8 @@ public class FastLogger extends AbstractFastTracking implements FastTracking {
 			if(tree) log = new File("log" + i + ".json");
 			else log = new File("log" + i);
 		}
-		//writeJSON(log);
-		writeCompact(log);
+		writeJSON(log);
+		//writeCompact(log);
 	}
 
 	public void writeJSON(File out) {

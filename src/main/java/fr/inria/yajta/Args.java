@@ -17,6 +17,7 @@ public class Args {
     public File output = null;
     public boolean strictIncludes = false;
     public boolean strictJar = false;
+    public boolean traceBranches = false;
     public String print = "tree";
     public ClassList cl = null;
     //includes=|excludes=
@@ -69,6 +70,8 @@ public class Args {
             parseJars(p);
         } else if (p.startsWith("strict-jar")) {
             parseStrictJar(p);
+        } else if (p.startsWith("trace-branches")) {
+            parseTraceBranches(p);
         }
     }
 
@@ -95,10 +98,13 @@ public class Args {
     public void parseStrictJar(String p) {
         strictJar = true;
     }
+    public void parseTraceBranches(String p) {
+        traceBranches = true;
+    }
 
     public void parseFollow(String p) {
         follow = new File(p.split("follow=")[1]);
-        if(!follow.exists()) System.err.println("Unvalid file for follow argument");
+        if(!follow.exists()) System.err.println("Invalid file for follow argument");
     }
 
     public void parsemFollow(String p) {
@@ -117,6 +123,8 @@ public class Args {
             print = "tie";
         } else if(p.compareTo("print=values") == 0) {
             print = "values";
+        } else if(p.compareTo("print=matrixclass") == 0) {
+            print = "matrixclass";
         } else if(p.compareTo("print=matrix") == 0) {
             print = "matrix";
         } else if(p.compareTo("print=branch") == 0) {

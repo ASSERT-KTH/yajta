@@ -4,6 +4,7 @@ package fr.inria.yajta.api;
 import fr.inria.yajta.processor.util.MyEntry;
 import fr.inria.yajta.processor.util.MyMap;
 
+import java.net.URL;
 import java.util.Arrays;
 
 /**
@@ -19,12 +20,17 @@ import java.util.Arrays;
  * cl.isToBeProcessed("a/a/b") -> false
  */
 public class ClassList {
+    String yajtaJar;
+
+
     public static ClassList getDefault(String packageToTrace) {
         return new ClassList(new String[]{packageToTrace}, null, null, true);
     }
     String[] JARS;
 
     public boolean isInJars(String classFilePath) {
+        //System.err.println("toto: " + yajtaJar + " vs: " + classFilePath);
+        if(classFilePath.startsWith(yajtaJar)) return false;
         if(JARS == null) return true;
         //System.err.println("jar 0: " + JARS[0]);
         //System.err.println("classPath: " + classFilePath);
@@ -55,6 +61,13 @@ public class ClassList {
         }
         rootTree.add(new String[]{"fr","inria","yajta"},false, !strictIncludes);
         this.JARS = jars;
+
+        ClassLoader loader = ClassList.class.getClassLoader();
+        URL jarURL = loader.getResource("fr/inria/yajta/api/ClassList.class");
+        yajtaJar = jarURL.getPath()
+                .replace("fr/inria/yajta/api/ClassList.class","")
+                .replace("file:", "");
+
     }
 
     public boolean isToBeProcessed(String className) {
