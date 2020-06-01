@@ -39,7 +39,7 @@ The execution of the instrumented code should lead to the creation of files `yaj
 Exemple:
 
 ```json
-{"org.mypackage.MyClass":["myMethod([ILjava/util/List;")V]}
+{"org.mypackage.MyClass":["myMethod([ILjava/util/List;)V"]}
 
 ```
 

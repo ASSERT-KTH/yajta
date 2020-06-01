@@ -6,6 +6,7 @@ import fr.inria.yajta.api.MalformedTrackingClassException;
 import fr.inria.yajta.api.SimpleTracerTest;
 import fr.inria.yajta.api.loggerimplem.TestFastLogger;
 import fr.inria.yajta.processor.loggers.FastRemoteLogger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import static org.junit.Assert.*;
 
 public class FastRemoteReaderTest {
 
+	@Ignore
 	@Test
 	public void testProduceRemoteTraceThenReadTrace() throws MalformedTrackingClassException, InterruptedException {
 		File tmpTrace = new File("tmpTrace");
@@ -76,6 +78,7 @@ public class FastRemoteReaderTest {
 
 	}
 
+	@Ignore
 	@Test
 	public void testReadTrace() throws InterruptedException {
 		File traceDir = new File(FastRemoteReaderTest.class.getClassLoader().getResource("remote").getPath());
