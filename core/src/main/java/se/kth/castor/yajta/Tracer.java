@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class Tracer implements ClassFileTransformer {
 
-    public boolean verbose = true;
+    public boolean verbose = false;
     public boolean strictIncludes = false;
     ClassList cl;
 
@@ -132,14 +132,16 @@ public class Tracer implements ClassFileTransformer {
             } else {
                 //if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
             }
-            String params = "(";
+
+            /*String params = "(";
             boolean first = true;
             for (CtClass c : method.getParameterTypes()) {
                 if (first) first = false;
                 else params += ", ";
                 params += c.getName();
             }
-            params += ")";
+            params += ")";*/
+            String params = method.getSignature();
 
             //method.insertAfter( "System.err.println( $_ );");
             //String test = className.replace("/", ".") + "." + method.getName();//

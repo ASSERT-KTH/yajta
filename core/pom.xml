@@ -13,8 +13,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -23,11 +23,6 @@
             <artifactId>client</artifactId>
             <version>2.0.0</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.github.gumtreediff</groupId>
-            <artifactId>gen.antlr3-json</artifactId>
-            <version>2.1.0</version>
-        </dependency>-->
         <dependency>
             <groupId>com.github.gumtreediff</groupId>
             <artifactId>core</artifactId>
@@ -116,5 +111,47 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Premain-Class>se.kth.castor.yajta.Yajta</Premain-Class>
+                            <Can-Redefine-Classes>True</Can-Redefine-Classes>
+                            <Can-Retransform-Classes>True</Can-Retransform-Classes>
+                            <Can-Set-Native-Method-Prefix>True</Can-Set-Native-Method-Prefix>
+                        </manifestEntries>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-my-jar-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>

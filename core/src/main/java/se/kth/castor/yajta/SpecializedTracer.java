@@ -101,6 +101,7 @@ public class SpecializedTracer implements ClassFileTransformer {
                 if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
             }
             if(verbose) System.err.println("1");
+            /*
             String params = "(";
             boolean first = true;
             for (CtClass c : method.getParameterTypes()) {
@@ -109,6 +110,8 @@ public class SpecializedTracer implements ClassFileTransformer {
                 params += c.getName();
             }
             params += ")";
+            */
+            String params = method.getSignature();
             //String methodName = className.replace("/", ".") + "." + method.getName() + params;
             if(methodToTrace.get(className.replace("/", ".")).contains(method.getName() + params)) {
                 method.insertBefore(pprefix + "se.kth.castor.yajta.Agent.getTrackingInstance().stepIn(Thread.currentThread().getName(),\"" + className.replace("/", ".") + "\", \""+ method.getName() + params + "\");" + ppostfix);

@@ -18,6 +18,7 @@ public class Args {
     public boolean strictIncludes = false;
     public boolean strictJar = false;
     public boolean traceBranches = false;
+    public boolean verbose = false;
     public String print = "tree";
     public ClassList cl = null;
     //includes=|excludes=
@@ -72,6 +73,9 @@ public class Args {
             parseStrictJar(p);
         } else if (p.startsWith("trace-branches")) {
             parseTraceBranches(p);
+        } else if (p.startsWith("verbose")) {
+            System.err.println("[yajta] Verbose enabled");
+            parseVerbose(p);
         }
     }
 
@@ -94,6 +98,9 @@ public class Args {
     }
     public void parseStrictIncludes(String p) {
         strictIncludes = true;
+    }
+    public void parseVerbose(String p) {
+        verbose = true;
     }
     public void parseStrictJar(String p) {
         strictJar = true;

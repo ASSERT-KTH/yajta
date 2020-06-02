@@ -5,6 +5,7 @@ pathToJarAgent=$1
 tmpDir="$rootDir/log"
 packages=$2
 testSrcDir="src/test"
+#testSrcDir="test"
 #testSrcDir="org.eclipse.jgit.test/tst org.eclipse.jgit.http.test/tst org.eclipse.jgit.pgm.test/tst"
 excude=""
 #excude=",org.eclipse.jgit.ant"
@@ -38,6 +39,6 @@ do
 	traceTest $t
 done
 
-java -cp $pathToJarAgent fr.inria.tie.Report -i $tmpDir -o "tie-report.json"
+java -cp $pathToJarAgent se.kth.castor.tie.Report -i $tmpDir -o "tie-report.json"
 #genReport
 

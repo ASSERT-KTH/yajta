@@ -5,6 +5,7 @@ pathToJarAgent=$1
 tmpDir="$rootDir/traces"
 packages=$2
 testSrcDir="src/test"
+#testSrcDir="test"
 #testSrcDir=$3
 #testSrcDir="org.eclipse.jgit.test/tst org.eclipse.jgit.http.test/tst org.eclipse.jgit.pgm.test/tst"
 

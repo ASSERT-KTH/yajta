@@ -26,7 +26,7 @@ import java.lang.instrument.UnmodifiableClassException;
 public class Agent {
     //Initialized from pom (pom > project.properties > Yajta
     public static String yajtaVersionUID;
-    static boolean verbose = true;
+    static boolean verbose = false;
 
     static String[] INCLUDES = new String[] {};
     static String[] ISOTOPES = new String[] {};
@@ -139,6 +139,11 @@ public class Agent {
                 l.log = a.output;
             if(!a.print.equalsIgnoreCase("tree")) l.tree = false;
             trackingInstance = l;
+        }
+
+        if(a.verbose) {
+            Agent.verbose = true;
+            SimpleTracer.strictIncludes = true;
         }
 
         final ClassFileTransformer transformer;

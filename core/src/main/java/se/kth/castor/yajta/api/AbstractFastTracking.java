@@ -47,8 +47,8 @@ public abstract class AbstractFastTracking implements FastTracking {
 	}
 
 	/**
-	 * @param thread the id of the thread beeing logged
-	 * @param id the id of the method/branch beeing logged
+	 * @param thread the id of the thread being logged
+	 * @param id the id of the method/branch being logged
 	 *
 	 *  stepIn is called when Method/Branch is entered.
 	 *  It is up to the logger to store it in its data structure.
@@ -57,7 +57,7 @@ public abstract class AbstractFastTracking implements FastTracking {
 	public abstract void stepIn(long thread, int id);
 
 	/**
-	 * @param thread the id of the thread beeing logged
+	 * @param thread the id of the thread being logged
 	 *
 	 *  stepOut is called when Method/Branch is exited.
 	 *  It is up to the logger to keep track of which

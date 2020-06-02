@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 public class LinearLogger implements Tracking, BranchTracking {
     public File log;
-    private boolean verbose = true;
+    private boolean verbose = false;
     BufferedWriter bufferedWriter;
     //MyList<String> logs = new MyList<>();
     int max;

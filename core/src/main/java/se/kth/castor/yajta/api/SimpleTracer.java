@@ -28,7 +28,7 @@ import java.util.Arrays;
 
 public class SimpleTracer extends AbstractTracer implements TracerI {
 
-    public boolean strictIncludes = false;
+    public static boolean strictIncludes = false;
 
     String loggerInstance;
     boolean logValue = false;

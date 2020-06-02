@@ -2,8 +2,6 @@ package se.kth.castor.yajta.processor.loggers;
 
 import se.kth.castor.yajta.api.AbstractFastTracking;
 import se.kth.castor.yajta.api.FastTracking;
-import se.kth.castor.yajta.processor.util.MyEntry;
-import se.kth.castor.yajta.processor.util.MySet;
 
 import java.io.BufferedWriter;
 import java.io.File;

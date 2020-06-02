@@ -66,49 +66,6 @@
         </resources>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <index>true</index>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <!--<Premain-Class>fr.inria.yajta.Agent</Premain-Class>-->
-                            <Premain-Class>fr.inria.yajta.Yajta</Premain-Class>
-                            <Can-Redefine-Classes>True</Can-Redefine-Classes>
-                            <Can-Retransform-Classes>True</Can-Retransform-Classes>
-                            <Can-Set-Native-Method-Prefix>True</Can-Set-Native-Method-Prefix>
-                            <!--<Boot-Class-Path>/home/nharrand/Documents/yajta/target/yajta-1.0-SNAPSHOT-jar-with-dependencies.jar</Boot-Class-Path>-->
-                            <!--<Boot-Class-Path>yajta-${project.version}-jar-with-dependencies.jar</Boot-Class-Path>-->
-                        </manifestEntries>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-my-jar-with-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>1.6.7</version>
@@ -132,7 +89,8 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+           <!--FIXME add javadoc-->
+           <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
@@ -144,7 +102,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
