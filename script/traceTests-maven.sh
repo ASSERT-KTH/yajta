@@ -14,7 +14,7 @@ listTests() {
 
 traceTest() {
 	#1 test name
-	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-jar|jars=$instrument|exculdes=fr.inria.yalta$exclude|print=fasttree|output=$tmpDir/$1\"" test
+	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-jar|jars=$instrument|exculdes=se.kth.castor.yalta$exclude|print=fasttree|output=$tmpDir/$1\"" test
 }
 
 mkdir $tmpDir

@@ -29,7 +29,7 @@ listTests() {
 
 traceTest() {
 	#1 test name
-	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=fr.inria.yalta$exclude|print=matrix|output=$tmpDir/$1\"" test
+	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=se.kth.castor.yalta$exclude|print=matrix|output=$tmpDir/$1\"" test
 }
 
 mkdir $tmpDir

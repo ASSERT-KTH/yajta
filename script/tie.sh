@@ -29,7 +29,7 @@ traceTest() {
 	#1 test name
 	#mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLineBis="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=fr.inria.yalta$exclude|print=tie|output=$tmpDir/$1\"" test
 	#echo "mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine=\"-javaagent:$pathToJarAgent=\\\"strict-includes|includes=$packages|excludes=fr.inria.yalta$exclude|print=tie|output=$tmpDir/$1\\\"\" test"
-	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=fr.inria.yalta$exclude|print=fasttie|output=$tmpDir/$1\"" test
+	mvn -o -Dtest=$1 -DfailIfNoTests=false -DargLine="-javaagent:$pathToJarAgent=\"strict-includes|includes=$packages|excludes=se.kth.castor.yalta$exclude|print=fasttie|output=$tmpDir/$1\"" test
 }
 
 mkdir $tmpDir

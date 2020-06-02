@@ -7,7 +7,7 @@ TMP="classes.tmp"
 
 for cl in `cat $TMP`
 do
-	java -javaagent:$AGENTPATH="excludes=fr.inria.yalta,sun,java|includes=$cl|print=tree|output=output.json" -jar $JARTOTEST > /dev/null 2>&1
+	java -javaagent:$AGENTPATH="excludes=se.kth.castor,sun,java|includes=$cl|print=tree|output=output.json" -jar $JARTOTEST > /dev/null 2>&1
 	status=$?
     if [ $status -ne 0 ]; then
         echo "!! $cl"
