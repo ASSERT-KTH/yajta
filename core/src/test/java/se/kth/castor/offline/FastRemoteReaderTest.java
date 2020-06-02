@@ -16,13 +16,12 @@ import static org.junit.Assert.*;
 
 public class FastRemoteReaderTest {
 
-	@Ignore
 	@Test
 	public void testProduceRemoteTraceThenReadTrace() throws MalformedTrackingClassException, InterruptedException {
 		File tmpTrace = new File("tmpTrace");
 		if(tmpTrace.exists()) tmpTrace.delete();
 		tmpTrace.mkdir();
-		//new File(tmpTrace, "trace").mkdir();
+
 		//Initialization
 		File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("classes-remote-branch").getPath());
 
@@ -33,7 +32,6 @@ public class FastRemoteReaderTest {
 
 
 		InstrumentationBuilder builder = new InstrumentationBuilder(classDir, FastRemoteLogger.class);
-		//InstrumentationBuilder builder = new InstrumentationBuilder(classDir, Logger.class);
 
 		//Instrument bytecode of class in classDir
 		builder.instrument();
@@ -56,10 +54,14 @@ public class FastRemoteReaderTest {
 		List<TestFastLogger.Log> logs = TestFastLogger.getInstance().logs;
 		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDictionary().inverse();
 
+		/*for(TestFastLogger.Log log: logs) {
+			System.out.println((log.type == TestFastLogger.LOGTYPE.IN ? "IN" : "OUT" ) + "-> " + log.getElementName(dico));
+		}*/
+
 
 		//contract: Every method and each branch is indeed logged (in and out)
 		//assertTrue(logs.size() == 97);
-		assertTrue(logs.size() == 160);
+		assertEquals(160, logs.size());
 
 		//contract: Every method logged in is also logged out
 		/*assertEquals(
@@ -71,14 +73,80 @@ public class FastRemoteReaderTest {
 				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.OUT).count()
 		);
 
+
+
+		assertEquals(
+				7,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.myIf(")
+				).count()
+		);
+
+		assertEquals(
+				28,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.myIfElse(")
+				).count()
+		);
+
+		assertEquals(
+				11,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.mySwitch(")
+				).count()
+		);
+
+		assertEquals(
+				8,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.myFor(")
+				).count()
+		);
+
+		assertEquals(
+				8,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.myWhile(")
+				).count()
+		);
+
+		assertEquals(
+				5,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.myDoWhile(")
+				).count()
+		);
+
+		assertEquals(
+				8,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.myForeach(")
+				).count()
+		);
+
+		assertEquals(
+				3,
+				logs.stream().filter(l ->
+						l.type == TestFastLogger.LOGTYPE.IN &&
+								l.getElementName(dico).startsWith("fr.inria.hellobranchr.AppBranch.myTry(")
+				).count()
+		);
+
+
 		//contract: every branch entered is logged
-		assertTrue(logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN && l.isBranch(dico)).count() == 63);
+		assertEquals(63, logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN && l.isBranch(dico)).count());
 
 		builder.close();
 
 	}
 
-	@Ignore
 	@Test
 	public void testReadTrace() throws InterruptedException {
 		File traceDir = new File(FastRemoteReaderTest.class.getClassLoader().getResource("remote").getPath());
