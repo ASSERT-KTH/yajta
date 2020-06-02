@@ -23,6 +23,7 @@ public class FastRemoteReaderTest {
 		tmpTrace.mkdir();
 
 		//Initialization
+		System.out.println("Reading bytecode from dir: " + SimpleTracerTest.class.getClassLoader().getResource("classes-remote-branch").getPath());
 		File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("classes-remote-branch").getPath());
 
 		FastRemoteLogger logger = FastRemoteLogger.getInstance();

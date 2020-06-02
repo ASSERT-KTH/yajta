@@ -27,13 +27,16 @@ public class FastRemoteLogger implements FastTracking {
 	public File log;
 
 	@Override
-	public void setLogFile(File log) {
+	public synchronized void setLogFile(File log) {
 		this.log = log;
+		queue = SingleChronicleQueueBuilder.binary(this.log.getAbsolutePath() + "/trace").build();
+		appender = queue.acquireAppender();
+
 	}
 
 	public static File defaultLogFile = new File("tmpTrace");
 	ChronicleQueue queue;
-	final ExcerptAppender appender;
+	ExcerptAppender appender;
 
 	public FastRemoteLogger() {
 		this(null);
@@ -47,7 +50,7 @@ public class FastRemoteLogger implements FastTracking {
 	}
 
 	@Override
-	public int register(String clazz, String method, String branch) {
+	public synchronized int register(String clazz, String method, String branch) {
 		String id = clazz + "." + method + "#" + branch;
 		int r;
 		if(dico.containsKey(id)) r = dico.get(id);
@@ -67,7 +70,7 @@ public class FastRemoteLogger implements FastTracking {
 	}
 
 	@Override
-	public int register(String clazz, String method) {
+	public synchronized int register(String clazz, String method) {
 		String id = clazz + "." + method;
 		int r;
 		if(dico.containsKey(id)) r = dico.get(id);
@@ -87,13 +90,13 @@ public class FastRemoteLogger implements FastTracking {
 
 	//If used outside of agent
 	static FastRemoteLogger instance ;
-	public static FastRemoteLogger getInstance() {
+	public synchronized static FastRemoteLogger getInstance() {
 		if(instance == null) instance = new FastRemoteLogger();
 		return instance;
 	}
 
 	@Override
-	public void stepIn(long thread, int id) {
+	public synchronized void stepIn(long thread, int id) {
 		appender.writeDocument(w -> w.write("trace").marshallable(
 			m -> m.write("type").text("in")
 				.write("thread").fixedInt64(thread)
@@ -102,7 +105,7 @@ public class FastRemoteLogger implements FastTracking {
 	}
 
 	@Override
-	public void stepOut(long thread) {
+	public synchronized void stepOut(long thread) {
 		appender.writeDocument(w -> w.write("trace").marshallable(
 			m -> m.write("type").text("out")
 				.write("thread").fixedInt64(thread)
@@ -110,7 +113,7 @@ public class FastRemoteLogger implements FastTracking {
 	}
 
 	@Override
-	public void flush() {
+	public synchronized void flush() {
 		appender.writeDocument(w -> w.write("trace").marshallable(
 			m -> m.write("type").text("end")
 		));
