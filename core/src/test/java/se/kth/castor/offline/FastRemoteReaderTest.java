@@ -48,7 +48,7 @@ public class FastRemoteReaderTest {
 
 		TestFastLogger.traceBranch = true;
 		TestFastLogger.getInstance().logs.clear();
-		TestFastLogger.getInstance().getDictionary().clear();
+		TestFastLogger.getInstance().purge();
 
 		FastRemoteReader reader = new FastRemoteReader(TestFastLogger.getInstance(),tmpTrace);
 
@@ -164,6 +164,7 @@ public class FastRemoteReaderTest {
 		File traceDir = new File(FastRemoteReaderTest.class.getClassLoader().getResource("remote").getPath());
 		TestFastLogger.traceBranch = true;
 		TestFastLogger.getInstance().logs.clear();
+		TestFastLogger.getInstance().purge();
 		FastRemoteReader reader = new FastRemoteReader(TestFastLogger.getInstance(),traceDir);
 
 		//Reconstitute logs
