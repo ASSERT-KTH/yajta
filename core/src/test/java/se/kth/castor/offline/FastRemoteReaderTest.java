@@ -11,6 +11,7 @@ import se.kth.castor.yajta.processor.loggers.FastRemoteLogger;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -18,15 +19,16 @@ public class FastRemoteReaderTest {
 
 	@Test
 	public void testProduceRemoteTraceThenReadTrace() throws MalformedTrackingClassException, InterruptedException {
-		File tmpTrace = new File("tmpTrace");
+		File tmpTrace = new File("FastRemoteReaderTest-tmpTrace");
 		if(tmpTrace.exists()) tmpTrace.delete();
 		tmpTrace.mkdir();
 
 		//Initialization
 		System.out.println("Reading bytecode from dir: " + SimpleTracerTest.class.getClassLoader().getResource("classes-remote-branch").getPath());
-		File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("classes-remote-branch").getPath());
+		File classDir = new File(FastRemoteReaderTest.class.getClassLoader().getResource("classes-remote-branch").getPath());
 
 		FastRemoteLogger logger = FastRemoteLogger.getInstance();
+		logger.purge();
 		logger.traceBranch = true;
 		logger.setLogFile(tmpTrace);
 
@@ -46,6 +48,8 @@ public class FastRemoteReaderTest {
 
 		TestFastLogger.traceBranch = true;
 		TestFastLogger.getInstance().logs.clear();
+		TestFastLogger.getInstance().getDictionary().clear();
+
 		FastRemoteReader reader = new FastRemoteReader(TestFastLogger.getInstance(),tmpTrace);
 
 		//Reconstitute logs
@@ -55,26 +59,33 @@ public class FastRemoteReaderTest {
 		List<TestFastLogger.Log> logs = TestFastLogger.getInstance().logs;
 		BiMap<Integer, String> dico = TestFastLogger.getInstance().getDictionary().inverse();
 
+		/*for(Map.Entry<String, Integer> entry: logger.getDico().entrySet()) {
+			System.out.println("Dico sent: " + entry.getKey() + ": " + entry.getValue());
+		}
+		for(Map.Entry<String, Integer> entry: TestFastLogger.getInstance().getDictionary().entrySet()) {
+			System.out.println("Dico read: " + entry.getKey() + ": " + entry.getValue());
+		}*/
+
+		//contract: the original dictionary and the dictionary read must contains the same elements
+		assertEquals(logger.getDico().size(), TestFastLogger.getInstance().getDictionary().size());
+		for(Map.Entry<String, Integer> entry: logger.getDico().entrySet()) {
+			assertTrue(TestFastLogger.getInstance().getDictionary().containsKey(entry.getKey()));
+			assertEquals(entry.getValue(), TestFastLogger.getInstance().getDictionary().get(entry.getKey()));
+		}
+
 		/*for(TestFastLogger.Log log: logs) {
 			System.out.println((log.type == TestFastLogger.LOGTYPE.IN ? "IN" : "OUT" ) + "-> " + log.getElementName(dico));
 		}*/
 
 
 		//contract: Every method and each branch is indeed logged (in and out)
-		//assertTrue(logs.size() == 97);
 		assertEquals(160, logs.size());
 
 		//contract: Every method logged in is also logged out
-		/*assertEquals(
-				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN && !l.isBranch(dico)).count(),
-				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.OUT).count()
-		);*/
 		assertEquals(
 				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN).count(),
 				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.OUT).count()
 		);
-
-
 
 		assertEquals(
 				7,

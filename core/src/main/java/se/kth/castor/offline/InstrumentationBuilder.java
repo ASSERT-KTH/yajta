@@ -29,7 +29,6 @@ public class InstrumentationBuilder {
     boolean tmpOutput = false;
     Class loggerClass;
     ClassList list;
-    //SimpleTracer tracer;
     TracerI tracer;
 
     /** trackingClass must implement Tracking or ValueTracking */
@@ -95,6 +94,7 @@ public class InstrumentationBuilder {
             } else {
                 throw new MalformedTrackingClassException("Tracking class must implements either Tracking, BranchTracking, FastTracking or ValueTracking");
             }*/
+            //FIXME This is a terrible idea to conflate the classpath available when instrumenting and when executing. This should be separated...  For shame!
             ClassPool pool = ClassPool.getDefault();
             pool.appendClassPath(InstrumentationBuilder.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             pool.appendClassPath(loggerClass.getProtectionDomain().getCodeSource().getLocation().getPath());

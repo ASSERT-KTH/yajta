@@ -74,4 +74,10 @@ public abstract class AbstractFastTracking implements FastTracking {
 	@Override
 	public abstract void flush();
 
+
+	@Override
+	public void purge() {
+		dictionary.clear();
+		elementCount = 1;
+	}
 }

@@ -118,4 +118,10 @@ public class FastRemoteLogger implements FastTracking {
 			m -> m.write("type").text("end")
 		));
 	}
+
+	@Override
+	public synchronized void purge() {
+		dico.clear();
+		elementCount = 1;
+	}
 }

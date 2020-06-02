@@ -59,4 +59,9 @@ public interface FastTracking {
 	 * Write traces in log file
 	 */
 	void flush();
+
+	/**
+	 * Reset dictionary
+	 */
+	void purge();
 }
