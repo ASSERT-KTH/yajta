@@ -1,0 +1,19 @@
+{"name":"Threads", "yajta-version": "2.0.2-SNAPSHOT", "serialization-version": 0, "nodes": 7, "branches": 0, "threads": 1, "children":[
+{ "name":"null", "children":[
+{ "name":"fr.inria.demo.packa.A.<clinit>()V", "children":[
+
+]},{ "name":"fr.inria.demo.packa.A.main([Ljava/lang/String;)V", "children":[
+{ "name":"fr.inria.demo.packa.A.m([Ljava/lang/String;)V", "children":[
+{ "name":"fr.inria.demo.packb.B.B()V", "children":[
+
+]},{ "name":"fr.inria.demo.packb.B.sayHello()Ljava/lang/String;", "children":[
+
+]},{ "name":"fr.inria.demo.packb.B.sayHello(Ljava/lang/String;)Ljava/lang/String;", "children":[
+
+]},{ "name":"fr.inria.demo.packb.B.sayHello(Ljava/lang/String;)Ljava/lang/String;", "children":[
+
+]}
+]}
+]}
+]}
+]}

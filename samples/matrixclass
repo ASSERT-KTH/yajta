@@ -1,0 +1,8 @@
+packageParent,classParent,packageCalled,classCalled
+,,fr.inria.demo.packa,A
+,,fr.inria.demo.packa,A
+fr.inria.demo.packa,A,fr.inria.demo.packa,A
+fr.inria.demo.packa,A,fr.inria.demo.packb,B
+fr.inria.demo.packa,A,fr.inria.demo.packb,B
+fr.inria.demo.packa,A,fr.inria.demo.packb,B
+fr.inria.demo.packa,A,fr.inria.demo.packb,B

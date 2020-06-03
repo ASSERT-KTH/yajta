@@ -1,0 +1,8 @@
+main
+<clinit>()V
+main([Ljava/lang/String;)V
+m([Ljava/lang/String;)V
+sayHello()Ljava/lang/String;
+sayHello(Ljava/lang/String;)Ljava/lang/String;
+sayHello(Ljava/lang/String;)Ljava/lang/String;
+

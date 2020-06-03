@@ -116,7 +116,7 @@ public class Args {
 
     public void parsemFollow(String p) {
         mfollow = new File(p.split("mfollow=")[1]);
-        if(!mfollow.exists()) System.err.println("Unvalid file for follow argument");
+        if(!mfollow.exists()) System.err.println("Invalid file for follow argument");
     }
 
     public void parseOutput(String p) {
@@ -166,7 +166,7 @@ public class Args {
         System.err.println("\t\t- includes=org.package(,org.package2)* Default: Empty");
         System.err.println("\t\t- excludes=org.package(,org.package2)* Default: se.kth.castor.yajta");
         System.err.println("\t\t- isotopes=org.package(,org.package2)* Default:Empty");
-        System.err.println("\t\t- print=(list,tree,tie,values,branch,count) Default: tree");
+        System.err.println("\t\t- print=(list,tie,values,matrixclass,matrix,branch,count,remote,fasttie,fasttree,fastremote,userlogger) Default: tree");
         System.err.println("\t\t- strict-includes Default: false");
         System.err.println("\t\t- follow=File Default: null");
         System.err.println("\t\t- mfollow=File Default: null");
