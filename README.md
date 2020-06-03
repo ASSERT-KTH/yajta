@@ -8,3 +8,13 @@ Further more several tools that make use of that library are provided:
  * An agent that check that an execution follow a previous trace (See [Follower_README](Follower_README.md))
  * A tool that generate a test impact report (A json file containing for each method of the explored project the list of test the call it.) (See [TIE_README](TIE_README.md))
  * A way to insert probe offline (See [API_README](API_README.md))
+
+## Maven
+
+```xml
+<dependency>
+  <artifactId>yajta-core</artifactId>
+  <groupId>se.kth.castor</groupId>
+  <version>2.0.1</version>
+</dependency>
+```
