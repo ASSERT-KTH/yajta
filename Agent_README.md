@@ -5,7 +5,7 @@ Java agent tracing methods calls.
 Argument must belong to the following list (and be separated by |)
  * includes=org.package(,org.package2)* Default: Empty
  * jars=/path/to/my/jar Default: Empty (trace only classes inside this jar list)
- * excludes=org.package(,org.package2)* Default: fr.inria.yajta (always added to excludes)
+ * excludes=org.package(,org.package2)* Default: se.kth.castor.yajta (always added to excludes)
  * isotopes=org.package(,org.package2)* Default:Empty Deprecated
  * print=(list,tree,tie,matrix,branch,values) Default: tree
  * strict-includes Default: false
@@ -15,12 +15,12 @@ Argument must belong to the following list (and be separated by |)
 
 Usage:
 ```
-java -javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="Args" myApp 
+java -javaagent:path/to/yajta/core/target/yajta-core-2.0.0-jar-with-dependencies.jar="Args" myApp 
 ```
 
 Ex:
 ```
-java -javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|output=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
+java -javaagent:path/to/yajta/core/target/yajta-core-2.0.0-jar-with-dependencies.jar="strict-includes|includes=org.myorg.myapp|excludes=fr.inria.yalta|output=oupout.json" -cp myJar.jar org.myorg.myapp.AppMainClass
 ```
 
 Note that not excluding java,javax,sun,sunw might still result into carshes
@@ -48,7 +48,7 @@ public class AppValue {
 
 Running this command:
 ```
-java -javaagent:/path/to/yajta.jar=strict-includes|includes="fr.inria.testentry|print=values|output=values.json" -cp myJar.jar fr.inria.testentry.AppValue
+java -javaagent:/path/to/yajta.jar="strict-includes|includes=fr.inria.testentry|print=values|output=values.json" -cp myJar.jar fr.inria.testentry.AppValue
 ```
 
 should create a json file named `values.json` containing:
@@ -66,7 +66,7 @@ should create a json file named `values.json` containing:
       "children": [
         {
           "class": "fr.inria.testentry.AppValue",
-          "method": "main(java.lang.String[])",
+          "method": "main([Ljava/lang/String;)V",
           "parameters": [
             "rO0ABXVyABNbTGphdmEubGFuZy5TdHJpbmc7rdJW5+kde0cCAAB4cAAAAAA="
           ],
@@ -74,7 +74,7 @@ should create a json file named `values.json` containing:
           "children": [
             {
               "class": "fr.inria.testentry.AppValue",
-              "method": "getI(int)",
+              "method": "getI(I)I",
               "parameters": [
                 "rO0ABXNyABFqYXZhLmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAAAAAD"
               ],
