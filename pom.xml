@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>se.kth.castor</groupId>
   <artifactId>yajta</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.0-SNAPSHOT</version>
   <modules>
     <module>offline</module>
     <module>core</module>
-      <module>lean</module>
+     <module>lean</module>
   </modules>
   <packaging>pom</packaging>
   <name>yajta</name>
