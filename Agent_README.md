@@ -7,7 +7,7 @@ Argument must belong to the following list (and be separated by |)
  * jars=/path/to/my/jar Default: Empty (trace only classes inside this jar list)
  * excludes=org.package(,org.package2)* Default: se.kth.castor.yajta (always added to excludes)
  * isotopes=org.package(,org.package2)* Default:Empty Deprecated
- * print=(list,tree,tie,matrix,branch,values) Default: tree
+ * print=(list,tie,values,matrixclass,matrix,branch,count,remote,fasttie,fasttree,fastremote,userlogger) Default: tree
  * strict-includes Default: false
  * follow=File Default: null
  * output=File Default: log[random_number].json
