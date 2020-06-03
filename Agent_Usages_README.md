@@ -49,7 +49,7 @@ public class B {
 java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=list|includes=fr.inria.demo|output=samples/list.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
-See output [here](samples/list)
+See output [here](samples/list).
 
 ## fasttree
 
@@ -57,7 +57,7 @@ See output [here](samples/list)
 java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=fasttree|includes=fr.inria.demo|output=samples/fasttree.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
-See output [here](samples/fasttree.json)
+See output [here](samples/fasttree.json).
 
 ## values
 
@@ -65,7 +65,7 @@ See output [here](samples/fasttree.json)
 java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=values|includes=fr.inria.demo|output=samples/values.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
-See output [here](samples/values.json)
+See output [here](samples/values.json).
 
 ## count
 
@@ -73,7 +73,7 @@ See output [here](samples/values.json)
 java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=count|includes=fr.inria.demo|output=samples/count.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
-See output [here](samples/count.json)
+See output [here](samples/count.json).
 
 ## matrixclass
 
@@ -81,7 +81,7 @@ See output [here](samples/count.json)
 java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=matrixclass|includes=fr.inria.demo|output=samples/matrixclass.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
-See output [here](samples/matrixclass)
+See output [here](samples/matrixclass).
 
 ## matrix
 
@@ -89,7 +89,7 @@ See output [here](samples/matrixclass)
 java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=matrix|includes=fr.inria.demo|output=samples/matrix.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
-See output [here](samples/matrix.json)
+See output [here](samples/matrix.json).
 
 ## branch
 
@@ -97,5 +97,5 @@ See output [here](samples/matrix.json)
 java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=branch|includes=fr.inria.demo|output=samples/branch.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
-See output [here](samples/branch.json)
+See output [here](samples/branch.json).
 

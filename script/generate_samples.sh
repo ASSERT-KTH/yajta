@@ -14,9 +14,9 @@ if [[ -f $README ]] ; then
 fi
 
 touch $README
-echo "# Agent usage exemples" > $README
+echo "# Agent usage examples" > $README
 echo "" >> $README
-echo "All the following exemples are run on the following classes:" >> $README
+echo "All the following examples are run on the following classes:" >> $README
 echo "" >> $README
 
 OPTIONS="list fasttree values count matrixclass matrix branch"
@@ -53,7 +53,7 @@ do
 	#echo "Run: java -javaagent:$JAR_PATH=\"strict-includes|print=$opt|includes=fr.inria.demo|output=$OUTPUT_FILE" -cp $CLASS_PATH $FQN\"
 	java -javaagent:$JAR_PATH="strict-includes|print=$opt|includes=fr.inria.demo|output=$OUTPUT_FILE" -cp $CLASS_PATH $FQN
 	
-	echo "See output [here]($OUTPUT_FILE)" >> $README
+	echo "See output [here]($OUTPUT_FILE)." >> $README
 	echo "" >> $README
 done
 

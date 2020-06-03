@@ -94,3 +94,8 @@ Values are encoded in Base64.
 
  * Does not log native methods yet.
  * Traces are written in the output file by a shutdown hook. Thus, anything that stops the jvm without executing these hooks (Internal error, SIGKILL) will result in not writting traces.
+
+
+## More exemples
+
+See [Agent_Usages_README.md](Agent_Usages_README.md).
