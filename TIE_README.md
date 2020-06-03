@@ -13,7 +13,7 @@ For a maven project for which test are in src/test, simply run
 
 To run it manually, run for each test the agent with the following option (Trace only org.MyApp):
 ```
-mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar=\"strict-includes|print=fasttie|includes=org.myApp\"" test > log/MyTest
+mvn -Dtest=MyTest -DargLine="-javaagent:path/to/yajta/core/target/yajta-core-2.0.0-jar-with-dependencies.jar=\"strict-includes|print=fasttie|includes=org.myApp\"" test > log/MyTest
 ```
 
 it will generate a trace for each test in the `log` folder.
@@ -23,7 +23,7 @@ it will generate a trace for each test in the `log` folder.
 
 Then, run
 ```
-java -cp path/to/yajta/target/yajta-2.0.0-jar-with-dependencies.jar fr.inria.tie.Report -i testLog -o tie-report.json
+java -cp path/to/yajta/core/target/yajta-core-2.0.0-jar-with-dependencies.jar fr.inria.tie.Report -i testLog -o tie-report.json
 ```
 to generate the report.
 
