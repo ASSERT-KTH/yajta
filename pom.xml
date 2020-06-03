@@ -19,7 +19,7 @@
     </issueManagement>
 
     <scm>
-        <url>https://github.com/castor-software/yajta</url>
+        <url>scm:git:git@github.com:castor-software/yajta</url>
         <connection>scm:git:git@github.com:castor-software/yajta.git</connection>
         <developerConnection>scm:git:git@github.com:castor-software/yajta.git</developerConnection>
         <tag>HEAD</tag>
