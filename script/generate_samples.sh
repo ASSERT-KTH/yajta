@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAR_PATH=$(echo "$0" | sed 's|script/generate_samples.sh|core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar|'| sed "s|\.|$PWD|")
+JAR_PATH=$(echo "$0" | sed 's|script/generate_samples.sh|core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar|' | sed "s|\./||")
 
 
 
@@ -20,9 +20,9 @@ echo "All the following exemples are run on the following classes:" >> $README
 echo "" >> $README
 
 OPTIONS="list fasttree values count matrixclass matrix branch"
-CLASS_PATH=$(echo "$0" | sed 's|script/generate_samples.sh|test/helloworld/target/classes|'| sed "s|\.|$PWD|")
-SRC_CLASS_A=$(echo "$0" | sed 's|script/generate_samples.sh|test/helloworld/src/main/java/fr/inria/demo/packa/A.java|'| sed "s|\.|$PWD|")
-SRC_CLASS_B=$(echo "$0" | sed 's|script/generate_samples.sh|test/helloworld/src/main/java/fr/inria/demo/packb/B.java|'| sed "s|\.|$PWD|")
+CLASS_PATH=$(echo "$0" | sed 's|script/generate_samples.sh|test/helloworld/target/classes|' | sed "s|\./||")
+SRC_CLASS_A=$(echo "$0" | sed 's|script/generate_samples.sh|test/helloworld/src/main/java/fr/inria/demo/packa/A.java|' | sed "s|\./||")
+SRC_CLASS_B=$(echo "$0" | sed 's|script/generate_samples.sh|test/helloworld/src/main/java/fr/inria/demo/packb/B.java|' | sed "s|\./||")
 FQN="fr.inria.demo.packa.A"
 FQNB="fr.inria.demo.packb.B"
 
@@ -47,7 +47,7 @@ do
 	echo "## $opt" >> $README
 	echo "" >> $README
 	echo "\`\`\`bash" >> $README
-	echo "Run: java -javaagent:$JAR_PATH=\"strict-includes|print=$opt|includes=fr.inria.demo|output=$OUTPUT_FILE" -cp $CLASS_PATH $FQN\" >> $README
+	echo "java -javaagent:$JAR_PATH=\"strict-includes|print=$opt|includes=fr.inria.demo|output=$OUTPUT_FILE" -cp $CLASS_PATH $FQN\" >> $README
 	echo "\`\`\`" >> $README
 	echo "" >> $README
 	#echo "Run: java -javaagent:$JAR_PATH=\"strict-includes|print=$opt|includes=fr.inria.demo|output=$OUTPUT_FILE" -cp $CLASS_PATH $FQN\"

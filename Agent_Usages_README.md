@@ -46,7 +46,7 @@ public class B {
 ## list
 
 ```bash
-Run: java -javaagent:/home/nharrand/Documents/yajta/core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=list|includes=fr.inria.demo|output=samples/list.json -cp /home/nharrand/Documents/yajta/test/helloworld/target/classes fr.inria.demo.packa.A"
+java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=list|includes=fr.inria.demo|output=samples/list.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
 See output [here](samples/list)
@@ -54,7 +54,7 @@ See output [here](samples/list)
 ## fasttree
 
 ```bash
-Run: java -javaagent:/home/nharrand/Documents/yajta/core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=fasttree|includes=fr.inria.demo|output=samples/fasttree.json -cp /home/nharrand/Documents/yajta/test/helloworld/target/classes fr.inria.demo.packa.A"
+java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=fasttree|includes=fr.inria.demo|output=samples/fasttree.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
 See output [here](samples/fasttree.json)
@@ -62,7 +62,7 @@ See output [here](samples/fasttree.json)
 ## values
 
 ```bash
-Run: java -javaagent:/home/nharrand/Documents/yajta/core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=values|includes=fr.inria.demo|output=samples/values.json -cp /home/nharrand/Documents/yajta/test/helloworld/target/classes fr.inria.demo.packa.A"
+java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=values|includes=fr.inria.demo|output=samples/values.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
 See output [here](samples/values.json)
@@ -70,7 +70,7 @@ See output [here](samples/values.json)
 ## count
 
 ```bash
-Run: java -javaagent:/home/nharrand/Documents/yajta/core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=count|includes=fr.inria.demo|output=samples/count.json -cp /home/nharrand/Documents/yajta/test/helloworld/target/classes fr.inria.demo.packa.A"
+java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=count|includes=fr.inria.demo|output=samples/count.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
 See output [here](samples/count.json)
@@ -78,7 +78,7 @@ See output [here](samples/count.json)
 ## matrixclass
 
 ```bash
-Run: java -javaagent:/home/nharrand/Documents/yajta/core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=matrixclass|includes=fr.inria.demo|output=samples/matrixclass.json -cp /home/nharrand/Documents/yajta/test/helloworld/target/classes fr.inria.demo.packa.A"
+java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=matrixclass|includes=fr.inria.demo|output=samples/matrixclass.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
 See output [here](samples/matrixclass)
@@ -86,7 +86,7 @@ See output [here](samples/matrixclass)
 ## matrix
 
 ```bash
-Run: java -javaagent:/home/nharrand/Documents/yajta/core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=matrix|includes=fr.inria.demo|output=samples/matrix.json -cp /home/nharrand/Documents/yajta/test/helloworld/target/classes fr.inria.demo.packa.A"
+java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=matrix|includes=fr.inria.demo|output=samples/matrix.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
 See output [here](samples/matrix.json)
@@ -94,7 +94,7 @@ See output [here](samples/matrix.json)
 ## branch
 
 ```bash
-Run: java -javaagent:/home/nharrand/Documents/yajta/core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=branch|includes=fr.inria.demo|output=samples/branch.json -cp /home/nharrand/Documents/yajta/test/helloworld/target/classes fr.inria.demo.packa.A"
+java -javaagent:core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar="strict-includes|print=branch|includes=fr.inria.demo|output=samples/branch.json -cp test/helloworld/target/classes fr.inria.demo.packa.A"
 ```
 
 See output [here](samples/branch.json)
