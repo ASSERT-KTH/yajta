@@ -57,9 +57,9 @@ public abstract class AbstractTracer {
 
 		for( int i = 0; i < methods.length; i++ ) {
 
-			if( methods[i].isEmpty() == false ) {
+			//if( methods[i].isEmpty() == false ) {
 				doMethod( methods[i] , name);
-			}
+			//}
 		}
 	}
 

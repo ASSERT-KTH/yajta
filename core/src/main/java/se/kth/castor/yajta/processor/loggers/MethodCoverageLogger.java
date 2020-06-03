@@ -86,4 +86,8 @@ public class MethodCoverageLogger implements Tracking {
 			e.printStackTrace();
 		}
 	}
+
+	public synchronized MyMap<String, MySet<String>> getObservedClasses() {
+		return observedClasses;
+	}
 }

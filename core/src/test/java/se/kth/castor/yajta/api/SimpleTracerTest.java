@@ -1,6 +1,7 @@
 package se.kth.castor.yajta.api;
 
 
+import org.junit.Ignore;
 import se.kth.castor.offline.InstrumentationBuilder;
 import se.kth.castor.yajta.api.loggerimplem.IncompleteLogger1;
 import se.kth.castor.yajta.api.loggerimplem.IncompleteLogger2;
@@ -12,6 +13,9 @@ import se.kth.castor.yajta.api.loggerimplem.TestBranchLogger;
 import se.kth.castor.yajta.api.loggerimplem.TestLogger;
 import se.kth.castor.yajta.api.loggerimplem.TestValueLogger;
 import org.junit.Test;
+import se.kth.castor.yajta.processor.loggers.MethodCoverageLogger;
+import se.kth.castor.yajta.processor.util.MyMap;
+import se.kth.castor.yajta.processor.util.MySet;
 
 import java.io.File;
 import java.util.List;
@@ -84,7 +88,7 @@ public class SimpleTracerTest {
 
         List<TestLogger.Log> logs = TestLogger.getInstance().logs;
         //Every method is indeed logged (in and out)
-        assertTrue(logs.size() == 22);
+        assertEquals(24, logs.size());
         //Every method logged in is also logged out
         assertEquals(logs.stream().filter(l -> l.type == TestLogger.LOGTYPE.IN).count(),
                 logs.stream().filter(l -> l.type == TestLogger.LOGTYPE.OUT).count()
@@ -113,7 +117,7 @@ public class SimpleTracerTest {
         //Check that the logs collected are consistent with what was expected
         List<TestValueLogger.Log> logs = TestValueLogger.getInstance().logs;
         //contract: Every method is indeed logged (in and out)
-        assertTrue(logs.size() == 22);
+        assertEquals(24, logs.size());
         //contract: Every method logged in is also logged out
         assertEquals(
                 logs.stream().filter(l -> l.type == TestValueLogger.LOGTYPE.IN).count(),
@@ -131,19 +135,19 @@ public class SimpleTracerTest {
         assertEquals(p[0],"Input");
 
         //contract: a method that returns a non-primitive type is indeed logged
-        assertEquals(logs.get(16).returnValue,"Hello");
+        assertEquals(logs.get(18).returnValue,"Hello");
         //contract: a method that returns a primitive type is indeed logged
-        assertEquals(logs.get(14).returnValue,false);
+        assertEquals(logs.get(16).returnValue,false);
         //contract: a method that returns a primitive array type is indeed logged
-        assertEquals(((boolean[])logs.get(18).returnValue).length,2);
-        assertEquals(((boolean[]) logs.get(18).returnValue)[0],true);
+        assertEquals(((boolean[])logs.get(20).returnValue).length,2);
+        assertEquals(((boolean[]) logs.get(20).returnValue)[0],true);
         //contract: a method that returns a non-primitive type is indeed logged
-        assertEquals(logs.get(16).returnValue,"Hello");
+        assertEquals(logs.get(18).returnValue,"Hello");
         //contract: a method that returns a non-primitive array type is indeed logged
-        assertEquals(((String[])logs.get(20).returnValue).length,1);
-        assertEquals(((String[]) logs.get(20).returnValue)[0],"Hello");
+        assertEquals(((String[])logs.get(22).returnValue).length,1);
+        assertEquals(((String[]) logs.get(22).returnValue)[0],"Hello");
         //contract: Last method to end (first to be called) return void"
-        assertEquals(logs.get(21).returnValue,null);
+        assertEquals(logs.get(23).returnValue,null);
 
         builder.close();
     }
@@ -176,6 +180,38 @@ public class SimpleTracerTest {
         );
 
         builder.close();
+    }
+
+    @Ignore
+    @Test
+    public void testImplicitConstructorTracing() throws MalformedTrackingClassException {
+        //Initialization
+        File classDir = new File(SimpleTracerTest.class.getClassLoader().getResource("class-with-implicit-constructor").getPath());
+        File outputDir = new File("tmpClassDir");
+        if(outputDir.exists()) outputDir.delete();
+        outputDir.mkdir();
+        InstrumentationBuilder builder = new InstrumentationBuilder(classDir, outputDir, new ClassList( new String[] {"testclasses"},  new String[] {}, new String[] {}, true), MethodCoverageLogger.class);
+        //InstrumentationBuilder builder = new InstrumentationBuilder(classDir, Logger.class);
+
+        //Instrument bytecode of class in classDir
+        builder.instrument();
+
+        //Run the instrumented code from fr.inria.hellovalue.App.main()
+        builder.setEntryPoint("testclasses.FruitSalad", "main", String[].class);
+        builder.runInstrumented((Object) new String[]{});
+
+        //Check that the logs collected are consistent with what was expected
+        MethodCoverageLogger l  = MethodCoverageLogger.getInstance();
+
+        MyMap<String,MySet<String>> observed = l.getObservedClasses();
+
+        assertEquals(1, observed.size());
+        assertEquals(4, observed.get("testclasses.FruitSalad").size());
+
+
+
+        builder.close();
+
     }
 
 }

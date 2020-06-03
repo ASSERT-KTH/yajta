@@ -25,7 +25,7 @@ public class FastTracerTest {
 				logs);
 
 		//Every method is indeed logged (in and out)
-		assertTrue(logs.size() == 36);
+		assertEquals(38, logs.size());
 		//Every method logged in is also logged out
 		assertEquals(logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.IN).count(),
 				logs.stream().filter(l -> l.type == TestFastLogger.LOGTYPE.OUT).count()

@@ -31,7 +31,7 @@ public class Utils {
     public static String[] listClassesAsArray(File f) {
         Object[] classNamesO = listClasses(f).toArray();
         String[] classNames = new String[classNamesO.length];
-        for(int i = 0; i < classNamesO.length; i++) classNames[i] = (String) classNamesO[i];
+        for(int i = 0; i < classNamesO.length; i++) classNames[i] = ((String) classNamesO[i]);
         return classNames;
     }
 
