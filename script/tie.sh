@@ -1,9 +1,9 @@
 #!/bin/bash
 
+pathToJarAgent=$(echo "$0" | sed 's|script/generate_samples.sh|core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar|' | sed "s|\.|$PWD|")
 rootDir=`pwd`
-pathToJarAgent=$1
 tmpDir="$rootDir/log"
-packages=$2
+packages=$1
 testSrcDir="src/test"
 #testSrcDir="test"
 #testSrcDir="org.eclipse.jgit.test/tst org.eclipse.jgit.http.test/tst org.eclipse.jgit.pgm.test/tst"

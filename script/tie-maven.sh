@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rootDir=`pwd`
-pathToJarAgent=$1
+pathToJarAgent=$(echo "$0" | sed 's|script/generate_samples.sh|core/target/yajta-core-2.0.2-SNAPSHOT-jar-with-dependencies.jar|' | sed "s|\.|$PWD|")
 tmpDir="$rootDir/log"
 excude=""
 instrument=$(find . -type d -path '**/target/classes' | sed "s|\.|${PWD}|" | paste -sd "," -)
