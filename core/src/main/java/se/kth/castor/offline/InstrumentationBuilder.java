@@ -31,7 +31,15 @@ public class InstrumentationBuilder {
     ClassList list;
     TracerI tracer;
 
-    /** trackingClass must implement Tracking or ValueTracking */
+    /**
+     * trackingClass must implement Tracking or ValueTracking
+     * @param classDir path bytecode to be transformed
+     * @param outputDir path to directory where to write transformed bytecode
+     * @param filter policy to determine which class to transform
+     * @param trackingClass logging class. Call to this class will be inserted.
+     * @param directLoggerCall if true, an instance of the tracking class will be obtain through getInstance
+     * @throws MalformedTrackingClassException if the tracking class does not implement a valid interface
+     */
     public InstrumentationBuilder (File classDir, File outputDir, ClassList filter, Class trackingClass, boolean directLoggerCall) throws MalformedTrackingClassException {
         System.out.println("[yajta] use " + trackingClass.getName());
         this.classDir = classDir;
@@ -39,7 +47,6 @@ public class InstrumentationBuilder {
         this.list = filter;
         this.loggerClass = trackingClass;
         if (implementsInterface(trackingClass, Tracking.class)) {
-            System.out.println("[yajta] use SimpleTracer with " + trackingClass.getName());
             tracer = new SimpleTracer(list, directLoggerCall ? (trackingClass.getName() + ".getInstance()") : null);
             tracer.setTrackingClass(trackingClass);
         } else if (implementsInterface(trackingClass, ValueTracking.class)) {
@@ -57,33 +64,65 @@ public class InstrumentationBuilder {
         }
     }
 
-    /** trackingClass must implement Tracking or ValueTracking */
+    /**
+     * trackingClass must implement Tracking or ValueTracking
+     * @param classDir path bytecode to be transformed
+     * @param outputDir path to directory where to write transformed bytecode
+     * @param filter policy to determine which class to transform
+     * @param trackingClass logging class. Call to this class will be inserted.
+     * @throws MalformedTrackingClassException if the tracking class does not implement a valid interface
+     */
     public InstrumentationBuilder (File classDir, File outputDir, ClassList filter, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,outputDir,filter,trackingClass, false);
     }
 
-    /** trackingClass must implement Tracking, BranchTracking or ValueTracking */
+    /**
+     * trackingClass must implement Tracking, BranchTracking or ValueTracking
+     * @param classDir path bytecode to be transformed
+     * @param trackingClass logging class. Call to this class will be inserted.
+     * @throws MalformedTrackingClassException if the tracking class does not implement a valid interface
+     */
     public InstrumentationBuilder (File classDir, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,null,null,trackingClass);
     }
 
-    /** trackingClass must implement Tracking, BranchTracking or ValueTracking */
+    /**
+     * trackingClass must implement Tracking, BranchTracking or ValueTracking
+     *
+     */
+    /**
+     * trackingClass must implement Tracking or ValueTracking
+     * @param classDir path bytecode to be transformed
+     * @param filter policy to determine which class to transform
+     * @param trackingClass logging class. Call to this class will be inserted.
+     * @throws MalformedTrackingClassException if the tracking class does not implement a valid interface
+     */
     public InstrumentationBuilder (File classDir, ClassList filter, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,null,filter,trackingClass);
     }
 
-    /** trackingClass must implement Tracking, BranchTracking or ValueTracking */
+    /**
+     * trackingClass must implement Tracking, BranchTracking or ValueTracking
+     * @param classDir path bytecode to be transformed
+     * @param outputDir path to directory where to write transformed bytecode
+     * @param trackingClass logging class. Call to this class will be inserted.
+     * @throws MalformedTrackingClassException if the tracking class does not implement a valid interface
+     */
     public InstrumentationBuilder (File classDir, File outputDir, Class trackingClass) throws MalformedTrackingClassException {
         this(classDir,outputDir,null,trackingClass);
     }
 
-    public String[] filter(String[]classes , ClassList filter) {
+    private String[] filter(String[]classes , ClassList filter) {
         if(filter == null) return classes;
         return Arrays.asList(classes).stream().filter(c -> filter.isToBeProcessed(c)).toArray(size -> new String[size]);
     }
 
 
-    /** instrument all classes (unless a class filter us given) from the given input directory and writes the instrumented classed to disk */
+    /**
+     * Instruments all classes (unless a class filter us given) from the given input directory and writes the instrumented classed to disk.
+     *
+     * @throws MalformedTrackingClassException when the path to a bytecode file cannot be determined or if the probe call cannot be compiled.
+     */
     public void instrument() throws MalformedTrackingClassException {
         System.out.println("[yajta] instrument");
         try {
@@ -122,7 +161,7 @@ public class InstrumentationBuilder {
     }
 
 
-    public boolean implementsInterface(Class cl, Class interf) {
+    private boolean implementsInterface(Class cl, Class interf) {
         for(Class c : cl.getInterfaces()) {
             if(c.equals(interf)) {
                 return true;
@@ -135,20 +174,32 @@ public class InstrumentationBuilder {
     String className;
     String methodName;
     Class<?>[] paramtersType;
+
+    /**
+     * Set the entry point to be used with runInstrumented
+     * @param className fully qualified name of the class
+     * @param methodName method name
+     * @param paramtersType types of arguments
+     */
     public void setEntryPoint(String className, String methodName, Class<?>... paramtersType) {
         this.className = className;
         this.methodName = methodName;
         this.paramtersType = paramtersType;
     }
 
-    public void runInstrumented(Object... paramters) throws MalformedTrackingClassException {
+    /**
+     * Run the instrumented bytecode with the previously set entry point.
+     * @param parameters Actual values of the arguments
+     * @throws MalformedTrackingClassException if something went wrong.
+     */
+    public void runInstrumented(Object... parameters) throws MalformedTrackingClassException {
         try {
 
             URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{outputDir.toURI().toURL()});
             Class appClass = urlClassLoader.loadClass(className);
             Method method;
             method = appClass.getMethod(methodName, paramtersType);
-            method.invoke(null, paramters);
+            method.invoke(null, parameters);
 
         } catch (MalformedURLException |
                 ClassNotFoundException |

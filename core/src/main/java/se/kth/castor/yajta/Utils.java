@@ -62,7 +62,7 @@ public class Utils {
     static MyMap<Integer,String> opcode;
 
     /**
-     * @param code
+     * @param code of the opcode
      * @return the string name of the corresponding opcode
      */
     public static String getOpcode(int code) {

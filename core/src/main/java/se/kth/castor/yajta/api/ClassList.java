@@ -10,14 +10,14 @@ import java.util.Arrays;
 /**
  * ClassList implements alternative inclusion exclusion filter
  * For exemple if a ClassList cl includes a, a/a/a and excludes a/a with strict includes
- * cl.isToBeProcessed("a") -> true
- * cl.isToBeProcessed("a/b") -> true
- * cl.isToBeProcessed("a/a/a") -> true
- * cl.isToBeProcessed("a/a/a/b") -> true
+ * cl.isToBeProcessed("a") will be true
+ * cl.isToBeProcessed("a/b") will be true
+ * cl.isToBeProcessed("a/a/a") will be true
+ * cl.isToBeProcessed("a/a/a/b") will be true
  * but
- * cl.isToBeProcessed("b") -> false
- * cl.isToBeProcessed("a/a") -> false
- * cl.isToBeProcessed("a/a/b") -> false
+ * cl.isToBeProcessed("b") will be false
+ * cl.isToBeProcessed("a/a") will be false
+ * cl.isToBeProcessed("a/a/b") will be false
  */
 public class ClassList {
     String yajtaJar;
