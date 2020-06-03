@@ -23,7 +23,7 @@
         <url>scm:git:git@github.com:castor-software/yajta</url>
         <connection>scm:git:git@github.com:castor-software/yajta.git</connection>
         <developerConnection>scm:git:git@github.com:castor-software/yajta.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>yajta-2.0.0</tag>
     </scm>
 
     <licenses>
