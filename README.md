@@ -10,7 +10,7 @@ Further more several tools that make use of that library are provided:
  * A way to insert probe offline (See [API_README](API_README.md))
 
 ## Maven
-
+Yajta can be depended upon by a maven project by including the following snippet in its pom.xml
 ```xml
 <dependency>
   <artifactId>yajta-core</artifactId>
