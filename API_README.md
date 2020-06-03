@@ -34,4 +34,4 @@ java -cp outputDir:yajta-offline/target/offline/-2.0.0-jar-with-dependencies.jar
     builder.runInstrumented((Object) new String[]{""});
 ```
 
-Note that your logging facade should implement either `fr.inria.yajta.api.Tracking` or `fr.inria.yajta.api.ValueTracking`. Additionally it may implement `fr.inria.yajta.api.BranchTracking`
+Note that your logging facade should implement either `se.kth.castor.yajta.api.Tracking`, `se.kth.castor.yajta.api.FastTracking` or `se.kth.castor.yajta.api.ValueTracking`. Additionally it may implement `se.kth.castor.yajta.api.BranchTracking`
