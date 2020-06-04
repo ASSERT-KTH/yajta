@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>se.kth.castor</groupId>
   <artifactId>yajta</artifactId>
-  <version>2.0.2</version>
+  <version>2.0.3-SNAPSHOT</version>
   <modules>
     <module>offline</module>
     <module>core</module>
@@ -23,7 +23,6 @@
         <url>scm:git:git@github.com:castor-software/yajta</url>
         <connection>scm:git:git@github.com:castor-software/yajta.git</connection>
         <developerConnection>scm:git:git@github.com:castor-software/yajta.git</developerConnection>
-        <tag>yajta-2.0.2</tag>
     </scm>
 
     <licenses>
