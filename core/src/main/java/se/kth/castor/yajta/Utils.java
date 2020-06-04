@@ -41,7 +41,7 @@ public class Utils {
 
     public static List<String> listClassesExecutor(File f, File root) {
         List<String> res = new ArrayList<>();
-        if(f.isDirectory()) {
+        if(f.isDirectory() && !f.getName().endsWith("META-INF")) {
             for(File c: f.listFiles()) {
                 res.addAll(listClassesExecutor(c, root));
             }

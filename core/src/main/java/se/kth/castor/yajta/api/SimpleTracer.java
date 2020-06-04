@@ -157,139 +157,144 @@ public class SimpleTracer extends AbstractTracer implements TracerI {
         return true;
     }
 
-    protected void doMethod( final CtBehavior method , String className, boolean isIsotope, String isotope) throws NotFoundException, CannotCompileException {
+    protected void doMethod( final CtBehavior method , String className, boolean isIsotope, String isotope) throws NotFoundException {
         //System.out.println("\t\tMethod: " + method.getLongName() + " -> " + !Modifier.isNative(method.getModifiers()));
-        if(!Modifier.isNative(method.getModifiers())) {
-            if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
-            /*String params = "(";
-            boolean first = true;
-            for (CtClass c : method.getParameterTypes()) {
-                if (first) first = false;
-                else params += ", ";
-                params += c.getName();
-            }
-            params += ")";*/
+        if(!Modifier.isNative(method.getModifiers()) && !Modifier.isAbstract(method.getModifiers())) {
+            try {
+                if(verbose) System.err.println("[Vanilla] " + className + " " + method.getName());
+                /*String params = "(";
+                boolean first = true;
+                for (CtClass c : method.getParameterTypes()) {
+                    if (first) first = false;
+                    else params += ", ";
+                    params += c.getName();
+                }
+                params += ")";*/
 
-            String parameterValues = "";
-            String returnValue = "";
-            if(logValue) {
-                parameterValues = ", $args";
-                if(method instanceof CtMethod) {
-                    CtMethod m = (CtMethod) method;
-                    if(m.getReturnType() instanceof CtPrimitiveType
-                            && !(m.getReturnType().getName().equals("void"))) {
-                        returnValue = ", new " + ((CtPrimitiveType) m.getReturnType()).getWrapperName() +"($_)";
+                String parameterValues = "";
+                String returnValue = "";
+                if(logValue) {
+                    parameterValues = ", $args";
+                    if(method instanceof CtMethod) {
+                        CtMethod m = (CtMethod) method;
+                        if(m.getReturnType() instanceof CtPrimitiveType
+                                && !(m.getReturnType().getName().equals("void"))) {
+                            returnValue = ", new " + ((CtPrimitiveType) m.getReturnType()).getWrapperName() +"($_)";
+                        } else {
+                            returnValue = ", $_";
+                        }
                     } else {
                         returnValue = ", $_";
                     }
-                } else {
-                    returnValue = ", $_";
                 }
-            }
 
-            /*System.err.println(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
-                    + className.replace("/", ".") + "\", \""
-                    + method.getName() + params + "\""
-                    + parameterValues
-                    + ");");*/
-            /*method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
-                    + className.replace("/", ".") + "\", \""
-                    + method.getName() + params + "\""
-                    + parameterValues
-                    + ");");
-            method.insertAfter(loggerInstance + ".stepOut(Thread.currentThread().getName()"
-                    + returnValue
-                    +");");*/
+                /*System.err.println(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
+                        + className.replace("/", ".") + "\", \""
+                        + method.getName() + params + "\""
+                        + parameterValues
+                        + ");");*/
+                /*method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
+                        + className.replace("/", ".") + "\", \""
+                        + method.getName() + params + "\""
+                        + parameterValues
+                        + ");");
+                method.insertAfter(loggerInstance + ".stepOut(Thread.currentThread().getName()"
+                        + returnValue
+                        +");");*/
 
-            // !!!! This only work because the inserted call for branch logging does not have more arguments than the method logging one.
-            if(logBranch && method instanceof CtMethod) {
-                try {
-                    ControlFlow controlFlow = new ControlFlow((CtMethod)method);
-                    MethodInfo info = method.getMethodInfo();
-                    CodeAttribute ca = info.getCodeAttribute();
-                    CodeIterator iterator = ca.iterator();
-                    ControlFlow.Block[] blocks = controlFlow.basicBlocks();
-                    String branchIn = loggerInstance + ".branchIn(Thread.currentThread().getName(),\"";
-                    String branchInEnd = "\");";
-                    String branchOut = loggerInstance + ".branchOut(Thread.currentThread().getName());";
-                    int offset = 0;
-                    /*if(method.getName().equals("myIfElse")) {
-                        System.out.println(" --- RAW --- ");
-
-                        for(int i = 0; i < ca.getCode().length; i++) {
-                            System.out.println(Mnemonic.OPCODE[(int) ca.getCode()[i] & 0xff]);
-                        }
-
-                        System.out.println(" --- Avant --- ");
-                        for(int i = 0; i < blocks.length; i++) {
-                            printBlock(iterator, blocks[i].position(), blocks[i].position() + blocks[i].length(), i);
-                        }
-                        System.out.println(" --- Après --- ");
-                        System.out.println("------- total size: "+ca.getCode().length+ ", added 0");
-                    }*/
-                    for(int i = 0; i < blocks.length; i++) {
-                    //for(int i = 1; i < blocks.length-1; i++) {
-                        int sizeBefore = ca.getCode().length;
-                        String inser = branchIn + i + branchInEnd;
-                        /*if(i == 0) {
-                            inser = loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
-                                    + className.replace("/", ".") + "\", \""
-                                    + method.getName() + params + "\""
-                                    + parameterValues
-                                    + ");\n" + inser;
-                        }*/
-                        byte[] bytes = getBytecode(inser, method.getDeclaringClass()).get();
-                        iterator.insertAt(blocks[i].position() + offset, bytes);
-                        int old_off = offset;
-                        //offset += bytes.length;
-                        int sizeAfter = ca.getCode().length;
-
-                        offset += (sizeAfter - sizeBefore); //insertAt may insert more than bytes.length bytes... For some reasons...
-
+                // !!!! This only work because the inserted call for branch logging does not have more arguments than the method logging one.
+                if(logBranch && method instanceof CtMethod) {
+                    try {
+                        ControlFlow controlFlow = new ControlFlow((CtMethod)method);
+                        MethodInfo info = method.getMethodInfo();
+                        CodeAttribute ca = info.getCodeAttribute();
+                        CodeIterator iterator = ca.iterator();
+                        ControlFlow.Block[] blocks = controlFlow.basicBlocks();
+                        String branchIn = loggerInstance + ".branchIn(Thread.currentThread().getName(),\"";
+                        String branchInEnd = "\");";
+                        String branchOut = loggerInstance + ".branchOut(Thread.currentThread().getName());";
+                        int offset = 0;
                         /*if(method.getName().equals("myIfElse")) {
-                            System.out.println("------- total size: " + ca.getCode().length
-                                    + ", added " + (sizeAfter - sizeBefore)
-                                    + ", from " + (blocks[i].position() + old_off)
-                                    + ", to " + ((sizeAfter - sizeBefore) + blocks[i].length()));
-                            //printBlock(iterator, blocks[i].position() + old_off, blocks[i].position() + offset + blocks[i].length(), i);
-                            printDiff(ca, blocks[i].position() + old_off, (sizeAfter - sizeBefore), (sizeAfter - sizeBefore) + blocks[i].length());
-                        }*/
+                            System.out.println(" --- RAW --- ");
 
-                        //Branch out
-                        /*sizeBefore = ca.getCode().length;
-                        bytes = getBytecode(branchOut, method.getDeclaringClass()).get();
-                        //iterator.insertAt(blocks[i].position() + offset + blocks[i].length(), bytes);
-                        iterator.append(bytes);
-                        sizeAfter = ca.getCode().length;
-                        offset += (sizeAfter - sizeBefore);*/
+                            for(int i = 0; i < ca.getCode().length; i++) {
+                                System.out.println(Mnemonic.OPCODE[(int) ca.getCode()[i] & 0xff]);
+                            }
+
+                            System.out.println(" --- Avant --- ");
+                            for(int i = 0; i < blocks.length; i++) {
+                                printBlock(iterator, blocks[i].position(), blocks[i].position() + blocks[i].length(), i);
+                            }
+                            System.out.println(" --- Après --- ");
+                            System.out.println("------- total size: "+ca.getCode().length+ ", added 0");
+                        }*/
+                        for(int i = 0; i < blocks.length; i++) {
+                        //for(int i = 1; i < blocks.length-1; i++) {
+                            int sizeBefore = ca.getCode().length;
+                            String inser = branchIn + i + branchInEnd;
+                            /*if(i == 0) {
+                                inser = loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
+                                        + className.replace("/", ".") + "\", \""
+                                        + method.getName() + params + "\""
+                                        + parameterValues
+                                        + ");\n" + inser;
+                            }*/
+                            byte[] bytes = getBytecode(inser, method.getDeclaringClass()).get();
+                            iterator.insertAt(blocks[i].position() + offset, bytes);
+                            int old_off = offset;
+                            //offset += bytes.length;
+                            int sizeAfter = ca.getCode().length;
+
+                            offset += (sizeAfter - sizeBefore); //insertAt may insert more than bytes.length bytes... For some reasons...
+
+                            /*if(method.getName().equals("myIfElse")) {
+                                System.out.println("------- total size: " + ca.getCode().length
+                                        + ", added " + (sizeAfter - sizeBefore)
+                                        + ", from " + (blocks[i].position() + old_off)
+                                        + ", to " + ((sizeAfter - sizeBefore) + blocks[i].length()));
+                                //printBlock(iterator, blocks[i].position() + old_off, blocks[i].position() + offset + blocks[i].length(), i);
+                                printDiff(ca, blocks[i].position() + old_off, (sizeAfter - sizeBefore), (sizeAfter - sizeBefore) + blocks[i].length());
+                            }*/
+
+                            //Branch out
+                            /*sizeBefore = ca.getCode().length;
+                            bytes = getBytecode(branchOut, method.getDeclaringClass()).get();
+                            //iterator.insertAt(blocks[i].position() + offset + blocks[i].length(), bytes);
+                            iterator.append(bytes);
+                            sizeAfter = ca.getCode().length;
+                            offset += (sizeAfter - sizeBefore);*/
+                        }
+                        ca.computeMaxStack();
+                        //if(ms < 4) ca.setMaxStack(4);
+                    } catch (BadBytecode badBytecode) {
+                        badBytecode.printStackTrace();
+                    } catch (CompileError compileError) {
+                        compileError.printStackTrace();
                     }
-                    ca.computeMaxStack();
-                    //if(ms < 4) ca.setMaxStack(4);
-                } catch (BadBytecode badBytecode) {
-                    badBytecode.printStackTrace();
-                } catch (CompileError compileError) {
-                    compileError.printStackTrace();
+                } else {
+                    /*method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
+                            + className.replace("/", ".") + "\", \""
+                            + method.getName() + params + "\""
+                            + parameterValues
+                            + ");");*/
                 }
-            } else {
                 /*method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
                         + className.replace("/", ".") + "\", \""
                         + method.getName() + params + "\""
                         + parameterValues
                         + ");");*/
+                method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
+                        + className.replace("/", ".") + "\", \""
+                        + method.getName() + method.getSignature() + "\""
+                        + parameterValues
+                        + ");");
+                method.insertAfter(loggerInstance + ".stepOut(Thread.currentThread().getName()"
+                        + returnValue
+                        +");");
+            } catch (CannotCompileException e) {
+                e.printStackTrace();
+                System.err.println("[Yajta] Cannot insert probe in " + method.getDeclaringClass().getName() + " " + method.getName() + method.getSignature() + ", skipping method");
             }
-            /*method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
-                    + className.replace("/", ".") + "\", \""
-                    + method.getName() + params + "\""
-                    + parameterValues
-                    + ");");*/
-            method.insertBefore(loggerInstance + ".stepIn(Thread.currentThread().getName(),\""
-                    + className.replace("/", ".") + "\", \""
-                    + method.getName() + method.getSignature() + "\""
-                    + parameterValues
-                    + ");");
-            method.insertAfter(loggerInstance + ".stepOut(Thread.currentThread().getName()"
-                    + returnValue
-                    +");");
 
         } else {
             if(verbose) System.err.println("Method: " + className.replace("/", ".") + "." + method.getName() + " is native");

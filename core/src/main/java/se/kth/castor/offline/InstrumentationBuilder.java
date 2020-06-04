@@ -147,10 +147,12 @@ public class InstrumentationBuilder {
                     tracer.doClass(cl,cl.getName());
                     cl.writeFile(outputDir.getAbsolutePath());
                 } catch (CannotCompileException e) {
+                    System.err.println("Incorrect probe insertion: " + e.getMessage() +", skiping class " + cl.getName());
                     e.printStackTrace();
-                    throw new MalformedTrackingClassException("Incorrect probe insertion: " + e.getMessage());
+                    //throw new MalformedTrackingClassException("Incorrect probe insertion: " + e.getMessage());
                 } catch (IOException e) {
-                    throw new MalformedTrackingClassException("ClassFile not found?");
+                    System.err.println("ClassFile not found: " + e.getMessage() +", skiping class " + cl.getName());
+                    //throw new MalformedTrackingClassException("ClassFile not found?");
                 }
             }
 
