@@ -45,8 +45,14 @@ public class Utils {
             for(File c: f.listFiles()) {
                 res.addAll(listClassesExecutor(c, root));
             }
-        } else if (f.getName().endsWith(".class")) {
-            res.add(f.getPath().split("\\.class")[0].substring(root.getPath().length()+1).replace("/","."));
+        } else if (f.getName().endsWith(".class")
+                && !(f.getName().endsWith("package-info.class") || f.getName().endsWith("module-info.class"))) {
+            res.add(
+                    f.getPath()
+                            .split("\\.class")[0]
+                            .substring(root.getPath().length()+1)
+                            .replace("/",".")
+            );
         }
         return res;
     }
