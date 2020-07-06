@@ -13,6 +13,7 @@ import se.kth.castor.yajta.api.MalformedTrackingClassException;
 import se.kth.castor.yajta.api.SimpleTracer;
 import se.kth.castor.yajta.api.Tracking;
 import se.kth.castor.yajta.api.ValueTracking;
+import se.kth.castor.yajta.processor.util.MyList;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class InstrumentationBuilder {
     Class loggerClass;
     ClassList list;
     TracerI tracer;
+    MyList<String> classpathElements = new MyList<>();
 
     /**
      * trackingClass must implement Tracking or ValueTracking
@@ -112,6 +114,13 @@ public class InstrumentationBuilder {
         this(classDir,outputDir,null,trackingClass);
     }
 
+
+    public void addClassPathElement(String classPathElement) {
+        classpathElements.add(classPathElement);
+    }
+
+
+
     private String[] filter(String[]classes , ClassList filter) {
         if(filter == null) return classes;
         return Arrays.asList(classes).stream().filter(c -> filter.isToBeProcessed(c)).toArray(size -> new String[size]);
@@ -133,11 +142,17 @@ public class InstrumentationBuilder {
             } else {
                 throw new MalformedTrackingClassException("Tracking class must implements either Tracking, BranchTracking, FastTracking or ValueTracking");
             }*/
-            //FIXME This is a terrible idea to conflate the classpath available when instrumenting and when executing. This should be separated...  For shame!
+
             ClassPool pool = ClassPool.getDefault();
             pool.appendClassPath(InstrumentationBuilder.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-            pool.appendClassPath(loggerClass.getProtectionDomain().getCodeSource().getLocation().getPath());
             pool.appendClassPath(classDir.getAbsolutePath());
+            for(String cpel: classpathElements) {
+                pool.appendClassPath(cpel);
+            }
+
+            //FIXME This is a terrible idea to conflate the classpath available when instrumenting and when executing. This should be separated...  For shame!
+            pool.appendClassPath(loggerClass.getProtectionDomain().getCodeSource().getLocation().getPath());
+
             String[] classNames = filter(Utils.listClassesAsArray(classDir), list);
             CtClass[] classToTransform = pool.get(classNames);
 

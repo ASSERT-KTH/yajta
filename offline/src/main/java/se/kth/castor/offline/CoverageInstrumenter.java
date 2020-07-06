@@ -17,6 +17,8 @@ public class CoverageInstrumenter {
 		private String classDir;
 		@Parameter(names = {"--out-class-dir", "-o"}, description = "Directory in which to output instrumented bytecode. Default: inst-classes")
 		private String traceDir = "./";
+		@Parameter(names = {"--class-path", "-p"}, description = "Compile time classpath of the instrumented bytecode")
+		private String classpath;
 
 
 		public static void printUsage(JCommander jcom) {
@@ -33,6 +35,11 @@ public class CoverageInstrumenter {
 				File oDir = new File(r.traceDir);
 				ClassList cl = new ClassList(new String[0],new String[0],null,false);
 				InstrumentationBuilder ib = new InstrumentationBuilder(iDir, oDir, cl, MethodCoverageLogger.class, true);
+				if(r.classpath != null) {
+					for(String cpel: r.classpath.split(":")) {
+						ib.addClassPathElement(cpel);
+					}
+				}
 				//InstrumentationBuilder ib = new InstrumentationBuilder(iDir,oDir,cl,RemoteLogger.class, true);
 				ib.instrument();
 				System.out.println("Instrumentation Done.");
