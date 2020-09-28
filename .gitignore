@@ -1,0 +1,10 @@
+target/
+*/target/
+**/target/
+*.iml
+**.iml
+/.idea/
+/.idea/*
+.idea/
+.idea/*
+.DS_Store
