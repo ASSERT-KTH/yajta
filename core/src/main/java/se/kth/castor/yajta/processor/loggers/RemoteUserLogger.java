@@ -59,7 +59,7 @@ public class RemoteUserLogger implements Tracking {
 				.marshallable(
 					m -> m.write("type").text("stepIn")
 						.write("thread").text(thread)
-						.write("clazz").text(clazz)
+						.write("clazz" ).text(clazz)
 						.write("method").text(method)
 						.write("caller").text(caller)
 				)

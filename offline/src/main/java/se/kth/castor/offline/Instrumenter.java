@@ -2,7 +2,6 @@ package se.kth.castor.offline;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import se.kth.castor.tie.Report;
 import se.kth.castor.yajta.Agent;
 import se.kth.castor.yajta.Tracer;
 import se.kth.castor.yajta.Utils;
@@ -10,13 +9,9 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import se.kth.castor.yajta.Agent;
-import se.kth.castor.yajta.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Instrumenter {
 

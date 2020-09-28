@@ -25,8 +25,9 @@ public class MethodCoverageLogger implements Tracking {
 			instance = new MethodCoverageLogger();
 			instance.setLogFile(new File("yajta_coverage-" + i + ".json"));
 
-			Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHook") {
-				public void run() {
+			Runtime.getRuntime().addShutdownHook(
+				new Thread("ShutdownHook") {
+					public void run() {
 					getInstance().flush();
 				}
 			});
@@ -37,7 +38,7 @@ public class MethodCoverageLogger implements Tracking {
 	@Override
 	public void stepIn(String thread, String clazz, String method) {
 		if(!observedClasses.containsKey(clazz)) {
-			observedClasses.put(clazz,new MySet<>());
+			observedClasses.put(clazz, new MySet<>());
 		}
 		observedClasses.get(clazz).add(method);
 	}

@@ -6,10 +6,10 @@ When run, the instrumented class will produce a json trace in a file called `yaj
 Note that in order to run them you must add the yajta jar to your classpath (as the probe call classes from yajta).
 
 ```
-#Instrument
+# Instrument
 java -cp yajta-offline/target/offline/-2.0.0-jar-with-dependencies.jar fr.inria.offline.Instrumenter -c classDir -o outputDir
 
-#Run
+# Run
 java -cp outputDir:yajta-offline/target/offline/-2.0.0-jar-with-dependencies.jar org.myApp
 ```
 
@@ -35,3 +35,18 @@ java -cp outputDir:yajta-offline/target/offline/-2.0.0-jar-with-dependencies.jar
 ```
 
 Note that your logging facade should implement either `se.kth.castor.yajta.api.Tracking`, `se.kth.castor.yajta.api.FastTracking` or `se.kth.castor.yajta.api.ValueTracking`. Additionally it may implement `se.kth.castor.yajta.api.BranchTracking`
+
+
+# Create a standalone instrumented Jar
+
+```bash
+	./script/instrument_jar.sh path/to/myJar.jar outputDIr
+```
+
+Run your application with the generated jar in the classpath. Temporary traces should appear in a directory traceDir
+
+Run the following to generate json traces:
+
+```bash
+	java -cp path/to/yajta-offline-2.0.3-SNAPSHOT-jar-with-dependencies.jar se.kth.castor.offline.RemoteUserReader -i traceDir -o trace.json -f
+```
