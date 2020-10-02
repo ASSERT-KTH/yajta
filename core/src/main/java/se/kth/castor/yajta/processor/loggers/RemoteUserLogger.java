@@ -8,7 +8,7 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 import java.io.File;
 
 public class RemoteUserLogger implements Tracking {
-	public static File defaultLogFile = new File("traceDir");
+	public static File defaultLogFile = new File("yajta-traceDir");
 	public File log;
 	ChronicleQueue queue;
 	final ExcerptAppender appender;
