@@ -13,14 +13,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RemoteUserReader {
 
 	@Parameter(names = {"--help", "-h"}, help = true, description = "Display this message.")
 	private boolean help;
-	@Parameter(names = {"--input-dir", "-i"}, description = "Directory containing bytecode to instrument")
-	private String inTraceDir;
+	@Parameter(names = {"--input-dir", "-i"}, description = "Directories containing bytecode to instrument")
+	private List<String> inTraceDir;
 	@Parameter(names = {"--output", "-o"}, description = "Output file")
 	private String output = "./";
 	@Parameter(names = {"--finalize", "-f"}, description = "Add an \"end\" message to the trace. Default: false")
@@ -36,11 +37,17 @@ public class RemoteUserReader {
 		if(r.help || r.inTraceDir == null) {
 			printUsage(jcom);
 		} else {
-			r.init();
-			r.read();
+			for (String dir : r.inTraceDir) {
+				System.out.println("Read trace dir: " + dir);
+				r.read(new File(dir));
+			}
 
 			File outputFile = new File(r.output);
+			if (outputFile.exists()) {
+				outputFile.delete();
+			}
 			try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputFile, true))) {
+				System.out.println("Write");
 				bufferedWriter.append(r.toJSONString());
 				bufferedWriter.flush();
 			} catch (IOException e) {
@@ -53,13 +60,6 @@ public class RemoteUserReader {
 	public RemoteUserReader() {
 	}
 
-	public RemoteUserReader(File inTraceDir) {
-		this.dir= inTraceDir;
-	}
-
-	public void init() {
-		dir = new File(inTraceDir);
-	}
 
 	protected Map<String,Map<String,Integer>> usages = new HashMap<>();
 
@@ -102,11 +102,9 @@ public class RemoteUserReader {
 		usages.put(called, us);
 	}
 
-	File dir;
 	private boolean done = false;
 
-	public void read() throws InterruptedException {
-
+	public void read(File dir) throws InterruptedException {
 		try (ChronicleQueue queue = SingleChronicleQueueBuilder.binary(dir.getAbsolutePath() + "/trace").build()) {
 			if(finalize) {
 				final ExcerptAppender appender = queue.acquireAppender();
