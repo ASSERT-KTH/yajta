@@ -14,11 +14,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.file.CopyOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
+
+import static java.nio.file.Files.copy;
+import static java.nio.file.Files.createDirectories;
 
 public class RemoteUserInstrumenter {
 
@@ -60,6 +71,7 @@ public class RemoteUserInstrumenter {
 				tmpOutDir.mkdirs();
 				//manifest = decompressJar(iDir, tmpDir);
 				decompressJar(iDir, tmpInDir, true);
+				copyNonClassFile(tmpInDir.toPath(), tmpOutDir.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 				ib = new InstrumentationBuilder(tmpInDir, tmpOutDir, cl, RemoteUserLogger.class, true);
 			} else {
@@ -95,9 +107,30 @@ public class RemoteUserInstrumenter {
 		}
 	}
 
+	public static void copyNonClassFile(Path source, Path target, CopyOption... options)
+			throws IOException {
+		Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+					throws IOException {
+				createDirectories(target.resolve(source.relativize(dir)));
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+					throws IOException {
+				if(!file.toString().endsWith(".class")) {
+					System.out.println("copy " + file);
+					copy(file, target.resolve(source.relativize(file)), options);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+		});
+	}
+
 	public static void decompressJar(File iJar, File tmpDir, boolean override) {
-	//public static File decompressJar(File iJar, File tmpDir) {
-		//File manifest = new File(tmpDir.getParentFile(), "MANIFEST.MF");
 		try {
 			JarFile jar = new JarFile(iJar);
 			Enumeration enumEntries = jar.entries();
@@ -130,10 +163,8 @@ public class RemoteUserInstrumenter {
 	}
 
 	public static void createJar(File oJar, File dir) {
-	//public static void createJar(File oJar, File dir, Manifest manifest) {
 		try {
 			JarOutputStream target = new JarOutputStream(new FileOutputStream(oJar));
-			//JarOutputStream target = new JarOutputStream(new FileOutputStream(oJar), manifest);
 			addToJar(dir, target, dir.getAbsolutePath() + "/");
 			target.close();
 		} catch (IOException e) {
@@ -159,7 +190,9 @@ public class RemoteUserInstrumenter {
 				return;
 			}
 
-			JarEntry entry = new JarEntry(source.getPath().replace("\\", "/").replace(prepath, ""));
+			String ePath = source.getAbsolutePath().replace("\\", "/").replace(prepath, "");
+			System.out.println("Add to jar: " + ePath + " (prepath " + prepath + ")");
+			JarEntry entry = new JarEntry(ePath);
 			entry.setTime(source.lastModified());
 			target.putNextEntry(entry);
 			in = new BufferedInputStream(new FileInputStream(source));

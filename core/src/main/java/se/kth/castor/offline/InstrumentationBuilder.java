@@ -144,21 +144,21 @@ public class InstrumentationBuilder {
             }*/
 
             ClassPool pool = ClassPool.getDefault();
-            pool.appendClassPath(InstrumentationBuilder.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+            //pool.appendClassPath(InstrumentationBuilder.class.getProtectionDomain().getCodeSource().getLocation().getPath());
             pool.appendClassPath(classDir.getAbsolutePath());
             for(String cpel: classpathElements) {
                 pool.appendClassPath(cpel);
             }
 
             //FIXME This is a terrible idea to conflate the classpath available when instrumenting and when executing. This should be separated...  For shame!
-            pool.appendClassPath(loggerClass.getProtectionDomain().getCodeSource().getLocation().getPath());
+            //pool.appendClassPath(loggerClass.getProtectionDomain().getCodeSource().getLocation().getPath());
 
             String[] classNames = filter(Utils.listClassesAsArray(classDir), list);
             CtClass[] classToTransform = pool.get(classNames);
 
             for(CtClass cl: classToTransform) {
                 try {
-                    System.out.println("[yajta] instrument class " + cl.getName());
+                    System.out.println("[yajta] instrument class " + cl.getName() + ", " + cl.getURL());
                     tracer.doClass(cl,cl.getName());
                     cl.writeFile(outputDir.getAbsolutePath());
                 } catch (CannotCompileException e) {

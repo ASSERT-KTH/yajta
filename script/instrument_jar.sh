@@ -12,12 +12,21 @@ fi
 #TMP dir clean up
 TMP=$(echo "$2/yajta-tmp" | sed 's|//|/|g')
 if [ -d $TMP ] ; then
+	echo "removed $2/yajta-tmp"
 	rm -rf $TMP
 fi
 mkdir $TMP
 
 echo "--- Instrumenting jar $1 ---"
 java -cp $JAR_PATH se.kth.castor.offline.RemoteUserInstrumenter -i $1 -o $TMP -y
+
+JAR_NAME=$(echo $1 | rev | cut -d '/' -f1 | rev)
+mv $TMP/$JAR_NAME $2
+
+if [ -d $TMP ] ; then
+	echo "removed $2/yajta-tmp"
+	rm -rf $TMP
+fi
 
 
 #java -cp /home/nharrand/Documents/yajta/offline/target/yajta-offline-2.0.3-SNAPSHOT-jar-with-dependencies.jar se.kth.castor.offline.RemoteUserReader -i yajta-traceDir -o toto.json -f
