@@ -15,7 +15,7 @@ Yajta can be depended upon by a maven project by including the following snippet
 <dependency>
   <artifactId>yajta-core</artifactId>
   <groupId>se.kth.castor</groupId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 ```
 The offline instrumenter can be used with
@@ -23,7 +23,7 @@ The offline instrumenter can be used with
 <dependency>
   <artifactId>yajta-offline</artifactId>
   <groupId>se.kth.castor</groupId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 ```
 A version of yajta with limited dependencies (should be enough to run instrumented code reffering to loggs impplemented in yajta) may be used with
@@ -31,6 +31,6 @@ A version of yajta with limited dependencies (should be enough to run instrument
 <dependency>
   <artifactId>yajta-lean</artifactId>
   <groupId>se.kth.castor</groupId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 ```
