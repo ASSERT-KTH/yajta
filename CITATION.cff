@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+preferred-citation:
+  title: "Yajta: An extensible library for bytecode probe insertion"
+  year: "2019"
+  type: misc
+  url: https://github.com/castor-software/yajta
+  authors:
+    - family-names: Harrand
+      given-names: Nicolas
