@@ -141,7 +141,11 @@ public class RemoteUserInstrumenter {
 					f = manifest;
 				} else {*/
 				if (file.isDirectory()) continue;
-				f = new File(tmpDir + File.separator + file.getName());
+       final File zipEntryFile = new File(tmpDir,file.getName());
+       if(!zipEntryFile.toPath().normalize().startsWith(tmpDir.toPath().normalize())) {
+           throw new IOException("Bad zip entry");
+       }
+       f = zipEntryFile;
 				if (!f.getParentFile().exists()) { // if its a directory, create it
 					f.getParentFile().mkdirs();
 				}
